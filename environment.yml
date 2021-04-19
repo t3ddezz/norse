@@ -1,0 +1,18 @@
+name: norse
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - pip=21.0.1
+  - python=3.8
+  - snakemake-minimal=5.13
+  - gofasta
+  - pip:
+    -pandas==1.2.3
+    -PyQt5==5.15.3
+    -PyQt5-Qt==5.15.2
+    -PyQt5-sip==12.8.1
+    -qtwidgets==0.18
+    -requests==2.25.1
+    -paramiko==2.7.2
