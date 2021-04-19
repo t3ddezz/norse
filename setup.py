@@ -20,5 +20,5 @@ setup(name='norse',
       url='https://github.com/cov-lineages/pangolin',
       entry_points="""
       [console_scripts]
-      {program} = norse.command:main
+      {program} = norse.gui:MyWindow
       """.format(program = 'norse')
