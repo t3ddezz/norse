@@ -3,7 +3,6 @@ import glob
 import os
 import pkg_resources
 
-from norse import _program
 
 setup(name='norse',
       version='0,1'
