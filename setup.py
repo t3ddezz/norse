@@ -22,4 +22,4 @@ setup(name='norse',
       entry_points="""
       [console_scripts]
       {program} = norse.command:main
-      """.format(program = _program)
+      """
