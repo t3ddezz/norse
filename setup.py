@@ -8,16 +8,15 @@ setup(name='norse',
       version='0,1'
       scripts=['GUI/GUI.py'],
       install_requires=[
-            "biopython>=1.70",
-            'pandas>=1.0.1',
-            "wheel>=0.34",
-            'joblib>=0.11',
-            'pysam>=0.16.0',
-            'scikit-learn==0.23.1',
-            "PuLP>=2"
+            "pandas==1.2.3",
+            "PyQt5==5.15.3",
+            "PyQt5-Qt==5.15.2",
+            "PyQt5-sip==12.8.1",
+            "qtwidgets==0.18",
+            "requests==2.25.1",
+            "paramiko==2.7.2"
         ],
       description='sequencing data transfer script as GUI',
-      url='https://github.com/cov-lineages/pangolin',
       entry_points="""
       [console_scripts]
       {program} = norse.gui:MyWindow
