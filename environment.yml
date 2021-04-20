@@ -2,15 +2,6 @@ name: GUI
 channels:
   - defaults
 dependencies:
-<<<<<<< HEAD
-  - python=3.8.5
-  - qt
-  - pyinstaller
-  - pandas
-  - requests
-  - paramiko
-prefix: /Users/T3ddezz/opt/anaconda3/envs/GUI
-=======
   - pip=21.0.1
   - python=3.8
   - pip:
@@ -21,4 +12,3 @@ prefix: /Users/T3ddezz/opt/anaconda3/envs/GUI
     -qtwidgets==0.18
     -requests==2.25.1
     -paramiko==2.7.2
->>>>>>> 6dcd92146554a6762ae739b07b439bda1f15d7e8
