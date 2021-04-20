@@ -1,6 +1,5 @@
 name: norse
 channels:
-
   - defaults
 dependencies:
   - pip=21.0.1
