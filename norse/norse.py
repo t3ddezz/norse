@@ -1410,15 +1410,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
         self.window2.displayInfo()
      
-    def on_toggle_password_Action(self):
-        if not self.password_shown:
-            self.setEchoMode(QLineEdit.Normal)
-            self.password_shown = True
-            self.togglepasswordAction.setIcon(self.hiddenIcon)
-        else:
-            self.setEchoMode(QLineEdit.Password)
-            self.password_shown = False
-            self.togglepasswordAction.setIcon(self.visibleIcon)
 
     def checkbox(self,state):
         if state == QtCore.Qt.Checked:
