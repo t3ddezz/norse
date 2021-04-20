@@ -6,7 +6,11 @@ import pkg_resources
 
 setup(name='norse',
       version='0,1',
+<<<<<<< HEAD
       scripts=['GUI/gui.py'],
+=======
+      scripts=['norse/norse.py'],
+>>>>>>> 6dcd92146554a6762ae739b07b439bda1f15d7e8
       install_requires=[
             "pandas==1.2.3",
             "PyQt5==5.15.3",

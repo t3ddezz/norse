@@ -1,0 +1,8 @@
+README.md
+setup.py
+GUI/gui.py
+norse.egg-info/PKG-INFO
+norse.egg-info/SOURCES.txt
+norse.egg-info/dependency_links.txt
+norse.egg-info/requires.txt
+norse.egg-info/top_level.txt
