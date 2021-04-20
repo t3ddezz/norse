@@ -890,7 +890,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         demo.close()
 
         date = datetime.today().strftime('%Y-%m-%d')
-        folder_name = os.path.basename(os.path.normpath(f'{save_path}'))
+        folder_name = os.path.basename(os.path.normpath(save_path))
         neuer_ordner_name = date + '_' + folder_name
 
 
@@ -913,7 +913,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(ip ,port ,username ,password, timeout=10)
-            stdin,stdout,stderr = ssh.exec_command(cmd)
+            stdin,stdout,stderr = ssh.exec_command(cmd) 
             #print (stdout.channel.recv_exit_status())
             time.sleep(5)
             outlines = stdout.readlines()
@@ -922,24 +922,15 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             rsync_var = resp
             rsync_var = rsync_var.strip()
 
-            if rsync_var == rsync_var:
-                cmd1 = os.system(f'scp -r "{save_path}" "{username}""@""{ip}"":""{path_on_server}/{neuer_ordner_name}"')
-                cmd1 = (f'scp -r "{save_path}" "{username}""@""{ip}"":""{path_on_server}/{neuer_ordner_name}"')
+            if rsync_var == 'rsync not found':
+                os.system('scp -r ' + save_path + username + "@" +
+                    ip + ":" + path_on_server + "/" + neuer_ordner_name)
+                #cmd1 = (f'scp -r "{save_path}" "{username}""@""{ip}"":""{path_on_server}/{neuer_ordner_name}"')
                 print('scp transfer')
             else:
-                cmd1 = f'rsync --rsync-path={rsync_var} -acrv --remove-source-files "{save_path}" "{username}""@""{ip}"":""{path_on_server}/{neuer_ordner_name}"'
+                os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
+                    save_path + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name)
                 print('rsync transfer')
-            ssh = paramiko.SSHClient()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(ip ,port ,username ,password, timeout=10)
-            stdin,stdout,stderr = ssh.exec_command(cmd1)
-            print (stdout.channel.recv_exit_status())
-            time.sleep(5)
-            outlines = stdout.readlines()
-            resp = ''.join(outlines)
-            print(resp)
-        except paramiko.AuthenticationException:
-            pass
 
         
         
