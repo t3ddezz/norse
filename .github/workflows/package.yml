@@ -34,4 +34,5 @@ jobs:
     - name: Test with pytest
       run: |
       pip install  pytest
-        pytest norse/norse/norse.py
+        pytest 
+        #norse/norse/norse.py
