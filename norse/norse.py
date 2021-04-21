@@ -925,17 +925,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             if rsync_var == 'rsync not found':
                 os.system('scp -r ' + save_path + username + "@" +
                     ip + ":" + path_on_server + "/" + neuer_ordner_name)
-                #cmd1 = (f'scp -r "{save_path}" "{username}""@""{ip}"":""{path_on_server}/{neuer_ordner_name}"')
-                print('scp transfer')
+
             else:
                 os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
                     save_path + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name)
-                print('rsync transfer')
-
-        
-        
-
-        # ftp (optional optional)
         
     def sequencing_changed(self):
 
