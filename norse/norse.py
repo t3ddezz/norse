@@ -929,6 +929,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             else:
                 os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
                     save_path + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name)
+            except
+                pass
         
     def sequencing_changed(self):
 
