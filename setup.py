@@ -3,11 +3,10 @@ import glob
 import os
 import pkg_resources
 
-import norse
 from norse import __version__
 
 setup(name='norse',
-      version=norse.__version__,
+      version=__version__,
       scripts=['norse/norse.py'],
       install_requires=[
             "pandas==1.2.3",
