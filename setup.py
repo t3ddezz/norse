@@ -5,6 +5,8 @@ import pkg_resources
 
 from norse import __version__
 
+exec(open('norse/version.py').read())
+
 setup(name='norse',
       version=__version__,
       scripts=['norse/norse.py'],
