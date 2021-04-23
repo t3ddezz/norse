@@ -1,4 +1,4 @@
-name: GUI
+name: norse
 channels:
   - defaults
 dependencies:
