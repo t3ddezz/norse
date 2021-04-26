@@ -35,7 +35,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.tablewidget = QtWidgets.QTableWidget
 
         self.label_sample = QtWidgets.QLabel(self)
-        self.label_sample.setText('sampel name:')
+        self.label_sample.setText('sample name:')
         self.label_sample.move(20, 70)
         
         
