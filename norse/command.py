@@ -33,11 +33,10 @@ import sys
 def main(sysargs = sys.argv[1:]):
 
     parser = argparse.ArgumentParser(prog = _program,
-    description='pangolin: Phylogenetic Assignment of Named Global Outbreak LINeages',
-    usage='''pangolin <query> [options]''')
+    description='norse blablabla',
+    usage='''norse [options]''')
 
-    parser.add_argument('query', nargs="*", help='Query fasta file of sequences to analyse.')
-    parser.add_argument('-o','--outdir', action="store",help="Output directory. Default: current working directory")
+
     parser.add_argument('--outfile', action="store",help="Optional output file name. Default: lineage_report.csv")
     parser.add_argument('--alignment', action="store_true",help="Optional alignment output.")
     parser.add_argument('-d', '--datadir', action='store',dest="datadir",help="Data directory minimally containing a fasta alignment and guide tree")

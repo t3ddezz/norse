@@ -8,7 +8,7 @@ from norse import __version__, _program
 
 setup(name='norse',
       version=__version__,
-      scripts=['norse/norse.py'],
+      scripts=['norse/scripts/norse.py'],
       install_requires=[
             "pandas==1.2.3",
             "PyQt5==5.15.3",
@@ -20,7 +20,6 @@ setup(name='norse',
       description='na',
       url='https://github.com/t3ddezz/norse',
       author='anton',
-      entry_points="""
-      [console_scripts]
-      {program} = norse.command:main
-      """.format(program = _program))
+      entry_points={'console_scripts': 
+      ['norse=command:main']},
+      zip_safe=False)
