@@ -23,3 +23,4 @@ setup(name='norse',
       entry_points={'console_scripts': 
       ['norse=norse.command:main']},
       zip_safe=False)
+      

@@ -30,13 +30,13 @@ import sys
     args = parser.parse_args(args)"""
 
 
-def main(sysargs = sys.argv[1:]):
+def main():
 
     parser = argparse.ArgumentParser(prog = _program,
     description='norse blablabla',
     usage='''norse [options]''')
 
-    parser.add_argument("-v","--version", action='version', version=f"pangolin {__version__}")
+    parser.add_argument("-v","--version", action='version', version=f"norse {__version__}")
 
 if __name__ == '__main__':
     main()
