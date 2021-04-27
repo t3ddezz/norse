@@ -21,5 +21,5 @@ setup(name='norse',
       url='https://github.com/t3ddezz/norse',
       author='anton',
       entry_points={'console_scripts': 
-      ['norse=command:main']},
+      ['norse=norse.command:main']},
       zip_safe=False)
