@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 import argparse
 from norse import __version__
 from . import _program
 import sys
+
 
 """def get_parser():
     
@@ -38,5 +40,11 @@ def main():
 
     parser.add_argument("-v","--version", action='version', version=f"norse {__version__}")
 
+    
+
 if __name__ == '__main__':
-    main()
+    main() 
+
+
+
+    

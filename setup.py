@@ -22,5 +22,6 @@ setup(name='norse',
       author='anton',
       entry_points={'console_scripts': 
       ['norse=norse.command:main']},
+      keywords=[],
       zip_safe=False)
       
