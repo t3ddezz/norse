@@ -8,7 +8,7 @@ from norse import __version__, _program
 
 setup(name='norse',
       version=__version__,
-      scripts=['norse/scripts/norse.py'],
+      scripts=['norse/norse_script.py'],
       install_requires=[
             "pandas==1.2.3",
             "PyQt5==5.15.3",
@@ -16,12 +16,14 @@ setup(name='norse',
             "PyQt5-sip==12.8.1",
             "qtwidgets==0.18",
             "requests==2.25.1",
-            "paramiko==2.7.2"],
+            "paramiko==2.7.2",
+            "argparse==1.4.0"],
       description='na',
       url='https://github.com/t3ddezz/norse',
       author='anton',
-      entry_points={'console_scripts': 
-      ['norse=norse.command:main']},
+      entry_points="""
+      [console_scripts]
+      norse = norse_script:main
+      """,
       keywords=[],
       zip_safe=False)
-      

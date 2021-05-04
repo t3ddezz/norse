@@ -14,8 +14,33 @@ import paramiko
 import socket
 import time
 import os
+import argparse
 
-class Validator(QtGui.QValidator):
+version = "0.1"
+program = "norse"
+
+def main(sysargs = sys.argv[1:]):#main function to run script and see version
+    
+    parser = argparse.ArgumentParser(prog = program,
+    description='norse, nanopoore sequencing data transfer',
+    usage='''norse [options]''')
+
+    
+    parser.add_argument("-v","--version", action='version', version=f"norse= {version}")
+    parser.add_argument("-r","--run",action='store_true', help=f"run {program}")
+        
+    if len(sysargs)<1:#if nothing typed show all arguments which avaible
+        parser.print_help()
+        sys.exit(-1)
+    else:
+        args = parser.parse_args(sysargs)
+    args = parser.parse_args()
+    
+    if args.run:
+        window()#function to show GUI
+    
+
+class Validator(QtGui.QValidator):#validator to restict input for flowcells,barcode and sequencinkits
     def validate(self, string, pos):
         return QtGui.QValidator.Acceptable, string.upper(), pos
 class Window2(QMainWindow):#class for window2 (pop up window)
@@ -27,10 +52,6 @@ class Window2(QMainWindow):#class for window2 (pop up window)
 
 
     def iniUI(self):#
-        
-        #self.window1 = MyWindow()
-       
-        
 
         self.tablewidget = QtWidgets.QTableWidget
 
@@ -276,8 +297,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
     #def upload_activated(self):
      #   self.window1.button_upload.setEnabled(True)
 class MyWindow(QMainWindow):#create a window through the initUI() method, and call it in the initialization method init()
-    rsync_var = 0
-    trasnfer_path_var = 0
+
     def __init__(self):
         super(MyWindow, self).__init__()
         
@@ -292,13 +312,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
         self.window2 = Window2()#for initiating window2
     
-        self.rsync_var_label = QtWidgets.QLabel(self)
-        self.rsync_var_label.setHidden(True)
+
 
         self.logo_label = QtWidgets.QLabel(self)
         self.logo_label.setText('norse')
-        #pixmap = QPixmap('auge.png')
-        #self.logo_label.setPixmap(pixmap)
         self.logo_label.move(10, 10)
 
         self.upper_frame = QtWidgets.QFrame(self)
@@ -330,14 +347,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.label_sonderzeichen.adjustSize()
         self.label_sonderzeichen.move(250, 406)
         
-
-        
-
-
-
-        barcode_liste = ['EXP-PBC096','EXP-PBC001','EXP-NBD114','EXP-NBD104','EXP-NBD196']
-        
-        
         self.kitinfos_label = QtWidgets.QLabel(self)
         self.kitinfos_label.move(10, 50)
         self.kitinfos_label.setText('Ligation kit:')
@@ -364,7 +373,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.barcode_edit.move(10, 120)
         self.validator = Validator(self)
         self.barcode_edit.setValidator(self.validator)
-        #self.barcode_edit.textChanged[str].connect(self.barcode_changed)
         self.barcode_edit.editingFinished.connect(self.barcode_changed)
         
         self.flowcell_label = QtWidgets.QLabel(self)
@@ -416,7 +424,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.sample_sheet_label.move(30, 290)
         self.sample_sheet_label.resize(150, 20)
 
-
         self.radiobutton_group = QtWidgets.QButtonGroup(self)
         self.radiobutton_group.addButton(self.radiobutton_yes)
         self.radiobutton_group.addButton(self.radiobutton_no)
@@ -428,30 +435,25 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.download_template.setDisabled(True)
         self.download_template.move(290, 100)
         self.download_template.adjustSize()
+        #tooltip is a help message, while mouse on button
         self.download_template.setToolTip('Here you can download a template for 96 samples')
         self.setStyleSheet("""QToolTip { 
                            background-color: black; 
                            color: white; 
                            border: black solid 1px
                            }""")
+
         self.download_template.setHidden(True)
 
         self.upload_data = QtWidgets.QPushButton(self)
         self.upload_data.setText('upload data')
         self.upload_data.setDisabled(True)
         self.upload_data.move(290,140)
-        #self.upload_data.adjustSize()
         self.upload_data.setHidden(True)
-
-
-        
 
         self.lineedit_username = QtWidgets.QLineEdit(self)
         self.lineedit_username.move(10, 400)
         self.lineedit_username.setPlaceholderText('username')
-        #self.label_username.adjustSize()
-        
-        #self.lineedit_username.setEchoMode(QtWidgets.QLineEdit.Password)#if password is needed
 
         self.lineedit_ip_adress = QtWidgets.QLineEdit(self)
         self.lineedit_ip_adress.move(125, 400)
@@ -485,8 +487,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.textedit.setPlaceholderText('Additional information,  this info will be uploaded to the server with run_info.txt')
         self.textedit.setGeometry(430, 400, 365, 195)
 
-        Flowcell_liste = ['FLO-MIN106']
-
 
         
         self.label_barcode_yes_no = QtWidgets.QLabel(self)
@@ -498,7 +498,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.label1.move(245, 20)
         self.lineedit1 = QtWidgets.QLineEdit(self)
         self.lineedit1.move(260,20)
-        #self.lineedit1.setFixedWidth(120)
         self.lineedit1.resize(240, 30)
 
 
@@ -741,14 +740,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                            }""")
         self.button_upload.clicked.connect(self.upload)
         
-    
-        
-        kitliste = ['Select Kit','SQK-PCB109','SQK-RNA002','SQK-PCS109','SQK-DCS109','SQK-CS9109','SQK-LSK109','SQK-LSK109-XL','SQK-16S024','SQK-LSK110',
-        'SQK-LRK001','SQK-RBK004','SQK-PBK004','SQK-RAB204','SQK-RPB004','SQK-PSK004','SQK-RAD004'] 
-        self.labelupload = QtWidgets.QLabel(self)
+        self.labelupload = QtWidgets.QLabel(self)#
         self.labelupload.setText('')
         self.labelupload.setHidden(True)
 
+        # check if there is a user info.txt if not no abortion
         try:
             
             user_pre_info = open('/Users/T3ddezz/Desktop/Venv/GUI/user_info.txt','r')
@@ -764,7 +760,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         except IndexError:
             print('index error')
 
-    def choose_dir(self):
+    def choose_dir(self):#pyqt5 build in directory select
         save_path = QFileDialog().getExistingDirectory(self, 'Select an  directory')
 
         self.lineedit_path_dir.setText(save_path)
@@ -780,7 +776,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
         date = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
            
-
+        #demo == run_info.txt
         demo = open(completeName, "w")
 
         kit = self.sequencing_edit.text()
@@ -806,6 +802,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         
         label_yes_no = self.labelupload.text()
         
+        ## build for run_info.txt
         if label_yes_no == 'no':
             lineedit01 = self.lineedit1.text()
             demo.write('NB01    ')
@@ -882,11 +879,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         
         demo.write('##additional info')
         demo.write('\n')
-        #demo.write('##')
         demo.write(additional_info)
 
-
-        #/n zeilenumbruch
         demo.close()
 
         date = datetime.today().strftime('%Y-%m-%d')
@@ -902,12 +896,12 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         username = self.lineedit_username.text()
         ip = self.lineedit_ip_adress.text()
         password = self.password.text()
-        rsync_var = self.rsync_var_label.text()
-        rsync_var = rsync_var.strip()
+        
 
         port = 22
-
         cmd = 'which rsync'
+
+        #connect to server, if fail error printed. But connection is tested in func test_upload
         try:
             
             ssh = paramiko.SSHClient()
@@ -930,7 +924,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
                     save_path + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name)
         except paramiko.AuthenticationException:
-            print('error')
+            print('connection error')
         
     def sequencing_changed(self):
 
@@ -958,10 +952,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             msg.setIcon(QMessageBox.Critical)
             self.sequencing_edit.clear()
             
-    def barcode_changed(self):
+    def barcode_changed(self):#if barcode list, could add barcode restriction
         pass
 
-    def flowcell_changed(self):
+    def flowcell_changed(self):#flowcell check after flowcell input 
         url="https://raw.githubusercontent.com/t3ddezz/data/main/flowcell_data.txt"
         re=requests.get(url).content
         flowcell=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
@@ -986,12 +980,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             msg.setIcon(QMessageBox.Critical)
             self.flowcell_edit.clear()
         
-    def test_upload(self):
-        #dialog = QFileDialog()
-        #save_path = dialog.getExistingDirectory(self, 'Select an  directory')
-        
-        
-        #completeInfo = os.path.join('/Users/T3ddezz/Desktop/test_server',  'user_info.txt')
+    def test_upload(self):#test connection to server and add info to user_info.txt
+
     
         username = self.lineedit_username.text()
         
@@ -1020,38 +1010,23 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             port = 22
 
             cmd  = 'ls'
-            cmd2 = 'which rsync'
             cmd3 = 'ls -d ' + path 
 
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(ip ,port ,username ,password, timeout=10)
             stdin,stdout,stderr = ssh.exec_command(cmd)
-            #print (stdout.channel.recv_exit_status())
             time.sleep(5)
             outlines = stdout.readlines()
             resp = ''.join(outlines)
-            #print(resp)
 
-            ssh = paramiko.SSHClient()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(ip ,port ,username ,password, timeout=10)
-            stdin,stdout,stderr = ssh.exec_command(cmd2)
-            #print (stdout.channel.recv_exit_status())
-            time.sleep(5)
-            outlines = stdout.readlines()
-            resp2 = ''.join(outlines)
-            #print(resp2)
 
-            self.rsync_var_label.setText(resp2)
-            rsync_var = resp2
+
 
             stdin,stdout,stderr = ssh.exec_command(cmd3)
-            #print (stdout.channel.recv_exit_status())
             time.sleep(5)
             outlines = stdout.readlines()
             resp3 = ''.join(outlines)
-            #print(resp3)
         
 
 
@@ -1085,7 +1060,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             msg3.setIcon(QMessageBox.Information)
             
 
-    def radioclicked_no(self):# 
+    def radioclicked_no(self):# button no barcodes
         self.window2.hide()
         self.window2.hide2()
         self.labelupload.setText('no')
@@ -1141,7 +1116,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.download_template.setHidden(True)
         self.upload_data.setHidden(True)
    
-    def radioclicked_yes(self):
+    def radioclicked_yes(self):# button for 1-12 samples
 
         self.window2.hide()
         self.window2.unhide2()
@@ -1202,7 +1177,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.upload_data.setHidden(True)
 
     
-    def clickbox(self):
+    def clickbox(self): #button for samples 12-24
         self.label13.setHidden(False)
         self.lineedit13.setHidden(False)
         self.label14.setHidden(False)
@@ -1282,7 +1257,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.lineedit24.setHidden(True)
         self.window2.hide()'''
     
-    def clickbox2(self):
+    def clickbox2(self):#button for 94-samples(not avaible atm)
         
             self.download_template.setHidden(False)
             self.upload_data.setHidden(False)
@@ -1335,35 +1310,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             self.label24.setHidden(True)
             self.lineedit24.setHidden(True)
             self.window2.hide()
-            '''
-            self.download_template.setHidden(True)
-            self.upload_data.setHidden(True)
-            self.label1.setHidden(False)
-            self.label2.setHidden(False)
-            self.label3.setHidden(False)
-            self.label4.setHidden(False)
-            self.label5.setHidden(False)
-            self.label6.setHidden(False)
-            self.label7.setHidden(False)
-            self.label8.setHidden(False)
-            self.label9.setHidden(False)
-            self.label10.setHidden(False)
-            self.label11.setHidden(False)
-            self.label12.setHidden(False)
-            self.lineedit1.setHidden(False)
-            self.lineedit2.setHidden(False)
-            self.lineedit3.setHidden(False)
-            self.lineedit4.setHidden(False)
-            self.lineedit5.setHidden(False)
-            self.lineedit6.setHidden(False)
-            self.lineedit7.setHidden(False)
-            self.lineedit8.setHidden(False)
-            self.lineedit9.setHidden(False)
-            self.lineedit10.setHidden(False)
-            self.lineedit11.setHidden(False)
-            self.lineedit12.setHidden(False)'''
     
-    def passinInformation(self):
+    def passinInformation(self):#all infos from mainwindow for window 2 to display there
         self.button_upload.setEnabled(True)
         self.window2.input000.setText(self.flowcell_edit.text())
         self.window2.input0.setText(self.sequencing_edit.text())
@@ -1397,7 +1345,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.window2.displayInfo()
      
 
-    def checkbox(self,state):
+    def checkbox(self,state):#fucntion to hide password
         if state == QtCore.Qt.Checked:
             self.password.setEchoMode(QtWidgets.QLineEdit.Normal)
         else:
@@ -1407,11 +1355,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
 
 
-def window():
+def window():# func to show GUI and exit correctly
     app = QApplication(sys.argv)
     
     
-    
+    # dark mode pallette
     app.setStyle('Fusion')
     dark_palette = QtGui.QPalette()
 
@@ -1434,4 +1382,7 @@ def window():
     win = MyWindow()
     win.show()
     sys.exit(app.exec_())
-window()    
+    
+
+if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
+    main()
