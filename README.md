@@ -3,7 +3,7 @@
 
 
 **N**an**O**op**R**e **SE**quencing 
-GUI for nanoopore sequencing data transfer to server
+GUI for data transfer to server
 
 
 ## Quick links
@@ -12,7 +12,7 @@ GUI for nanoopore sequencing data transfer to server
   * [Check the install worked](#check-the-install-worked)
   * [Usage](#basic-usage)
 
-  ### Requirements
+### Requirements
 
 norse runs on MacOS.
 1. Some conda version. Can be downloaded from [here](https://www.anaconda.com/products/individual)
