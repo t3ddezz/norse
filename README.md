@@ -2,7 +2,7 @@
 
 
 
-**n**an**o**op**r**e **se**quencing 
+**N**an**O**op**R**e **SE**quencing 
 GUI for nanoopore sequencing data transfer to server
 
 
@@ -11,7 +11,6 @@ GUI for nanoopore sequencing data transfer to server
   * [Install norse](#install-norse)
   * [Check the install worked](#check-the-install-worked)
   * [Usage](#basic-usage)
-  * [References](#references)
 
   ### Requirements
 
@@ -39,3 +38,6 @@ norse -v
 
 1. Activate the environment ``conda activate norse``
 2. Run ``norse -r``
+
+
+
