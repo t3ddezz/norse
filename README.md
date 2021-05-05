@@ -23,7 +23,7 @@ norse runs on MacOS.
 ```shell=
 cd norse
 conda env create -f environment.yml
-conda activate norse``
+conda activate norse
 python setup.py install```
 
 
