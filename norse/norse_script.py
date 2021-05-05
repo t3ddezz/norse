@@ -884,7 +884,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
         demo.close()
 
-        date = datetime.today().strftime('%Y-%m-%d')
+        date = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
         folder_name = os.path.basename(os.path.normpath(save_path))
         neuer_ordner_name = date + '_' + folder_name
 
@@ -916,7 +916,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             rsync_var = resp
             rsync_var = rsync_var.strip()
 
-            if rsync_var == 'rsync not found':
+            if rsync_var == rsync_var:#'rsync not found':
                 os.system('scp -r ' + save_path + username + "@" +
                     ip + ":" + path_on_server + "/" + neuer_ordner_name)
 
@@ -924,7 +924,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 #os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
                  #   save_path + " " + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name) {neuer_ordner_name}
 
-                os.system(f"rsync --rsync-path={rsync_var} -acrv --remove-source-files {save_path}  {username}@{ip}:{path_on_server}")
+                os.system(f"rsync --rsync-path={rsync_var} -acrv --remove-source-files {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
                 
         except paramiko.AuthenticationException:
             print('connection error')
