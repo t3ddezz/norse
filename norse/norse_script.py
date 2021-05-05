@@ -747,7 +747,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         # check if there is a user info.txt if not no abortion
         try:
             
-            user_pre_info = open('/Users/T3ddezz/Desktop/Venv/GUI/user_info.txt','r')
+            user_pre_info = open('user_info.txt','r')
             
             data_list = user_pre_info.read().splitlines()
             
@@ -759,6 +759,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             self.test_upload_variable.setText('true')
         except IndexError:
             print('index error')
+        except FileNotFoundError:
+            print('file not found')
 
     def choose_dir(self):#pyqt5 build in directory select
         save_path = QFileDialog().getExistingDirectory(self, 'Select an  directory')
@@ -919,8 +921,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     ip + ":" + path_on_server + "/" + neuer_ordner_name)
 
             else:
-                os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
-                    save_path + " " + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name)
+                #os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
+                 #   save_path + " " + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name) {neuer_ordner_name}
+
+                os.system(f"rsync --rsync-path={rsync_var} -acrv --remove-source-files {save_path}  {username}@{ip}:{path_on_server}")
+                
         except paramiko.AuthenticationException:
             print('connection error')
         
@@ -1355,3 +1360,4 @@ def window():# func to show GUI and exit correctly
 
 if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
     main()
+    window()
