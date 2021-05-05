@@ -339,7 +339,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
         self.checkbox_hide_unhide = QtWidgets.QCheckBox('show',self)
         self.checkbox_hide_unhide.adjustSize()
-        self.checkbox_hide_unhide.stateChanged.connect(self.checkbox)
+        self.checkbox_hide_unhide.stateChanged.connect(self.password_hide_unhide)
         self.checkbox_hide_unhide.move(370, 405)
 
         self.label_sonderzeichen = QtWidgets.QLabel(self)
@@ -410,14 +410,14 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.test_upload_variable.setHidden(True)
 
         self.radiobutton_24_samples = QtWidgets.QRadioButton(self)
-        self.radiobutton_24_samples.toggled.connect(self.clickbox)
+        self.radiobutton_24_samples.toggled.connect(self.radiobutton_24)
         self.radiobutton_24_samples.move(10, 265)
         self.samples_24_label = QtWidgets.QLabel(self)
         self.samples_24_label.setText('yes (24)')
         self.samples_24_label.move(30, 265)
 
         self.radiobutton_sample_sheet = QtWidgets.QRadioButton(self)
-        self.radiobutton_sample_sheet.toggled.connect(self.clickbox2)
+        self.radiobutton_sample_sheet.toggled.connect(self.radiobutton_96)
         self.radiobutton_sample_sheet.move(10, 285)
         self.sample_sheet_label = QtWidgets.QLabel(self)
         self.sample_sheet_label.setText('yes (sample sheet)')
@@ -811,9 +811,40 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         
         
         if label_yes_no == 'yes':
-            checkbox_24 = self.checkbox.checkState()
+            lineedit01 = self.lineedit1.text()
+            lineedit02 = self.lineedit2.text()
+            lineedit03 = self.lineedit3.text()
+            lineedit04 = self.lineedit4.text()
+            lineedit05 = self.lineedit5.text()
+            lineedit06 = self.lineedit6.text()
+            lineedit07 = self.lineedit7.text()
+            lineedit08 = self.lineedit8.text()
+            lineedit09 = self.lineedit9.text()
+            lineedit10 = self.lineedit10.text()
+            lineedit11 = self.lineedit11.text()
+            lineedit12 = self.lineedit12.text()
+            liste = [lineedit01,lineedit02,lineedit03,lineedit04,lineedit05,lineedit06,lineedit07,lineedit08,
+            lineedit09,lineedit10,lineedit11,lineedit12]
+            a = 1
+            for i in range(0,12):
+                if a<10:
+                    demo.write('NB0')
+                    demo.write(str(a))
+                    demo.write('    ')
+                    demo.write(liste[i])
+                    demo.write('\n')
+                    a = a + 1
+                else:
+                    demo.write('NB')
+                    demo.write(str(a))
+                    demo.write('    ')
+                    demo.write(liste[i])
+                    demo.write('\n')
+                    a = a + 1
             
-            if checkbox_24 == 2:
+
+            
+        if label_yes_no == '24':
                 lineedit13 = self.lineedit13.text()
                 lineedit14 = self.lineedit14.text()
                 lineedit15 = self.lineedit15.text()
@@ -838,40 +869,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     demo.write(liste[i])
                     demo.write('\n')
                     a = a + 1       
-            if checkbox_24 == 0 :
-                
-                lineedit01 = self.lineedit1.text()
-                lineedit02 = self.lineedit2.text()
-                lineedit03 = self.lineedit3.text()
-                lineedit04 = self.lineedit4.text()
-                lineedit05 = self.lineedit5.text()
-                lineedit06 = self.lineedit6.text()
-                lineedit07 = self.lineedit7.text()
-                lineedit08 = self.lineedit8.text()
-                lineedit09 = self.lineedit9.text()
-                lineedit10 = self.lineedit10.text()
-                lineedit11 = self.lineedit11.text()
-                lineedit12 = self.lineedit12.text()
-                liste = [lineedit01,lineedit02,lineedit03,lineedit04,lineedit05,lineedit06,lineedit07,lineedit08,
-                lineedit09,lineedit10,lineedit11,lineedit12]
-                a = 1
-                for i in range(0,12):
-                    if a<10:
-                        demo.write('NB0')
-                        demo.write(str(a))
-                        demo.write('    ')
-                        demo.write(liste[i])
-                        demo.write('\n')
-                        a = a + 1
-                    else:
-                        demo.write('NB')
-                        demo.write(str(a))
-                        demo.write('    ')
-                        demo.write(liste[i])
-                        demo.write('\n')
-                        a = a + 1
             
-            
+    
                     
         
         additional_info = self.textedit.toPlainText()
@@ -912,7 +911,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             time.sleep(5)
             outlines = stdout.readlines()
             resp = ''.join(outlines)
-            print(resp)
             rsync_var = resp
             rsync_var = rsync_var.strip()
 
@@ -922,7 +920,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
             else:
                 os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
-                    save_path + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name)
+                    save_path + " " + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name)
         except paramiko.AuthenticationException:
             print('connection error')
         
@@ -1122,9 +1120,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.window2.unhide2()
         self.labelupload.setText('yes')
         self.label_barcode_yes_no.setText('yes')
-        #self.checkbox.setHidden(False)
-        #self.textedit.setDisabled(True)
-        #self.textedit.setHidden(True)
         self.label1.setHidden(False)
         self.label2.setHidden(False)
         self.label3.setHidden(False)
@@ -1177,7 +1172,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.upload_data.setHidden(True)
 
     
-    def clickbox(self): #button for samples 12-24
+    def radiobutton_24(self): #button for samples 12-24
+        self.labelupload.setText('24')
         self.label13.setHidden(False)
         self.lineedit13.setHidden(False)
         self.label14.setHidden(False)
@@ -1230,35 +1226,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.lineedit10.setHidden(False)
         self.lineedit11.setHidden(False)
         self.lineedit12.setHidden(False)
-        '''
-        self.label13.setHidden(True)
-        self.lineedit13.setHidden(True)
-        self.label14.setHidden(True)
-        self.lineedit14.setHidden(True)
-        self.label15.setHidden(True)
-        self.lineedit15.setHidden(True)
-        self.label16.setHidden(True)
-        self.lineedit16.setHidden(True)
-        self.label17.setHidden(True)
-        self.lineedit17.setHidden(True)
-        self.label18.setHidden(True)
-        self.lineedit18.setHidden(True)
-        self.label19.setHidden(True)
-        self.lineedit19.setHidden(True)
-        self.label20.setHidden(True)
-        self.lineedit20.setHidden(True)
-        self.label21.setHidden(True)
-        self.lineedit21.setHidden(True)
-        self.label22.setHidden(True)
-        self.lineedit22.setHidden(True)
-        self.label23.setHidden(True)
-        self.lineedit23.setHidden(True)
-        self.label24.setHidden(True)
-        self.lineedit24.setHidden(True)
-        self.window2.hide()'''
-    
-    def clickbox2(self):#button for 94-samples(not avaible atm)
         
+    
+    def radiobutton_96(self):#button for 94-samples(not avaible atm)
+            self.labelupload.setText('94')
             self.download_template.setHidden(False)
             self.upload_data.setHidden(False)
             self.label1.setHidden(True)
@@ -1345,14 +1316,12 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.window2.displayInfo()
      
 
-    def checkbox(self,state):#fucntion to hide password
+    def password_hide_unhide(self,state):#fucntion to hide password
         if state == QtCore.Qt.Checked:
             self.password.setEchoMode(QtWidgets.QLineEdit.Normal)
         else:
             self.password.setEchoMode(QtWidgets.QLineEdit.Password)
     
-
-
 
 
 def window():# func to show GUI and exit correctly

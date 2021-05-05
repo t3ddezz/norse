@@ -20,6 +20,12 @@ norse runs on MacOS.
 
 
 ### Install norse
+```shell=
+cd norse
+conda env create -f environment.yml
+conda activate norse``
+python setup.py install```
+
 
 1. Clone this repository and ``cd norse``
 2. ``conda env create -f environment.yml``
