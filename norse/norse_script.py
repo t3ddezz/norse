@@ -18,7 +18,7 @@ import argparse
 
 version = "0.1"
 program = "norse"
-
+"""
 def main(sysargs = sys.argv[1:]):#main function to run script and see version
     
     parser = argparse.ArgumentParser(prog = program,
@@ -38,7 +38,7 @@ def main(sysargs = sys.argv[1:]):#main function to run script and see version
     
     if args.run:
         window()#function to show GUI
-    
+    """
 
 class Validator(QtGui.QValidator):#validator to restict input for flowcells,barcode and sequencinkits
     def validate(self, string, pos):
@@ -909,22 +909,23 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(ip ,port ,username ,password, timeout=10)
             stdin,stdout,stderr = ssh.exec_command(cmd) 
-            #print (stdout.channel.recv_exit_status())
             time.sleep(5)
             outlines = stdout.readlines()
             resp = ''.join(outlines)
             rsync_var = resp
             rsync_var = rsync_var.strip()
 
-            if rsync_var == rsync_var:#'rsync not found':
+            if rsync_var =='rsync not found':
                 os.system('scp -r ' + save_path + username + "@" +
                     ip + ":" + path_on_server + "/" + neuer_ordner_name)
+                os.system(f"scp -r {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
 
             else:
                 #os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
                  #   save_path + " " + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name) {neuer_ordner_name}
-
+                print(":DDD")
                 os.system(f"rsync --rsync-path={rsync_var} -acrv --remove-source-files {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
+                print("after")
                 
         except paramiko.AuthenticationException:
             print('connection error')
@@ -1359,5 +1360,5 @@ def window():# func to show GUI and exit correctly
     
 
 if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
-    main()
+    #main()
     window()
