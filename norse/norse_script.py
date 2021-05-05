@@ -436,7 +436,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.download_template.move(290, 100)
         self.download_template.adjustSize()
         #tooltip is a help message, while mouse on button
-        self.download_template.setToolTip('Here you can download a template for 96 samples')
+        self.download_template.setToolTip('Download a template for 96 samples here')
         self.setStyleSheet("""QToolTip { 
                            background-color: black; 
                            color: white; 
@@ -732,7 +732,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.button_upload = QtWidgets.QPushButton(self)
         self.button_upload.setText('Upload')
         self.button_upload.move(40, 560)
-        self.button_upload.setToolTip('check data first, to enable upload')
+        self.button_upload.setToolTip('check data before upload')
         self.setStyleSheet("""QToolTip { 
                            background-color: black; 
                            color: white; 

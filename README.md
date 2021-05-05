@@ -15,7 +15,7 @@ GUI for data transfer to server
 ### Requirements
 
 norse runs on MacOS and Linux(if not working isntall following libaries)
-1. Some conda version. Can be downloaded from [here](https://www.anaconda.com/products/individual)
+1. A conda version. Can be downloaded from [here](https://www.anaconda.com/products/individual)
 2. Only for Linux if not working:
 ```shell=
 sudo apt-get install libxkbcommon-x11-0
@@ -44,7 +44,7 @@ norse -v
 
 ### Basic usage
 
-1. Activate the environment ``conda activate norse``
+1. Activate the virtual environment ``conda activate norse``
 2. Run ``norse -r``
 
 
