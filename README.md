@@ -16,11 +16,7 @@ GUI for data transfer to server
 
 norse runs on MacOS and Linux(if not working isntall following libaries)
 1. A conda version. Can be downloaded from [here](https://www.anaconda.com/products/individual)
-2. Only for Linux if not working:
-```shell=
-sudo apt-get install libxkbcommon-x11-0
-sudo apt install libxcb-xinerama0
-```
+
 
 
 
@@ -30,7 +26,13 @@ cd norse
 conda env create -f environment.yml
 conda activate norse
 python setup.py install
-```
+````
+
+Only for Linux if not working:
+```shell=
+sudo apt-get install libxkbcommon-x11-0
+sudo apt install libxcb-xinerama0
+``` 
 
 
 

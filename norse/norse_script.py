@@ -435,6 +435,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.download_template.setDisabled(True)
         self.download_template.move(290, 100)
         self.download_template.adjustSize()
+        self.download_template.clicked.connect(self.download)
         #tooltip is a help message, while mouse on button
         self.download_template.setToolTip('Download a template for 96 samples here')
         self.setStyleSheet("""QToolTip { 
@@ -937,17 +938,17 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         sequencing=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
 
         kit_input = self.sequencing_edit.text()
-        länge = len(sequencing)
-        zähler = 0
+        lange = len(sequencing)
+        zahler = 0
         kit = 0
 
-        for i in range(länge):
-            if  kit_input == sequencing.loc[zähler,0]:
+        for i in range(lange):
+            if  kit_input == sequencing.loc[zahler,0]:
                 kit = 1
                 break
     
             else: 
-                zähler = zähler + 1
+                zahler = zahler + 1
         if kit == 0:
             msg = QMessageBox()
             msg.setWindowTitle("sequencing input")
@@ -965,17 +966,17 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         flowcell=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
 
         flow_input = self.flowcell_edit.text()
-        länge = len(flowcell)
-        zähler = 0
+        lange = len(flowcell)
+        zahler = 0
         kit = 0
 
-        for i in range(länge):
-            if  flow_input == flowcell.loc[zähler,0]:
+        for i in range(lange):
+            if  flow_input == flowcell.loc[zahler,0]:
                 kit = 1
                 break
     
             else: 
-                zähler = zähler + 1
+                zahler = zahler + 1
         if kit == 0:
             msg = QMessageBox()
             msg.setWindowTitle("flowcell input")
@@ -1328,6 +1329,15 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         else:
             self.password.setEchoMode(QtWidgets.QLineEdit.Password)
     
+    def download(self):
+        pass
+        #download template, so its unique to read
+        download_path = QFileDialog().getExistingDirectory(self, 'Select an directory for template')
+        url="https://raw.githubusercontent.com/t3ddezz/data/main/sequencing_data.txt"
+        re=requests.get(url).content
+        sequencing=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
+
+
 
 
 def window():# func to show GUI and exit correctly
