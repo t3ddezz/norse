@@ -18,6 +18,11 @@ import argparse
 
 version = "0.1"
 program = "norse"
+
+file_1 = 0
+upload_sample_path = 0
+
+
 """
 def main(sysargs = sys.argv[1:]):#main function to run script and see version
     
@@ -297,7 +302,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
     #def upload_activated(self):
      #   self.window1.button_upload.setEnabled(True)
 class MyWindow(QMainWindow):#create a window through the initUI() method, and call it in the initialization method init()
-
+    
     def __init__(self):
         super(MyWindow, self).__init__()
         
@@ -352,7 +357,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.kitinfos_label.setText('Ligation kit:')
 
         self.sequencing_edit = QtWidgets.QLineEdit(self)
-        self.sequencing_edit.setPlaceholderText('e.g SQK-PCB109')
+        self.sequencing_edit.setPlaceholderText('e.g SQK-LSK109')
         self.sequencing_edit.setMaxLength(13)
         self.sequencing_edit.adjustSize()
         self.sequencing_edit.move(10, 75)
@@ -435,9 +440,9 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.download_template.setDisabled(True)
         self.download_template.move(290, 100)
         self.download_template.adjustSize()
-        self.download_template.clicked.connect(self.download)
+        self.download_template.clicked.connect(self.sample_upload)
         #tooltip is a help message, while mouse on button
-        self.download_template.setToolTip('Download a template for 96 samples here')
+        self.download_template.setToolTip('upload your 96-samples')
         self.setStyleSheet("""QToolTip { 
                            background-color: black; 
                            color: white; 
@@ -447,11 +452,12 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
         self.download_template.setHidden(True)
 
-        self.upload_data = QtWidgets.QPushButton(self)
-        self.upload_data.setText('upload data')
-        self.upload_data.setDisabled(True)
-        self.upload_data.move(290,140)
-        self.upload_data.setHidden(True)
+        self.upload_info = QtWidgets.QPushButton(self)
+        self.upload_info.setText('info')
+        self.upload_info.setDisabled(True)
+        self.upload_info.move(290,140)
+        self.upload_info.setHidden(True)
+        self.upload_info.clicked.connect(self.info)
 
         self.lineedit_username = QtWidgets.QLineEdit(self)
         self.lineedit_username.move(10, 400)
@@ -787,7 +793,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         barcodekit = self.barcode_edit.text()
         flowcell = self.flowcell_edit.text()
 
-        demo.write('##toolname version 0')
+        demo.write('##toolname version '+ version)
         demo.write('\n')
 
         demo.write('##Kit:    ')
@@ -805,6 +811,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         
         
         label_yes_no = self.labelupload.text()
+        
         
         ## build for run_info.txt
         if label_yes_no == 'no':
@@ -873,7 +880,91 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     demo.write(liste[i])
                     demo.write('\n')
                     a = a + 1       
-            
+        if label_yes_no == "96":
+            print(file_1)
+            if file_1 == "csv":
+                sample_csv = pd.read_csv(upload_sample_path, sep=',',header=None)
+                print(sample_csv)
+            if file_1 == "xlsx":
+                sample_excel = pd.read_excel(upload_sample_path, header=None)
+                print(sample_excel)
+
+
+            #reading csv files
+            if file_1  == "csv":
+                zeile = 0
+                while True:
+                    if sample_csv.loc[zeile, 0] == "01" or "1":
+                        print(zeile)
+                        break
+                    else:
+                        zeile = zeile + 1 
+                        if zeile == "100":
+                            break
+
+                gesamt_zeilen = len(sample_csv)
+                a = 0
+                if sample_csv.loc[zeile, 0] == 1:
+                    for zeilen in range(zeile, gesamt_zeilen):
+                        demo.write('NB')
+                        demo.write(sample_csv.loc[zeilen, 0])#barcode number
+                        demo.write('    ')
+                        demo.write(sample_csv.loc[zeilen, 1])#sample id
+                        demo.write('\n')
+                        print(sample_csv.loc[zeilen, 0])
+                        print(sample_csv.loc[zeilen, 1])
+                else:
+                    for zeilen in range(zeile, gesamt_zeilen):
+                        if zeilen < 10:
+                            
+                            demo.write('NB0')
+                            demo.write(sample_csv.loc[zeilen, 0])#barcode number
+                            demo.write('    ')
+                            demo.write(sample_csv.loc[zeilen, 1])#sample id
+                            demo.write('\n')
+                        else:
+                            
+                            demo.write('NB')
+                            demo.write(sample_csv.loc[zeilen, 0])#barcode number
+                            demo.write('    ')
+                            demo.write(sample_csv.loc[zeilen, 1])#sample id
+                            demo.write('\n')
+                            print(sample_csv.loc[zeilen, 0])
+                            print(sample_csv.loc[zeilen, 1])
+
+                #reading excel files (xlsx)
+            if file_1 == "xlsx":
+                zeile = 0
+                while True:
+                    if sample_excel.iloc[zeile, 0] == 1:
+                        print(zeile)
+                        break
+                    else:
+                        zeile = zeile + 1 
+                        if zeile == "100":
+                            break
+
+                gesamt_zeilen = len(sample_excel)
+                a = 0
+                if sample_excel.iloc[zeile, 0] == 1:
+                    for zeilen in range(zeile, gesamt_zeilen):
+                        if zeilen < 10:
+                            demo.write('NB0')
+                            demo.write(str(sample_excel.iloc[zeilen, 0]))#barcode number
+                            demo.write('    ')
+                            demo.write(str(sample_excel.iloc[zeilen, 1]))#sample id
+                            demo.write('\n')
+                        else:
+                            demo.write('NB')
+                            demo.write(str(sample_excel.iloc[zeilen, 0]))#barcode number
+                            demo.write('    ')
+                            demo.write(str(sample_excel.iloc[zeilen, 1]))#sample id
+                            demo.write('\n')
+
+               
+
+        
+
     
                     
         
@@ -997,7 +1088,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         
         password = self.password.text()
 
-        
+         
 
         user_info = open('user_info.txt', "w+")
 
@@ -1121,7 +1212,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.lineedit24.setHidden(True)
         self.download_template.setHidden(True)
         self.download_template.setDisabled(True)
-        self.upload_data.setHidden(True)
+        self.upload_info.setHidden(True)
+        self.upload_info.setDisabled(True)
    
     def radioclicked_yes(self):# button for 1-12 samples
 
@@ -1179,7 +1271,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.lineedit24.setHidden(True)
         self.download_template.setHidden(True)
         self.download_template.setDisabled(True)
-        self.upload_data.setHidden(True)
+        self.upload_info.setHidden(True)
+        self.upload_info.setDisabled(True)
 
     
     def radiobutton_24(self): #button for samples 12-24
@@ -1212,7 +1305,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
         self.download_template.setHidden(True)
         self.download_template.setDisabled(True)
-        self.upload_data.setHidden(True)
+        self.upload_info.setHidden(True)
+        self.upload_info.setDisabled(True)
         self.label1.setHidden(False)
         self.label2.setHidden(False)
         self.label3.setHidden(False)
@@ -1241,10 +1335,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
     
     def radiobutton_96(self):#button for 94-samples(not avaible atm)
     
-            self.labelupload.setText('94')
+            self.labelupload.setText('96')
             self.download_template.setHidden(False)
             self.download_template.setDisabled(False)
-            self.upload_data.setHidden(False)
+            self.upload_info.setHidden(False)
+            self.upload_info.setDisabled(False)
             self.label1.setHidden(True)
             self.label2.setHidden(True)
             self.label3.setHidden(True)
@@ -1335,116 +1430,28 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         else:
             self.password.setEchoMode(QtWidgets.QLineEdit.Password)
     
-    def download(self):
+    def sample_upload(self):
         pass
         #download template, so its unique to read 
+        global upload_sample_path
+        upload_sample_path, _ = QFileDialog.getOpenFileName(self, 'Select sample sheet',"~", "data files(*.csv *.xlsx)")
+        filename =  QFileInfo(upload_sample_path).fileName()
+        global file_1
+        file_1 = filename.split(".",1)[1]
+        print(filename)
+        print('')
+        print(upload_sample_path)
+        print('')
+        print(file_1)
+        
+
+        
+
+    def info(self):
         msg = QMessageBox()
         msg.setWindowTitle("data input")
         msg.setText("If you wanna use 96 samples, please create a csv(.csv) or excel(.xlsx) file with the following restrictions: two columns, first one with barcode number (01, 02, 03 and so on), second one with the sample ID.")
         x = msg.exec_()
-        download_path, _ =QFileDialog.getOpenFileName(self, 'Select sample sheet',"~", "data files(*.csv *.xlsx")
-        filename =  QFileInfo(download_path).fileName()
-        print(filename)
-        print('')
-        print(download_path)
-        print('')
-         
-        while True:
-            file_1 = filename.split(".",1)[1]
-            print (file_1)
-            if file_1 == "csv":
-                sample_csv = pd.read_csv(download_path, sep=',',header=None)
-                print(sample_csv)
-            if file_1 == "xlsx":
-                sample_excel = pd.read_excel(download_path, header=None)
-                print(sample_excel)
-            if file_1 != "csv" and "xlsx":
-                print("please check your file, the suffix has to be: csv or xlsx")
-            break
-        
-        #reading csv files
-        if file_1  == "csv":
-
-            zeile = 0
-            while True:
-                if sample_csv.loc[zeile, 0] == "01" or "1":
-                    print(zeile)
-                    break
-                else:
-                    zeile = zeile + 1 
-                if zeile == "100":
-                    break
-
-            gesamt_zeilen = len(sample_csv)
-            if sample_csv.loc[zeile, 0] == "01" or "1":
-                for zeilen in range(zeile, gesamt_zeilen):
-                    """demo.write('NB')
-                    demo.write(sample_csv.loc[[zeilen], 0])#barcode number
-                    demo.write('    ')
-                    demo.write(sample_csv.loc[[zeilen], 1]))#sample id
-                    demo.write('\n')"""
-                    print(sample_csv.loc[zeilen, 0])
-                    print(sample_csv.loc[zeilen, 1])
-            else:
-                for zeilen in range(zeile, gesamt_zeilen):
-                    if zeilen < 10:
-                        """
-                        demo.write('NB0')
-                        demo.write(sample_csv.loc[[zeilen], 0])#barcode number
-                        demo.write('    ')
-                        demo.write(sample_csv.loc[[zeilen], 1]))#sample id
-                        demo.write('\n')"""
-                    else:
-                        """
-                        demo.write('NB')
-                        demo.write(sample_csv.loc[[zeilen], 0])#barcode number
-                        demo.write('    ')
-                        demo.write(sample_csv.loc[[zeilen], 1]))#sample id
-                        demo.write('\n')"""
-                        print(sample_csv.loc[zeilen, 0])
-                        print(sample_csv.loc[zeilen, 1])
-
-        #reading excel files (xlsx)
-        if file_1 == "xlsx":
-            zeile = 0
-            while True:
-                if sample_excel.loc[zeile, 0] == "01" or "1":
-                    print(zeile)
-                    break
-                else:
-                    zeile = zeile + 1 
-                    if zeile == "100":
-                        break
-
-            gesamt_zeilen = len(sample_excel)
-            if sample_excel.loc[zeile, 0] == "01" or "1":
-                for zeilen in range(zeile, gesamt_zeilen):
-                    """demo.write('NB')
-                    demo.write(sample_excel.loc[[zeilen], 0])#barcode number
-                    demo.write('    ')
-                    demo.write(sample_excel.loc[[zeilen], 1]))#sample id
-                    demo.write('\n')"""
-                    print(sample_excel.loc[zeilen, 0])
-                    print(sample_excel.loc[zeilen, 1])
-            else:
-                for zeilen in range(zeile, gesamt_zeilen):
-                    if zeilen < 10:
-                        """
-                        demo.write('NB0')
-                        demo.write(sample_excel.loc[[zeilen], 0])#barcode number
-                        demo.write('    ')
-                        demo.write(sample_excel.loc[[zeilen], 1]))#sample id
-                        demo.write('\n')"""
-                else:
-                    """
-                    demo.write('NB')
-                    demo.write(sample_excel.loc[[zeilen], 0])#barcode number
-                    demo.write('    ')
-                    demo.write(sample_excel.loc[[zeilen], 1]))#sample id
-                    demo.write('\n')"""
-                    print(sample_excel.loc[zeilen, 0])
-                    print(sample_excel.loc[zeilen, 1])
-
 
 
 
