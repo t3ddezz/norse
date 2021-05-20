@@ -893,59 +893,48 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             #reading csv files
             if file_1  == "csv":
                 zeile = 0
+                gesamt_zeilen = len(sample_csv)
                 while True:
-                    if sample_csv.loc[zeile, 0] == "01" or "1":
+                    print(sample_csv.iloc[zeile, 0])
+                    if sample_csv.iloc[zeile, 0] == 1:
                         print(zeile)
+                        print("found")
                         break
                     else:
-                        zeile = zeile + 1 
-                        if zeile == "100":
+                        zeile = zeile + 1
+                        if zeile == gesamt_zeilen:
+                            print("not found")
                             break
 
-                gesamt_zeilen = len(sample_csv)
-                a = 0
-                if sample_csv.loc[zeile, 0] == 1:
-                    for zeilen in range(zeile, gesamt_zeilen):
-                        demo.write('NB')
-                        demo.write(sample_csv.loc[zeilen, 0])#barcode number
-                        demo.write('    ')
-                        demo.write(sample_csv.loc[zeilen, 1])#sample id
-                        demo.write('\n')
-                        print(sample_csv.loc[zeilen, 0])
-                        print(sample_csv.loc[zeilen, 1])
-                else:
+                if sample_csv.iloc[zeile, 0] == 1:
                     for zeilen in range(zeile, gesamt_zeilen):
                         if zeilen < 10:
-                            
-                            demo.write('NB0')
-                            demo.write(sample_csv.loc[zeilen, 0])#barcode number
+                            demo.write('NB')
+                            demo.write(str(sample_csv.iloc[zeilen, 0]))#barcode number
                             demo.write('    ')
-                            demo.write(sample_csv.loc[zeilen, 1])#sample id
+                            demo.write(str(sample_csv.iloc[zeilen, 1]))#sample id
                             demo.write('\n')
                         else:
-                            
                             demo.write('NB')
-                            demo.write(sample_csv.loc[zeilen, 0])#barcode number
+                            demo.write(str(sample_csv.iloc[zeilen, 0]))#barcode number
                             demo.write('    ')
-                            demo.write(sample_csv.loc[zeilen, 1])#sample id
+                            demo.write(str(sample_csv.iloc[zeilen, 1]))#sample id
                             demo.write('\n')
-                            print(sample_csv.loc[zeilen, 0])
-                            print(sample_csv.loc[zeilen, 1])
+                
 
-                #reading excel files (xlsx)
+            #reading excel files (xlsx)
             if file_1 == "xlsx":
                 zeile = 0
+                gesamt_zeilen = len(sample_excel)
                 while True:
                     if sample_excel.iloc[zeile, 0] == 1:
                         print(zeile)
                         break
                     else:
                         zeile = zeile + 1 
-                        if zeile == "100":
+                        if zeile == gesamt_zeilen:
                             break
 
-                gesamt_zeilen = len(sample_excel)
-                a = 0
                 if sample_excel.iloc[zeile, 0] == 1:
                     for zeilen in range(zeile, gesamt_zeilen):
                         if zeilen < 10:
@@ -1450,7 +1439,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
     def info(self):
         msg = QMessageBox()
         msg.setWindowTitle("data input")
-        msg.setText("If you wanna use 96 samples, please create a csv(.csv) or excel(.xlsx) file with the following restrictions: two columns, first one with barcode number (01, 02, 03 and so on), second one with the sample ID.")
+        msg.setText("If you wanna use 96 samples, please create a csv(.csv) or excel(.xlsx) file with the following restrictions: two columns, first one with barcode number (1, 2, 3 and so on), second one with the sample ID.")
         x = msg.exec_()
 
 
