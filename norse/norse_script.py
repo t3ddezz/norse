@@ -438,11 +438,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.download_template = QtWidgets.QPushButton(self)
         self.download_template.setText('upload data')
         self.download_template.setDisabled(True)
-        self.download_template.move(290, 100)
-        self.download_template.adjustSize()
+        self.download_template.move(290, 140)
         self.download_template.clicked.connect(self.sample_upload)
         #tooltip is a help message, while mouse on button
-        self.download_template.setToolTip('upload your 96-samples')
+        self.download_template.setToolTip('Click info to activate. Upload your 96-samples')
         self.setStyleSheet("""QToolTip { 
                            background-color: black; 
                            color: white; 
@@ -455,7 +454,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.upload_info = QtWidgets.QPushButton(self)
         self.upload_info.setText('info')
         self.upload_info.setDisabled(True)
-        self.upload_info.move(290,140)
+        self.upload_info.move(290,100)
         self.upload_info.setHidden(True)
         self.upload_info.clicked.connect(self.info)
 
@@ -752,6 +751,42 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.labelupload.setText('')
         self.labelupload.setHidden(True)
 
+
+        """self.label_image = QtWidgets.QLabel(self)
+        self.label_image.move(300, 140)
+        self.label
+        self.image = QtGui.QPixmap('image.png')
+        self.label_image.setPixmap(self.image)"""
+
+        self.tableWidget = QtWidgets.QTableWidget(self)
+        self.tableWidget.move(300, 300)
+  
+        #Row count
+        self.tableWidget.setRowCount(6) 
+  
+        #Column count
+        self.tableWidget.setColumnCount(2)  
+  
+        self.tableWidget.setItem(0,0, QtWidgets.QTableWidgetItem("Barcode_number"))
+        self.tableWidget.setItem(0,1, QtWidgets.QTableWidgetItem("SampleID"))
+        self.tableWidget.setItem(1,0, QtWidgets.QTableWidgetItem("1"))
+        self.tableWidget.setItem(1,1, QtWidgets.QTableWidgetItem("Sample_1"))
+        self.tableWidget.setItem(2,0, QtWidgets.QTableWidgetItem("2"))
+        self.tableWidget.setItem(2,1, QtWidgets.QTableWidgetItem("sample_2"))
+        self.tableWidget.setItem(3,0, QtWidgets.QTableWidgetItem("3"))
+        self.tableWidget.setItem(3,1, QtWidgets.QTableWidgetItem("sample_3"))
+        self.tableWidget.setItem(4,0, QtWidgets.QTableWidgetItem("4"))
+        self.tableWidget.setItem(4,1, QtWidgets.QTableWidgetItem("sample_4"))
+        self.tableWidget.setItem(5,0, QtWidgets.QTableWidgetItem("6"))
+        self.tableWidget.setItem(5,1, QtWidgets.QTableWidgetItem("sample_6"))
+        self.tableWidget.setItem(6,0, QtWidgets.QTableWidgetItem("7"))
+        self.tableWidget.setItem(6,1, QtWidgets.QTableWidgetItem("sample_7"))
+
+        self.tableWidget.resizeColumnsToContents()
+        self.tableWidget.setFixedWidth(self.tableWidget.columnWidth(0) + self.tableWidget.columnWidth(1))
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+
+
         # check if there is a user info.txt if not no abortion
         try:
             
@@ -895,21 +930,20 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 zeile = 0
                 gesamt_zeilen = len(sample_csv)
                 while True:
-                    print(sample_csv.iloc[zeile, 0])
-                    if sample_csv.iloc[zeile, 0] == 1:
+                    if sample_csv.iloc[zeile, 0] == "barcode":
                         print(zeile)
-                        print("found")
                         break
                     else:
                         zeile = zeile + 1
                         if zeile == gesamt_zeilen:
-                            print("not found")
+                            zeile = 0
                             break
 
-                if sample_csv.iloc[zeile, 0] == 1:
+                if sample_csv.iloc[zeile, 0] == "barcode":
+                    zeile = zeile + 1
                     for zeilen in range(zeile, gesamt_zeilen):
                         if zeilen < 10:
-                            demo.write('NB')
+                            demo.write('NB0')
                             demo.write(str(sample_csv.iloc[zeilen, 0]))#barcode number
                             demo.write('    ')
                             demo.write(str(sample_csv.iloc[zeilen, 1]))#sample id
@@ -927,15 +961,17 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 zeile = 0
                 gesamt_zeilen = len(sample_excel)
                 while True:
-                    if sample_excel.iloc[zeile, 0] == 1:
+                    if sample_excel.iloc[zeile, 0] == "barcode":
                         print(zeile)
                         break
                     else:
                         zeile = zeile + 1 
                         if zeile == gesamt_zeilen:
+                            zeile = 0
                             break
 
-                if sample_excel.iloc[zeile, 0] == 1:
+                if sample_excel.iloc[zeile, 0] == "barcode":
+                    zeile = zeile + 1
                     for zeilen in range(zeile, gesamt_zeilen):
                         if zeilen < 10:
                             demo.write('NB0')
@@ -1326,7 +1362,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
     
             self.labelupload.setText('96')
             self.download_template.setHidden(False)
-            self.download_template.setDisabled(False)
             self.upload_info.setHidden(False)
             self.upload_info.setDisabled(False)
             self.label1.setHidden(True)
@@ -1420,18 +1455,15 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             self.password.setEchoMode(QtWidgets.QLineEdit.Password)
     
     def sample_upload(self):
-        pass
         #download template, so its unique to read 
-        global upload_sample_path
-        upload_sample_path, _ = QFileDialog.getOpenFileName(self, 'Select sample sheet',"~", "data files(*.csv *.xlsx)")
-        filename =  QFileInfo(upload_sample_path).fileName()
-        global file_1
-        file_1 = filename.split(".",1)[1]
-        print(filename)
-        print('')
-        print(upload_sample_path)
-        print('')
-        print(file_1)
+        try:
+            global upload_sample_path
+            upload_sample_path, _ = QFileDialog.getOpenFileName(self, 'Select sample sheet',"~", "data files(*.csv *.xlsx)")
+            filename =  QFileInfo(upload_sample_path).fileName()
+            global file_1
+            file_1 = filename.split(".",1)[1]
+        except IndexError:
+            print('no file selected')
         
 
         
@@ -1441,6 +1473,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         msg.setWindowTitle("data input")
         msg.setText("If you wanna use 96 samples, please create a csv(.csv) or excel(.xlsx) file with the following restrictions: two columns, first one with barcode number (1, 2, 3 and so on), second one with the sample ID.")
         x = msg.exec_()
+        self.download_template.setDisabled(False)
 
 
 
