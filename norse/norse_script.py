@@ -759,7 +759,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.label_image.setPixmap(self.image)"""
 
         self.tableWidget = QtWidgets.QTableWidget(self)
-        self.tableWidget.move(300, 300)
+        self.tableWidget.move(400, 20)
+        self.tableWidget.setHidden(True)
   
         #Row count
         self.tableWidget.setRowCount(6) 
@@ -782,9 +783,27 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.tableWidget.setItem(6,0, QtWidgets.QTableWidgetItem("7"))
         self.tableWidget.setItem(6,1, QtWidgets.QTableWidgetItem("sample_7"))
 
-        self.tableWidget.resizeColumnsToContents()
-        self.tableWidget.setFixedWidth(self.tableWidget.columnWidth(0) + self.tableWidget.columnWidth(1))
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.tableWidget.setMaximumWidth(222)
+        self.tableWidget.setMinimumWidth(222)
+        self.tableWidget.setMaximumHeight(200)
+        self.tableWidget.setMinimumHeight(200)
+
+        #table cant be changed
+        self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+
+        #self.tableWidget.resizeColumnsToContents()
+        #self.tableWidget.setFixedWidth(self.tableWidget.columnWidth(0) + self.tableWidget.columnWidth(1))
+        #self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+
+        self.textedit_csv = QtWidgets.QTextEdit(self)#little edit field to add additional info
+        self.textedit_csv.setPlaceholderText('barcode name,sampleid             1,sample_1                           2,sample_2                          3,sample_3                          5,sample_5')
+        self.textedit_csv.setGeometry(400, 235, 225, 150)
+        self.textedit_csv.setHidden(True)
+        self.textedit_csv_label = QtWidgets.QLabel(self)
+        self.textedit_csv_label.setText("csv example")
+        self.textedit_csv_label.move(400, 212)
+
 
 
         # check if there is a user info.txt if not no abortion
@@ -816,6 +835,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         save_path = self.lineedit_path_dir.text()
         
         name_of_file = 'run_info' 
+        
 
         completeName = os.path.join(save_path, name_of_file + ".txt")    
 
@@ -1239,6 +1259,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.download_template.setDisabled(True)
         self.upload_info.setHidden(True)
         self.upload_info.setDisabled(True)
+        self.tableWidget.setHidden(True)
+        self.textedit_csv.setHidden(True)
    
     def radioclicked_yes(self):# button for 1-12 samples
 
@@ -1298,6 +1320,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.download_template.setDisabled(True)
         self.upload_info.setHidden(True)
         self.upload_info.setDisabled(True)
+        self.tableWidget.setHidden(True)
+        self.textedit_csv.setHidden(True)
 
     
     def radiobutton_24(self): #button for samples 12-24
@@ -1332,6 +1356,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.download_template.setDisabled(True)
         self.upload_info.setHidden(True)
         self.upload_info.setDisabled(True)
+        self.tableWidget.setHidden(True)
+        self.textedit_csv.setHidden(True)
         self.label1.setHidden(False)
         self.label2.setHidden(False)
         self.label3.setHidden(False)
@@ -1364,6 +1390,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             self.download_template.setHidden(False)
             self.upload_info.setHidden(False)
             self.upload_info.setDisabled(False)
+            self.tableWidget.setHidden(False)
+            self.textedit_csv.setHidden(False)
             self.label1.setHidden(True)
             self.label2.setHidden(True)
             self.label3.setHidden(True)
