@@ -58,7 +58,9 @@ class Window2(QMainWindow):#class for window2 (pop up window)
 
     def iniUI(self):#
 
-        self.tablewidget = QtWidgets.QTableWidget
+        self.tableView = QtWidgets.QTableView
+        self.sample_96()
+        self.open_sheet()
 
         self.label_sample = QtWidgets.QLabel(self)
         self.label_sample.setText('sample name:')
@@ -236,6 +238,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         #self.button.clicked.connect(self.upload_activated)
         self.button.clicked.connect(self.close)#close window2
 
+        
 
     def hide2(self):#hide all labels from 2 to 12 
         self.label2.setHidden(True)
@@ -294,7 +297,38 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label23.setHidden(True)
         self.label24.setHidden(True)
 
- 
+    def sample_96(self):
+
+
+        """df1 = 0
+        if file_1 == "csv":
+            df1 = pd.read_csv(upload_sample_path, sep=',',header=None)
+        if file_1 == "xlsx":
+            df1 = pd.read_excel(upload_sample_path, header=None)
+            
+            
+        model = df1
+        self.tableView.setModel(model)
+        self.tableView.show """
+
+    def open_sheet(self):
+        
+        path = upload_sample_path
+        if path[0] != '':
+            with open(path[0]):
+                self.tableView.setRowCount(0)
+                self.tableView.setColumnCount(2)
+                my_file = pd.read_csv(upload_sample_path, sep=',',header=None)
+                for row_data in my_file:
+                    row = self.rowCount()
+                    self.insertRow(row)
+                    if len(row_data) > 10:
+                        self.setColumnCount(len(row_data))
+                    """for column, stuff in enumerate(row_data):
+                        item = QTableWidgetItem(stuff)
+                        self.setItem(row, column, item)"""
+        self.tableView.show                
+
     def displayInfo(self):#shows window2
         self.show( )
 
@@ -759,7 +793,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.label_image.setPixmap(self.image)"""
 
         self.tableWidget = QtWidgets.QTableWidget(self)
-        self.tableWidget.move(400, 20)
+        self.tableWidget.move(400, 23)
         self.tableWidget.setHidden(True)
   
         #Row count
@@ -768,8 +802,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #Column count
         self.tableWidget.setColumnCount(2)  
   
-        self.tableWidget.setItem(0,0, QtWidgets.QTableWidgetItem("Barcode_number"))
-        self.tableWidget.setItem(0,1, QtWidgets.QTableWidgetItem("SampleID"))
+        self.tableWidget.setItem(0,0, QtWidgets.QTableWidgetItem("barcode"))
+        self.tableWidget.setItem(0,1, QtWidgets.QTableWidgetItem("sampleID"))
         self.tableWidget.setItem(1,0, QtWidgets.QTableWidgetItem("1"))
         self.tableWidget.setItem(1,1, QtWidgets.QTableWidgetItem("Sample_1"))
         self.tableWidget.setItem(2,0, QtWidgets.QTableWidgetItem("2"))
@@ -795,14 +829,20 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #self.tableWidget.resizeColumnsToContents()
         #self.tableWidget.setFixedWidth(self.tableWidget.columnWidth(0) + self.tableWidget.columnWidth(1))
         #self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.tableWidget_label = QtWidgets.QLabel(self)
+        self.tableWidget_label.setText("xlsx example:")
+        self.tableWidget_label.move(400,0)
+        self.tableWidget_label.setHidden(True)
 
         self.textedit_csv = QtWidgets.QTextEdit(self)#little edit field to add additional info
-        self.textedit_csv.setPlaceholderText('barcode name,sampleid             1,sample_1                           2,sample_2                          3,sample_3                          5,sample_5')
-        self.textedit_csv.setGeometry(400, 235, 225, 150)
+        self.textedit_csv.setPlaceholderText('barcode,sampleid             1,sample_1                           2,sample_2                          3,sample_3                          5,sample_5')
+        self.textedit_csv.setGeometry(400, 238, 225, 150)
         self.textedit_csv.setHidden(True)
         self.textedit_csv_label = QtWidgets.QLabel(self)
-        self.textedit_csv_label.setText("csv example")
-        self.textedit_csv_label.move(400, 212)
+        self.textedit_csv_label.setText("csv example:")
+        self.textedit_csv_label.move(400, 215)
+        self.textedit_csv_label.setHidden(True)
+        
 
 
 
@@ -1261,6 +1301,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.upload_info.setDisabled(True)
         self.tableWidget.setHidden(True)
         self.textedit_csv.setHidden(True)
+        self.textedit_csv_label.setHidden(True)
+        self.tableWidget_label.setHidden(True)
    
     def radioclicked_yes(self):# button for 1-12 samples
 
@@ -1321,7 +1363,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.upload_info.setHidden(True)
         self.upload_info.setDisabled(True)
         self.tableWidget.setHidden(True)
-        self.textedit_csv.setHidden(True)
+        self.textedit_csv_label.setHidden(True)
+        self.tableWidget_label.setHidden(True)
 
     
     def radiobutton_24(self): #button for samples 12-24
@@ -1358,6 +1401,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.upload_info.setDisabled(True)
         self.tableWidget.setHidden(True)
         self.textedit_csv.setHidden(True)
+        self.textedit_csv_label.setHidden(True)
+        self.tableWidget_label.setHidden(True)
         self.label1.setHidden(False)
         self.label2.setHidden(False)
         self.label3.setHidden(False)
@@ -1392,6 +1437,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             self.upload_info.setDisabled(False)
             self.tableWidget.setHidden(False)
             self.textedit_csv.setHidden(False)
+            self.textedit_csv_label.setHidden(False)
+            self.tableWidget_label.setHidden(False)
             self.label1.setHidden(True)
             self.label2.setHidden(True)
             self.label3.setHidden(True)
@@ -1499,7 +1546,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
     def info(self):
         msg = QMessageBox()
         msg.setWindowTitle("data input")
-        msg.setText("If you wanna use 96 samples, please create a csv(.csv) or excel(.xlsx) file with the following restrictions: two columns, first one with barcode number (1, 2, 3 and so on), second one with the sample ID.")
+        msg.setText("If you wanna use 96 samples, please create a csv(.csv) or excel(.xlsx) file with like shown on the rigth side. Remember to write the headers (barcode, sampleid) not in caps.")
         x = msg.exec_()
         self.download_template.setDisabled(False)
 
