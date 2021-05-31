@@ -327,7 +327,6 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         #file_1 
         #self.tableWidget.setItem(0,0, QtWidgets.QTableWidgetItem("barcode")
         column = 0
-        print(file_1)
         if file_1 == 'csv':
             self.tableView.setRowCount(0)
             self.tableView.setColumnCount(2)
@@ -352,15 +351,22 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         if file_1 == 'xlsx':
             self.tableView.setRowCount(0)
             self.tableView.setColumnCount(2)
-            my_file = pd.read_excel(upload_sample_path, sep=',',header=None)
-            for row_data in my_file:
-                row = self.tableView.rowCount()
-                self.tableView.insertRow(row)
-                if len(row_data) > 10:
-                    self.tableView.setColumnCount(len(row_data))
+            my_file = pd.read_excel(upload_sample_path, header=None)
+            print(my_file)
+            my_file_rows = len(my_file)
+            my_file_columns = len(my_file.columns)
+            self.tableView.setRowCount(my_file_rows)
+            self.tableView.setColumnCount(my_file_columns)
+            for rows in range(0, my_file_rows):
+                barcode = my_file.loc[rows, 0]
+                sample_id = my_file.loc[rows, 1]
+                self.tableView.setItem(rows,column, QtWidgets.QTableWidgetItem(barcode))
+                column = column + 1
+                self.tableView.setItem(rows,column, QtWidgets.QTableWidgetItem(sample_id))
+                column = 0
         self.tableView.move(15,100)
-        self.tableView.setMaximumWidth(250)
-        self.tableView.setMinimumWidth(250)
+        self.tableView.setMaximumWidth(240)
+        self.tableView.setMinimumWidth(240)
         self.tableView.setMaximumHeight(250)
         self.tableView.setMinimumHeight(250)
         self.tableView.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
@@ -856,10 +862,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.tableWidget.setItem(6,0, QtWidgets.QTableWidgetItem("7"))
         self.tableWidget.setItem(6,1, QtWidgets.QTableWidgetItem("sample_7"))
 
-        self.tableWidget.setMaximumWidth(222)
-        self.tableWidget.setMinimumWidth(222)
+        self.tableWidget.setMaximumWidth(215)
+        self.tableWidget.setMinimumWidth(215)
         self.tableWidget.setMaximumHeight(200)
         self.tableWidget.setMinimumHeight(200)
+        self.tableWidget.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
 
         #table cant be changed
         self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
@@ -872,6 +879,9 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.tableWidget_label.setText("xlsx example:")
         self.tableWidget_label.move(400,0)
         self.tableWidget_label.setHidden(True)
+        self.tableWidget_label.setFont(QtGui.QFont("arial", 15))
+
+        
 
         self.textedit_csv = QtWidgets.QTextEdit(self)#little edit field to add additional info
         self.textedit_csv.setPlaceholderText('barcode,sample_id             1,sample_1                           2,sample_2                          3,sample_3                          5,sample_5')
@@ -881,6 +891,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.textedit_csv_label.setText("csv example:")
         self.textedit_csv_label.move(400, 215)
         self.textedit_csv_label.setHidden(True)
+        self.textedit_csv_label.setFont(QtGui.QFont("arial", 15))
         
 
 
