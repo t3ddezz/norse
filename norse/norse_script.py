@@ -18,7 +18,7 @@ import argparse
 
 version = "0.1"
 program = "norse"
-"""
+
 def main(sysargs = sys.argv[1:]):#main function to run script and see version
     
     parser = argparse.ArgumentParser(prog = program,
@@ -38,7 +38,7 @@ def main(sysargs = sys.argv[1:]):#main function to run script and see version
     
     if args.run:
         window()#function to show GUI
-    """
+    
 
 class Validator(QtGui.QValidator):#validator to restict input for flowcells,barcode and sequencinkits
     def validate(self, string, pos):
@@ -1370,5 +1370,5 @@ def window():# func to show GUI and exit correctly
     
 
 if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
-    #main()
-    window()
+    main()
+    #window()
