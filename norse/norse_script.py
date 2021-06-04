@@ -347,12 +347,11 @@ class Window2(QMainWindow):#class for window2 (pop up window)
                 
 
 
-
+        column = 0
         if file_1 == 'xlsx':
             self.tableView.setRowCount(0)
             self.tableView.setColumnCount(2)
             my_file = pd.read_excel(upload_sample_path, header=None)
-            print(my_file)
             my_file_rows = len(my_file)
             my_file_columns = len(my_file.columns)
             self.tableView.setRowCount(my_file_rows)
@@ -360,7 +359,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
             for rows in range(0, my_file_rows):
                 barcode = my_file.loc[rows, 0]
                 sample_id = my_file.loc[rows, 1]
-                self.tableView.setItem(rows,column, QtWidgets.QTableWidgetItem(barcode))
+                self.tableView.setItem(rows,column, QtWidgets.QTableWidgetItem(str(barcode)))
                 column = column + 1
                 self.tableView.setItem(rows,column, QtWidgets.QTableWidgetItem(sample_id))
                 column = 0
