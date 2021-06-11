@@ -239,6 +239,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
 
         
 
+    """    
     def hide2(self):#hide all labels from 2 to 12 
         self.label2.setHidden(True)
         self.label3.setHidden(True)
@@ -250,10 +251,13 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label9.setHidden(True)
         self.label10.setHidden(True)
         self.label11.setHidden(True)
-        self.label12.setHidden(True)  
+        self.label12.setHidden(True)
+        self.tableView.setHidden(True)
+        """
 
 
-    def unhide2(self):#unhide all labels from 2 to 12
+    def unhide2(self):#unhide all labels from 1 to 12
+        self.label1.setHidden(False)
         self.label2.setHidden(False)
         self.label3.setHidden(False)
         self.label4.setHidden(False)
@@ -265,21 +269,36 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label10.setHidden(False)
         self.label11.setHidden(False)
         self.label12.setHidden(False)
+        self.tableView.setHidden(True)
 
 
-    def unhide(self):#show all labels from 13 to 24
-         self.label13.setHidden(False)
-         self.label14.setHidden(False)
-         self.label15.setHidden(False)
-         self.label16.setHidden(False)
-         self.label17.setHidden(False)
-         self.label18.setHidden(False)
-         self.label19.setHidden(False)
-         self.label20.setHidden(False)
-         self.label21.setHidden(False)
-         self.label22.setHidden(False)
-         self.label23.setHidden(False)
-         self.label24.setHidden(False)
+    def unhide(self):#show all labels from 1 to 24  
+        self.label1.setHidden(False)
+        self.label2.setHidden(False)
+        self.label3.setHidden(False)
+        self.label4.setHidden(False)
+        self.label5.setHidden(False)
+        self.label6.setHidden(False)
+        self.label7.setHidden(False)
+        self.label8.setHidden(False)
+        self.label9.setHidden(False)
+        self.label10.setHidden(False)
+        self.label11.setHidden(False)
+        self.label12.setHidden(False)
+        self.tableView.setHidden(True)
+        self.label13.setHidden(False)
+        self.label14.setHidden(False)
+        self.label15.setHidden(False)
+        self.label16.setHidden(False)
+        self.label17.setHidden(False)
+        self.label18.setHidden(False)
+        self.label19.setHidden(False)
+        self.label20.setHidden(False)
+        self.label21.setHidden(False)
+        self.label22.setHidden(False)
+        self.label23.setHidden(False)
+        self.label24.setHidden(False)
+        self.tableView.setHidden(True)
 
 
     def hide(self):#hide all labels from 13 to 24
@@ -295,6 +314,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label22.setHidden(True)
         self.label23.setHidden(True)
         self.label24.setHidden(True)
+        self.tableView.setHidden(True)
 
     def sample_96(self):
         self.label1.setHidden(True)
@@ -324,7 +344,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         
 
     def open_sheet(self):
-        #file_1 
+        #file_1 = global variable with suffix from uploaded file
         #self.tableWidget.setItem(0,0, QtWidgets.QTableWidgetItem("barcode")
         column = 0
         if file_1 == 'csv':
@@ -1293,7 +1313,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
     def radioclicked_no(self):# button no barcodes
         self.window2.hide()
-        self.window2.hide2()
+        #self.window2.hide2()
         self.labelupload.setText('no')
         self.label_barcode_yes_no.setText('no')
         self.label1.setHidden(False)
