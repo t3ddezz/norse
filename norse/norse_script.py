@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)
 from PyQt5 import QtWidgets, QtCore, QtGui
