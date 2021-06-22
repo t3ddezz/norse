@@ -16,7 +16,7 @@ import time
 import os
 import argparse
 
-version = "0.1"
+version = "0.2"
 program = "norse"
 
 
@@ -1665,4 +1665,5 @@ def window():# func to show GUI and exit correctly
 if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
     #main()
     window()
+
 
