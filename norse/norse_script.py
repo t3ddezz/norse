@@ -1183,6 +1183,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 
         except paramiko.AuthenticationException:
             print('connection error')
+        except socket.timeout:
+            print('connection error')
         
     def sequencing_changed(self):
 
