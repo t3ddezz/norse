@@ -13,3 +13,5 @@ dependencies:
     - requests==2.25.1
     - paramiko==2.7.2
     - argparse==1.4.0
+    - openpyxl==3.0.7
+    - xlrd==2.0.1
