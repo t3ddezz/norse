@@ -1658,4 +1658,3 @@ def window():# func to show GUI and exit correctly
 if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
     main()
     #window()
-
