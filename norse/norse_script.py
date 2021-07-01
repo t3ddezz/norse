@@ -16,7 +16,7 @@ import time
 import os
 import argparse
 
-version = "0.1"
+version = "0.2"
 program = "norse"
 
 
@@ -93,7 +93,9 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label1 = QtWidgets.QLabel(self)
         self.label1.setText('1')
         self.label1.move(10, 90)
+
         
+
         self.input2 = QtWidgets.QLabel(self)
         self.input2.move(20,110)
         self.label2 = QtWidgets.QLabel(self)
@@ -117,6 +119,9 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label5 = QtWidgets.QLabel(self)
         self.label5.setText('5')
         self.label5.move(10, 170)
+        
+
+
         
         self.input6 = QtWidgets.QLabel(self)
         self.input6.move(20,190)
@@ -240,7 +245,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
 
         
 
-    """    
+      
     def hide2(self):#hide all labels from 2 to 12 
         self.label2.setHidden(True)
         self.label3.setHidden(True)
@@ -254,7 +259,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label11.setHidden(True)
         self.label12.setHidden(True)
         self.tableView.setHidden(True)
-        """
+        
 
 
     def unhide2(self):#unhide all labels from 1 to 12
@@ -1046,13 +1051,13 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     demo.write('\n')
                     a = a + 1       
         if label_yes_no == "96":
-            print(file_1)
+            #print(file_1)
             if file_1 == "csv":
                 sample_csv = pd.read_csv(upload_sample_path, sep=',',header=None)
-                print(sample_csv)
+                #print(sample_csv)
             if file_1 == "xlsx":
                 sample_excel = pd.read_excel(upload_sample_path, header=None)
-                print(sample_excel)
+                #print(sample_excel)
 
 
             #reading csv files
@@ -1061,7 +1066,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 gesamt_zeilen = len(sample_csv)
                 while True:
                     if sample_csv.iloc[zeile, 0] == "barcode":
-                        print(zeile)
+                        #print(zeile)
                         break
                     else:
                         zeile = zeile + 1
@@ -1092,7 +1097,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 gesamt_zeilen = len(sample_excel)
                 while True:
                     if sample_excel.iloc[zeile, 0] == "barcode":
-                        print(zeile)
+                        #print(zeile)
                         break
                     else:
                         zeile = zeile + 1 
@@ -1171,11 +1176,15 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             else:
                 #os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
                  #   save_path + " " + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name) {neuer_ordner_name}
-                print(":DDD")
+                
                 os.system(f"rsync --rsync-path={rsync_var} -acrv --remove-source-files {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
-                print("after")
+                print(" ")
+                print("file upload complete")
+                print(" ")
                 
         except paramiko.AuthenticationException:
+            print('connection error')
+        except socket.timeout:
             print('connection error')
         
     def sequencing_changed(self):
@@ -1282,7 +1291,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         
 
 
-            print(path in resp3)#string doesnt have to match exactly at moment
+            #print(path in resp3)#string doesnt have to match exactly at moment
             if path in resp3:
                 msg = QMessageBox()
                 msg.setWindowTitle("test upload")
@@ -1314,7 +1323,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
     def radioclicked_no(self):# button no barcodes
         self.window2.hide()
-        #self.window2.hide2()
+        self.window2.hide2()
         self.labelupload.setText('no')
         self.label_barcode_yes_no.setText('no')
         self.label1.setHidden(False)
@@ -1434,6 +1443,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.upload_info.setDisabled(True)
         self.tableWidget.setHidden(True)
         self.textedit_csv_label.setHidden(True)
+        self.textedit_csv.setHidden(True)
         self.tableWidget_label.setHidden(True)
 
     
