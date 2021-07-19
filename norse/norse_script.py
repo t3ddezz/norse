@@ -277,7 +277,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label12.setHidden(False)
         self.tableView.setHidden(True)
 
-
+    """
     def unhide(self):#show all labels from 1 to 24  
         self.label1.setHidden(False)
         self.label2.setHidden(False)
@@ -305,7 +305,14 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label23.setHidden(False)
         self.label24.setHidden(False)
         self.tableView.setHidden(True)
-
+    """
+    def unhide(self, first_label_nr, last_label_nr, BOOLEAN):
+       
+        label_name_list = ["label" + str(item) for item in list(range(first_label_nr, (int(last_label_nr) + 1), 1))]
+        for label_name in label_name_list:
+            current_label = int(label_name_list[label_name])
+            [self.current_label.setHidden(BOOLEAN)]
+        self.tableView.setHidden(True)
 
     def hide(self):#hide all labels from 13 to 24
         self.label13.setHidden(True)
@@ -1473,7 +1480,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.lineedit23.setHidden(False)
         self.label24.setHidden(False)
         self.lineedit24.setHidden(False)
-        self.window2.unhide()
+        self.window2.unhide(1, 24, False)
 
         self.download_template.setHidden(True)
         self.download_template.setDisabled(True)
@@ -1666,5 +1673,5 @@ def window():# func to show GUI and exit correctly
     
 
 if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
-    main()
-    #window()
+    #main()
+    window()
