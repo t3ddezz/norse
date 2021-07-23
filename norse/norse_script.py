@@ -57,6 +57,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         
 
         self.label_name_list = ["label" + str(item) for item in list(range(1, (24 + 1), 1))]
+        self.input_name_list = ["input" + str(item) for item in list(range(1, (24 + 1), 1))]
         #[exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list]
         self.iniUI()
         
@@ -64,29 +65,40 @@ class Window2(QMainWindow):#class for window2 (pop up window)
     def iniUI(self):#
         globs, locs = globals(), locals()
         [exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list]
+        [exec(f"self.{input_name} = QtWidgets.QLabel(self)",globs, locs) for input_name in self.input_name_list]
         self.tableView = QtWidgets.QTableWidget(self)
         self.tableView.setHidden(True)
 
         x_y_values_for_label = []
         label_move_y_value = 70
         for i in range(1,25,1):
-            if 1 < 10:
+            if i < 10:
                 x_value = 10
-                label_move_y_value += 20
             elif 9 < i <= 12:
                 x_value = 6
-                label_move_y_value += 20
             elif i == 13:
-                x_value = 184
-                label_move_y_value = 90
-            else:
-                label_move_y_value += 20
+                x_value = 18
+                label_move_y_value = 70
+            label_move_y_value += 20
             x_y_values_for_label.append([x_value,label_move_y_value])
-            print(x_y_values_for_label)
+            
         [exec(f"self.{self.label_name_list[index]}.move(*{x_y_values_for_label[index]})",globs, locs) for index in range(len(self.label_name_list))]
         [exec(f"self.{self.label_name_list[index]}.setText(str({index}+ 1))",globs, locs) for index in range(len(self.label_name_list))]
         
 
+        x_y_values_for_input = []
+        input_move_y_value = 70
+        for i in range(1,25,1):
+            if i <= 12:
+                x_value = 20
+            else:
+                x_value = 200
+                input_move_y_value = 70
+            input_move_y_value += 20
+            x_y_values_for_input.append([x_value,input_move_y_value])
+            #print(x_y_values_for_input)
+        [exec(f"self.{self.input_name_list[index]}.move(*{x_y_values_for_input[index]})",globs, locs) for index in range(len(self.input_name_list))]
+        
         self.label_sample = QtWidgets.QLabel(self)
         self.label_sample.setText('sample name:')
         self.label_sample.move(20, 70)
@@ -115,12 +127,6 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         
         self.input1 = QtWidgets.QLabel(self)#samples 1-24
         self.input1.move(20, 90)
-        #self.label1 = QtWidgets.QLabel(self)
-        #self.label1.setText('1')
-        #self.label1.move(10, 90)
-        
-
-        
 
         self.input2 = QtWidgets.QLabel(self)
         self.input2.move(20,110)
@@ -129,77 +135,56 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.input3 = QtWidgets.QLabel(self)
         self.input3.move(20,130)
 
-    
         self.input4 = QtWidgets.QLabel(self)
         self.input4.move(20,150)
 
-        
         self.input5 = QtWidgets.QLabel(self)
         self.input5.move(20,170)
  
-        
-
-
-        
         self.input6 = QtWidgets.QLabel(self)
         self.input6.move(20,190)
 
-        
         self.input7 = QtWidgets.QLabel(self)
         self.input7.move(20,210)
-
         
         self.input8 = QtWidgets.QLabel(self)
         self.input8.move(20,230)
-
         
         self.input9 = QtWidgets.QLabel(self)
         self.input9.move(20,250)
-
         
         self.input10 = QtWidgets.QLabel(self)
         self.input10.move(20,270)
-
         
         self.input11 = QtWidgets.QLabel(self)
         self.input11.move(20,290)
-
         
         self.input12 = QtWidgets.QLabel(self)
         self.input12.move(20,310)
-
         
         self.input13 = QtWidgets.QLabel(self)
         self.input13.move(200,90)
-
        
         self.input14 = QtWidgets.QLabel(self)
         self.input14.move(200,110)
-
         
         self.input15 = QtWidgets.QLabel(self)
         self.input15.move(200,130)
-
         
         self.input16 = QtWidgets.QLabel(self)
         self.input16.move(200,150)
-
         
         self.input17 = QtWidgets.QLabel(self)
         self.input17.move(200,170)
-
         
         self.input18 = QtWidgets.QLabel(self)
         self.input18.move(200,190)
-
         
         self.input19 = QtWidgets.QLabel(self)
         self.input19.move(200,210)
-
         
         self.input20 = QtWidgets.QLabel(self)
         self.input20.move(200,230)
-
         
         self.input21 = QtWidgets.QLabel(self)
         self.input21.move(200,250)
@@ -207,20 +192,16 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         
         self.input22 = QtWidgets.QLabel(self)
         self.input22.move(200,270)
-
         
         self.input23 = QtWidgets.QLabel(self)
         self.input23.move(200,290)
-
         
         self.input24 = QtWidgets.QLabel(self)
         self.input24.move(200,310)
 
-
         self.button = QtWidgets.QPushButton(self)
         self.button.setText('ok!')
-        self.button.move(230, 355) 
-        #self.button.clicked.connect(self.upload_activated)
+        self.button.move(230, 355)
         self.button.clicked.connect(self.close)#close window2
         
     
