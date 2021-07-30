@@ -1,7 +1,12 @@
+from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import QApplication, QMainWindow, QInputDialog,  QFileDialog, QFrame, QMessageBox
+from PyQt5.QtGui import QPalette, QColor, QIcon, QPixmap
+from PyQt5.QtCore import Qt, QFileInfo
+from  upload_data import password_hide_unhide
 def iniUI(self):
         # 'self' is the first parameter of the methods of a class that refers to the instance of the same
 
-        self.window2 = Window2()#for initiating window2
+        #self.window2 = Window2()   #for initiating window2
     
 
 
@@ -30,7 +35,7 @@ def iniUI(self):
 
         self.checkbox_hide_unhide = QtWidgets.QCheckBox('show',self)
         self.checkbox_hide_unhide.adjustSize()
-        self.checkbox_hide_unhide.stateChanged.connect(self.password_hide_unhide)
+        self.checkbox_hide_unhide.stateChanged.connect(password_hide_unhide(self))
         self.checkbox_hide_unhide.move(370, 405)
 
         self.label_sonderzeichen = QtWidgets.QLabel(self)

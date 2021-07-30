@@ -15,8 +15,10 @@ import socket
 import time
 import os
 import argparse
-
-
+#from scripts import barcode_input, data_transfer_between_windows, flowcell_barcode_sequencing_kits, mainWindow, sample_upload, upload_data, window2
+#import scripts.mainWindow as mw
+import hulu
+from mainWindow import iniUI
 
 version = "0.2"
 program = "norse"
@@ -56,7 +58,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         super(Window2,self).__init__()
         self.setWindowTitle("check your data")
         self.setGeometry(400, 400, 330, 385)
-        self.iniUI()
+        #self.iniUI()
 class MyWindow(QMainWindow):#create a window through the initUI() method, and call it in the initialization method init()
     
     def __init__(self):
@@ -65,7 +67,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #self.secondwindow = Window2()
         self.setGeometry(200, 200, 800, 600)
         self.setWindowTitle('norse')
-        self.iniUI()
+        self.window2 = Window2()
+        iniUI(self)
+        
+        
 def window():# func to show GUI and exit correctly
     app = QApplication(sys.argv)
     
@@ -94,5 +99,6 @@ def window():# func to show GUI and exit correctly
     win.show()
     sys.exit(app.exec_())
 
-if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module       
+if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
+    #main()
     window()
