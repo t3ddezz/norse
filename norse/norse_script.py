@@ -23,7 +23,7 @@ program = "norse"
 file_1 = 0
 upload_sample_path = 0
 
-"""
+
 def main(sysargs = sys.argv[1:]):#main function to run script and see version
     
     parser = argparse.ArgumentParser(prog = program,
@@ -44,7 +44,7 @@ def main(sysargs = sys.argv[1:]):#main function to run script and see version
     if args.run:
         window()#function to show GUI
     
-"""    
+ 
 
 class Validator(QtGui.QValidator):#validator to restict input for flowcells,barcode and sequencinkits
     def validate(self, string, pos):
@@ -54,14 +54,51 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         super(Window2,self).__init__()
         self.setWindowTitle("check your data")
         self.setGeometry(400, 400, 330, 385)
+        
+
+        self.label_name_list = ["label" + str(item) for item in list(range(1, (24 + 1), 1))]
+        self.input_name_list = ["input" + str(item) for item in list(range(1, (24 + 1), 1))]
+        #[exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list]
         self.iniUI()
-
-
+        
+        
     def iniUI(self):#
-
+        globs, locs = globals(), locals()
+        [exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list]
+        [exec(f"self.{input_name} = QtWidgets.QLabel(self)",globs, locs) for input_name in self.input_name_list]
         self.tableView = QtWidgets.QTableWidget(self)
         self.tableView.setHidden(True)
 
+        x_y_values_for_label = []
+        label_move_y_value = 70
+        for i in range(1,25,1):
+            if i < 10:
+                x_value = 10
+            elif 9 < i <= 12:
+                x_value = 6
+            elif i == 13:
+                x_value = 180
+                label_move_y_value = 70
+            label_move_y_value += 20
+            x_y_values_for_label.append([x_value,label_move_y_value])
+            
+        [exec(f"self.{self.label_name_list[index]}.move(*{x_y_values_for_label[index]})",globs, locs) for index in range(len(self.label_name_list))]
+        [exec(f"self.{self.label_name_list[index]}.setText(str({index}+ 1))",globs, locs) for index in range(len(self.label_name_list))]
+        
+
+        x_y_values_for_input = []
+        input_move_y_value = 70
+        for i in range(1,25,1):
+            if i <= 12:
+                x_value = 20
+            elif i == 13:
+                x_value = 200
+                input_move_y_value = 70
+            input_move_y_value += 20
+            x_y_values_for_input.append([x_value,input_move_y_value])
+        
+        [exec(f"self.{self.input_name_list[index]}.move(*{x_y_values_for_input[index]})",globs, locs) for index in range(len(self.input_name_list))]
+        
         self.label_sample = QtWidgets.QLabel(self)
         self.label_sample.setText('sample name:')
         self.label_sample.move(20, 70)
@@ -70,284 +107,39 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.kitlabel = QtWidgets.QLabel(self)
         self.kitlabel.move(20, 10)
         self.kitlabel.setText('kit:')
+        self.input_kit = QtWidgets.QLabel(self)
+        self.input_kit.move(115, 10)
 
         self.barlabel = QtWidgets.QLabel(self)
         self.barlabel.move(20, 30)
         self.barlabel.setText('barcoding kit:')
+        self.input_barcode = QtWidgets.QLabel(self)
+        self.input_barcode.move(115, 30)
         
         self.barcodinglabel = QtWidgets.QLabel(self)
         self.barcodinglabel.move(20, 50)
         self.barcodinglabel.setText('flowcell:')
-        
-        self.input0 = QtWidgets.QLabel(self)#kit
-        self.input0.move(115, 10)
-
-        self.input00 = QtWidgets.QLabel(self)#barcode
-        self.input00.move(115, 30)
-
-        self.input000 = QtWidgets.QLabel(self)#flowcell
-        self.input000.move(115, 50)
-        
-        self.input1 = QtWidgets.QLabel(self)#samples 1-24
-        self.input1.move(20, 90)
-        self.label1 = QtWidgets.QLabel(self)
-        self.label1.setText('1')
-        self.label1.move(10, 90)
-
-        
-
-        self.input2 = QtWidgets.QLabel(self)
-        self.input2.move(20,110)
-        self.label2 = QtWidgets.QLabel(self)
-        self.label2.setText('2')
-        self.label2.move(10, 110)
-        
-        self.input3 = QtWidgets.QLabel(self)
-        self.input3.move(20,130)
-        self.label3 = QtWidgets.QLabel(self)
-        self.label3.setText('3')
-        self.label3.move(10, 130)
-    
-        self.input4 = QtWidgets.QLabel(self)
-        self.input4.move(20,150)
-        self.label4 = QtWidgets.QLabel(self)
-        self.label4.setText('4')
-        self.label4.move(10, 150)
-        
-        self.input5 = QtWidgets.QLabel(self)
-        self.input5.move(20,170)
-        self.label5 = QtWidgets.QLabel(self)
-        self.label5.setText('5')
-        self.label5.move(10, 170)
+        self.input_flowcell = QtWidgets.QLabel(self)
+        self.input_flowcell.move(115, 50)
         
 
 
-        
-        self.input6 = QtWidgets.QLabel(self)
-        self.input6.move(20,190)
-        self.label6 = QtWidgets.QLabel(self)
-        self.label6.setText('6')
-        self.label6.move(10, 190)
-        
-        self.input7 = QtWidgets.QLabel(self)
-        self.input7.move(20,210)
-        self.label7 = QtWidgets.QLabel(self)
-        self.label7.setText('7')
-        self.label7.move(10, 210)
-        
-        self.input8 = QtWidgets.QLabel(self)
-        self.input8.move(20,230)
-        self.label8 = QtWidgets.QLabel(self)
-        self.label8.setText('8')
-        self.label8.move(10, 230)
-        
-        self.input9 = QtWidgets.QLabel(self)
-        self.input9.move(20,250)
-        self.label9 = QtWidgets.QLabel(self)
-        self.label9.setText('9')
-        self.label9.move(10, 250)
-        
-        self.input10 = QtWidgets.QLabel(self)
-        self.input10.move(20,270)
-        self.label10 = QtWidgets.QLabel(self)
-        self.label10.setText('10')
-        self.label10.move(6, 270)
-        
-        self.input11 = QtWidgets.QLabel(self)
-        self.input11.move(20,290)
-        self.label11 = QtWidgets.QLabel(self)
-        self.label11.setText('11')
-        self.label11.move(6, 290)
-        
-        self.input12 = QtWidgets.QLabel(self)
-        self.input12.move(20,310)
-        self.label12 = QtWidgets.QLabel(self)
-        self.label12.setText('12')
-        self.label12.move(6, 310)
-        
-        self.input13 = QtWidgets.QLabel(self)
-        self.input13.move(200,90)
-        self.label13 = QtWidgets.QLabel(self)
-        self.label13.setText('13')
-        self.label13.move(184, 90)
-       
-        self.input14 = QtWidgets.QLabel(self)
-        self.input14.move(200,110)
-        self.label14 = QtWidgets.QLabel(self)
-        self.label14.setText('14')
-        self.label14.move(184, 110)
-        
-        self.input15 = QtWidgets.QLabel(self)
-        self.input15.move(200,130)
-        self.label15 = QtWidgets.QLabel(self)
-        self.label15.setText('16')
-        self.label15.move(184, 130)
-        
-        self.input16 = QtWidgets.QLabel(self)
-        self.input16.move(200,150)
-        self.label16 = QtWidgets.QLabel(self)
-        self.label16.setText('16')
-        self.label16.move(184, 150)
-        
-        self.input17 = QtWidgets.QLabel(self)
-        self.input17.move(200,170)
-        self.label17 = QtWidgets.QLabel(self)
-        self.label17.setText('17')
-        self.label17.move(184, 170)
-        
-        self.input18 = QtWidgets.QLabel(self)
-        self.input18.move(200,190)
-        self.label18 = QtWidgets.QLabel(self)
-        self.label18.setText('18')
-        self.label18.move(184, 190)
-        
-        self.input19 = QtWidgets.QLabel(self)
-        self.input19.move(200,210)
-        self.label19 = QtWidgets.QLabel(self)
-        self.label19.setText('19')
-        self.label19.move(184, 210)
-        
-        self.input20 = QtWidgets.QLabel(self)
-        self.input20.move(200,230)
-        self.label20 = QtWidgets.QLabel(self)
-        self.label20.setText('20')
-        self.label20.move(184, 230)
-        
-        self.input21 = QtWidgets.QLabel(self)
-        self.input21.move(200,250)
-        self.label21 = QtWidgets.QLabel(self)
-        self.label21.setText('21')
-        self.label21.move(184, 250)
-        
-        self.input22 = QtWidgets.QLabel(self)
-        self.input22.move(200,270)
-        self.label22 = QtWidgets.QLabel(self)
-        self.label22.setText('22')
-        self.label22.move(184, 270)
-        
-        self.input23 = QtWidgets.QLabel(self)
-        self.input23.move(200,290)
-        self.label23 = QtWidgets.QLabel(self)
-        self.label23.setText('23')
-        self.label23.move(184, 290)
-        
-        self.input24 = QtWidgets.QLabel(self)
-        self.input24.move(200,310)
-        self.label24 = QtWidgets.QLabel(self)
-        self.label24.setText('24')
-        self.label24.move(184, 310)
+
+
+
 
         self.button = QtWidgets.QPushButton(self)
         self.button.setText('ok!')
-        self.button.move(230, 355) 
-        #self.button.clicked.connect(self.upload_activated)
+        self.button.move(230, 355)
         self.button.clicked.connect(self.close)#close window2
 
-        
 
-      
-    def hide2(self):#hide all labels from 2 to 12 
-        self.label2.setHidden(True)
-        self.label3.setHidden(True)
-        self.label4.setHidden(True)
-        self.label5.setHidden(True)
-        self.label6.setHidden(True)
-        self.label7.setHidden(True)
-        self.label8.setHidden(True)
-        self.label9.setHidden(True)
-        self.label10.setHidden(True)
-        self.label11.setHidden(True)
-        self.label12.setHidden(True)
-        self.tableView.setHidden(True)
-        
-
-
-    def unhide2(self):#unhide all labels from 1 to 12
-        self.label1.setHidden(False)
-        self.label2.setHidden(False)
-        self.label3.setHidden(False)
-        self.label4.setHidden(False)
-        self.label5.setHidden(False)
-        self.label6.setHidden(False)
-        self.label7.setHidden(False)
-        self.label8.setHidden(False)
-        self.label9.setHidden(False)
-        self.label10.setHidden(False)
-        self.label11.setHidden(False)
-        self.label12.setHidden(False)
+    def hide_and_show(self,first_label_index, last_label_index, BOOLEAN):#hide or show labels
+        globs, locs = globals(), locals()
+        #list comprehension build string (exec) using label_name an then execute the command
+        [exec(f'self.{label_name}.setHidden({BOOLEAN})', globs,locs) for label_name in self.label_name_list[(first_label_index - 1):last_label_index]]
         self.tableView.setHidden(True)
 
-
-    def unhide(self):#show all labels from 1 to 24  
-        self.label1.setHidden(False)
-        self.label2.setHidden(False)
-        self.label3.setHidden(False)
-        self.label4.setHidden(False)
-        self.label5.setHidden(False)
-        self.label6.setHidden(False)
-        self.label7.setHidden(False)
-        self.label8.setHidden(False)
-        self.label9.setHidden(False)
-        self.label10.setHidden(False)
-        self.label11.setHidden(False)
-        self.label12.setHidden(False)
-        self.tableView.setHidden(True)
-        self.label13.setHidden(False)
-        self.label14.setHidden(False)
-        self.label15.setHidden(False)
-        self.label16.setHidden(False)
-        self.label17.setHidden(False)
-        self.label18.setHidden(False)
-        self.label19.setHidden(False)
-        self.label20.setHidden(False)
-        self.label21.setHidden(False)
-        self.label22.setHidden(False)
-        self.label23.setHidden(False)
-        self.label24.setHidden(False)
-        self.tableView.setHidden(True)
-
-
-    def hide(self):#hide all labels from 13 to 24
-        self.label13.setHidden(True)
-        self.label14.setHidden(True)
-        self.label15.setHidden(True)
-        self.label16.setHidden(True)
-        self.label17.setHidden(True)
-        self.label18.setHidden(True)
-        self.label19.setHidden(True)
-        self.label20.setHidden(True)
-        self.label21.setHidden(True)
-        self.label22.setHidden(True)
-        self.label23.setHidden(True)
-        self.label24.setHidden(True)
-        self.tableView.setHidden(True)
-
-    def sample_96(self):
-        self.label1.setHidden(True)
-        self.label2.setHidden(True)
-        self.label3.setHidden(True)
-        self.label4.setHidden(True)
-        self.label5.setHidden(True)
-        self.label6.setHidden(True)
-        self.label7.setHidden(True)
-        self.label8.setHidden(True)
-        self.label9.setHidden(True)
-        self.label10.setHidden(True)
-        self.label11.setHidden(True)
-        self.label12.setHidden(True) 
-        self.label13.setHidden(True)
-        self.label14.setHidden(True)
-        self.label15.setHidden(True)
-        self.label16.setHidden(True)
-        self.label17.setHidden(True)
-        self.label18.setHidden(True)
-        self.label19.setHidden(True)
-        self.label20.setHidden(True)
-        self.label21.setHidden(True)
-        self.label22.setHidden(True)
-        self.label23.setHidden(True)
-        self.label24.setHidden(True)
-        
 
     def open_sheet(self):
         #file_1 = global variable with suffix from uploaded file
@@ -399,12 +191,10 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.tableView.setHidden(False)
         self.tableView.show                
 
+
     def displayInfo(self):#shows window2
         self.show( )
 
-
-    #def upload_activated(self):
-     #   self.window1.button_upload.setEnabled(True)
 class MyWindow(QMainWindow):#create a window through the initUI() method, and call it in the initialization method init()
     
     def __init__(self):
@@ -413,14 +203,54 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #self.secondwindow = Window2()
         self.setGeometry(200, 200, 800, 600)
         self.setWindowTitle('norse')
+        self.label_name_list_main = ["label" + str(item) for item in list(range(1, (24 + 1), 1))]
+        self.input_name_list_main = ["lineedit" + str(item) for item in list(range(1, (24 + 1), 1))]
         self.iniUI()#function call
-        #self.layoutUI()
-
     def iniUI(self):
         # 'self' is the first parameter of the methods of a class that refers to the instance of the same
 
         self.window2 = Window2()#for initiating window2
-    
+        globs, locs = globals(), locals()
+        [exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list_main]
+        [exec(f"self.{input_name} = QtWidgets.QLineEdit(self)",globs, locs) for input_name in self.input_name_list_main]
+        
+        x_y_values_for_label = []
+        label_move_y_value = 20
+        for i in range(1,25,1):
+            if i == 1:
+                x_value = 245
+            elif i < 13:
+                label_move_y_value += 30
+            elif i == 13:
+                x_value = 533
+                label_move_y_value = 20
+            elif i > 13:
+                label_move_y_value += 30
+            x_y_values_for_label.append([x_value,label_move_y_value])
+
+        [exec(f"self.{self.label_name_list_main[index]}.move(*{x_y_values_for_label[index]})",globs, locs) for index in range(len(self.label_name_list_main))]
+        [exec(f"self.{self.label_name_list_main[index]}.setText(str({index}+ 1))",globs, locs) for index in range(len(self.label_name_list_main))]
+        [exec(f'self.{label_name}.setHidden(True)', globs,locs) for label_name in self.label_name_list_main[(1-1):24]]
+        self.label1.setHidden(False)
+
+        x_y_values_for_input = []
+        input_move_y_value = 20
+        for i in range(1,25,1):
+            if i == 1:
+                x_value = 260
+            elif i < 13:
+                input_move_y_value += 30
+            elif i == 13:
+                x_value = 550
+                input_move_y_value = 20
+            elif i > 13:
+                input_move_y_value += 30
+            x_y_values_for_input.append([x_value,input_move_y_value])
+
+        [exec(f"self.{self.input_name_list_main[index]}.move(*{x_y_values_for_input[index]})",globs, locs) for index in range(len(self.input_name_list_main))]
+        [exec(f'self.{input_name}.resize(240,30)', globs,locs) for input_name in self.input_name_list_main[(1-1):24]]
+        [exec(f'self.{input_name}.setHidden(True)', globs,locs) for input_name in self.input_name_list_main[(1-1):24]]
+        self.lineedit1.setHidden(False)
 
 
         self.logo_label = QtWidgets.QLabel(self)
@@ -602,230 +432,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         
         self.label_barcode_yes_no = QtWidgets.QLabel(self)
         self.label_barcode_yes_no.setHidden(True)
-
-    
-        self.label1 = QtWidgets.QLabel(self)# labels for lineedits for the samples
-        self.label1.setText('1')
-        self.label1.move(245, 20)
-        self.lineedit1 = QtWidgets.QLineEdit(self)
-        self.lineedit1.move(260,20)
-        self.lineedit1.resize(240, 30)
-
-
-        self.label2 = QtWidgets.QLabel(self)
-        self.label2.setText('2')
-        self.label2.move(245, 50)
-        self.label2.setHidden(True)
-        self.lineedit2 = QtWidgets.QLineEdit(self)
-        self.lineedit2.move(260,50)
-        self.lineedit2.setHidden(True)
-        self.lineedit2.resize(240, 30)
-
-        
-
-        self.label3 = QtWidgets.QLabel(self) 
-        self.label3.setText('3')
-        self.label3.move(245, 80)
-        self.label3.setHidden(True)
-        self.lineedit3 = QtWidgets.QLineEdit(self)
-        self.lineedit3.move(260,80)
-        self.lineedit3.setHidden(True)
-        self.lineedit3.resize(240, 30)
-
-
-        self.label4 = QtWidgets.QLabel(self)
-        self.label4.setText('4')
-        self.label4.move(245, 110)
-        self.label4.setHidden(True)
-        self.lineedit4 = QtWidgets.QLineEdit(self)
-        self.lineedit4.move(260,110)
-        self.lineedit4.setHidden(True)
-        self.lineedit4.resize(240, 30)
-
-
-        self.label5 = QtWidgets.QLabel(self)
-        self.label5.setText('5')
-        self.label5.move(245, 140)
-        self.label5.setHidden(True)
-        self.lineedit5 = QtWidgets.QLineEdit(self)
-        self.lineedit5.move(260,140)
-        self.lineedit5.setHidden(True)
-        self.lineedit5.resize(240, 30)
-
-
-        self.label6 = QtWidgets.QLabel(self)
-        self.label6.setText('6')
-        self.label6.move(245, 170)
-        self.label6.setHidden(True)
-        self.lineedit6 = QtWidgets.QLineEdit(self)
-        self.lineedit6.move(260,170)
-        self.lineedit6.setHidden(True)
-        self.lineedit6.resize(240, 30)
-
-
-        self.label7 = QtWidgets.QLabel(self)
-        self.label7.setText('7')
-        self.label7.move(245, 200)
-        self.label7.setHidden(True)
-        self.lineedit7 = QtWidgets.QLineEdit(self)
-        self.lineedit7.move(260,200)
-        self.lineedit7.setHidden(True)
-        self.lineedit7.resize(240, 30)
-
-        self.label8 = QtWidgets.QLabel(self)
-        self.label8.setText('8')
-        self.label8.move(245, 230)
-        self.label8.setHidden(True)
-        self.lineedit8 = QtWidgets.QLineEdit(self)
-        self.lineedit8.move(260,230)
-        self.lineedit8.setHidden(True)
-        self.lineedit8.resize(240, 30)
-
-        self.label9 = QtWidgets.QLabel(self)
-        self.label9.setText('9')
-        self.label9.move(245, 260)
-        self.label9.setHidden(True)
-        self.lineedit9 = QtWidgets.QLineEdit(self)
-        self.lineedit9.move(260,260)
-        self.lineedit9.setHidden(True)
-        self.lineedit9.resize(240, 30)
-
-        self.label10 = QtWidgets.QLabel(self)
-        self.label10.setText('10')
-        self.label10.move(245, 290)
-        self.label10.setHidden(True)
-        self.lineedit10 = QtWidgets.QLineEdit(self)
-        self.lineedit10.move(260,290)
-        self.lineedit10.setHidden(True)
-        self.lineedit10.resize(240, 30)
-
-        self.label11 = QtWidgets.QLabel(self)
-        self.label11.setText('11')
-        self.label11.move(245, 320)
-        self.label11.setHidden(True)
-        self.lineedit11 = QtWidgets.QLineEdit(self)
-        self.lineedit11.move(260,320)
-        self.lineedit11.setHidden(True)
-        self.lineedit11.resize(240, 30)
-
-        self.label12 = QtWidgets.QLabel(self)
-        self.label12.setText('12')
-        self.label12.move(245, 350)
-        self.label12.setHidden(True)
-        self.lineedit12 = QtWidgets.QLineEdit(self)
-        self.lineedit12.move(260, 350)
-        self.lineedit12.setHidden(True)
-        self.lineedit12.resize(240, 30)
-
-        self.label13 = QtWidgets.QLabel(self)
-        self.label13.setText('13')
-        self.label13.move(533, 20)
-        self.label13.setHidden(True)
-        self.lineedit13 = QtWidgets.QLineEdit(self)
-        self.lineedit13.move(550, 20)
-        self.lineedit13.setHidden(True)
-        self.lineedit13.resize(240, 30)
-
-        self.label14 = QtWidgets.QLabel(self)
-        self.label14.setText('14')
-        self.label14.move(533, 50)
-        self.label14.setHidden(True)
-        self.lineedit14 = QtWidgets.QLineEdit(self)
-        self.lineedit14.move(550,50)
-        self.lineedit14.setHidden(True)
-        self.lineedit14.resize(240, 30)
-
-        self.label15 = QtWidgets.QLabel(self)
-        self.label15.setText('15')
-        self.label15.move(533, 80)
-        self.label15.setHidden(True)
-        self.lineedit15 = QtWidgets.QLineEdit(self)
-        self.lineedit15.move(550, 80)
-        self.lineedit15.setHidden(True)
-        self.lineedit15.resize(240, 30)
-        
-        self.label16 = QtWidgets.QLabel(self)
-        self.label16.setText('16')
-        self.label16.move(533, 110)
-        self.label16.setHidden(True)
-        self.lineedit16 = QtWidgets.QLineEdit(self)
-        self.lineedit16.move(550, 110)
-        self.lineedit16.setHidden(True)
-        self.lineedit16.resize(240, 30)
-        
-        self.label17 = QtWidgets.QLabel(self)
-        self.label17.setText('17')
-        self.label17.move(533, 140)
-        self.label17.setHidden(True)
-        self.lineedit17 = QtWidgets.QLineEdit(self)
-        self.lineedit17.move(550, 140)
-        self.lineedit17.setHidden(True)
-        self.lineedit17.resize(240, 30)
-        
-        self.label18 = QtWidgets.QLabel(self)
-        self.label18.setText('18')
-        self.label18.move(533, 170)
-        self.label18.setHidden(True)
-        self.lineedit18 = QtWidgets.QLineEdit(self)
-        self.lineedit18.move(550, 170)
-        self.lineedit18.setHidden(True)
-        self.lineedit18.resize(240, 30)
-        
-        self.label19 = QtWidgets.QLabel(self)
-        self.label19.setText('19')
-        self.label19.move(533, 200)
-        self.label19.setHidden(True)
-        self.lineedit19 = QtWidgets.QLineEdit(self)
-        self.lineedit19.move(550, 200)
-        self.lineedit19.setHidden(True)
-        self.lineedit19.resize(240, 30)
-        
-        self.label20 = QtWidgets.QLabel(self)
-        self.label20.setText('20')
-        self.label20.move(533, 230)
-        self.label20.setHidden(True)
-        self.lineedit20 = QtWidgets.QLineEdit(self)
-        self.lineedit20.move(550, 230)
-        self.lineedit20.setHidden(True)
-        self.lineedit20.resize(240, 30)
-        
-        self.label21 = QtWidgets.QLabel(self)
-        self.label21.setText('21')
-        self.label21.move(533, 260)
-        self.label21.setHidden(True)
-        self.lineedit21 = QtWidgets.QLineEdit(self)
-        self.lineedit21.move(550, 260)
-        self.lineedit21.setHidden(True)
-        self.lineedit21.resize(240, 30)
-        
-        self.label22 = QtWidgets.QLabel(self)
-        self.label22.setText('22')
-        self.label22.move(533, 290)
-        self.label22.setHidden(True)
-        self.lineedit22 = QtWidgets.QLineEdit(self)
-        self.lineedit22.move(550, 290)
-        self.lineedit22.setHidden(True)
-        self.lineedit22.resize(240, 30)
-        
-        self.label23 = QtWidgets.QLabel(self)
-        self.label23.setText('23')
-        self.label23.move(533, 320)
-        self.label23.setHidden(True)
-        self.lineedit23 = QtWidgets.QLineEdit(self)
-        self.lineedit23.move(550, 320)
-        self.lineedit23.setHidden(True)
-        self.lineedit23.resize(240, 30)
-        
-        self.label24 = QtWidgets.QLabel(self)
-        self.label24.setText('24')
-        self.label24.move(533, 350)
-        self.label24.setHidden(True)
-        self.lineedit24 = QtWidgets.QLineEdit(self)
-        self.lineedit24.move(550, 350)
-        self.lineedit24.setHidden(True)
-        self.lineedit24.resize(240, 30)
-
-        
 
         self.button_checkdata = QtWidgets.QPushButton(self)#button to insepct data
         self.button_checkdata.setText('check data')
@@ -1322,58 +928,16 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             
 
     def radioclicked_no(self):# button no barcodes
-        self.window2.hide()
-        self.window2.hide2()
+        self.window2.hide_and_show(2,24,True)
         self.labelupload.setText('no')
         self.label_barcode_yes_no.setText('no')
+        globs, locs = globals(), locals()
+        [exec(f'self.{label_name}.setHidden(True)', globs,locs) for label_name in self.label_name_list_main[(0):24]]
+        [exec(f'self.{input_name}.setHidden(True)', globs,locs) for input_name in self.input_name_list_main[(0):24]]
+
         self.label1.setHidden(False)
-        self.label2.setHidden(True)
-        self.label3.setHidden(True)
-        self.label4.setHidden(True)
-        self.label5.setHidden(True)
-        self.label6.setHidden(True)
-        self.label7.setHidden(True)
-        self.label8.setHidden(True)
-        self.label9.setHidden(True)
-        self.label10.setHidden(True)
-        self.label11.setHidden(True)
-        self.label12.setHidden(True)
         self.lineedit1.setHidden(False)
-        self.lineedit2.setHidden(True)
-        self.lineedit3.setHidden(True)
-        self.lineedit4.setHidden(True)
-        self.lineedit5.setHidden(True)
-        self.lineedit6.setHidden(True)
-        self.lineedit7.setHidden(True)
-        self.lineedit8.setHidden(True)
-        self.lineedit9.setHidden(True)
-        self.lineedit10.setHidden(True)
-        self.lineedit11.setHidden(True)
-        self.lineedit12.setHidden(True)
-        self.label13.setHidden(True)
-        self.lineedit13.setHidden(True)
-        self.label14.setHidden(True)
-        self.lineedit14.setHidden(True)
-        self.label15.setHidden(True)
-        self.lineedit15.setHidden(True)
-        self.label16.setHidden(True)
-        self.lineedit16.setHidden(True)
-        self.label17.setHidden(True)
-        self.lineedit17.setHidden(True)
-        self.label18.setHidden(True)
-        self.lineedit18.setHidden(True)
-        self.label19.setHidden(True)
-        self.lineedit19.setHidden(True)
-        self.label20.setHidden(True)
-        self.lineedit20.setHidden(True)
-        self.label21.setHidden(True)
-        self.lineedit21.setHidden(True)
-        self.label22.setHidden(True)
-        self.lineedit22.setHidden(True)
-        self.label23.setHidden(True)
-        self.lineedit23.setHidden(True)
-        self.label24.setHidden(True)
-        self.lineedit24.setHidden(True)
+
         self.download_template.setHidden(True)
         self.download_template.setDisabled(True)
         self.upload_info.setHidden(True)
@@ -1385,130 +949,47 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
    
     def radioclicked_yes(self):# button for 1-12 samples
 
-        self.window2.hide()
-        self.window2.unhide2()
+        self.window2.hide_and_show(1,12,False)
+        self.window2.hide_and_show(13,24,True)
         self.labelupload.setText('yes')
         self.label_barcode_yes_no.setText('yes')
-        self.label1.setHidden(False)
-        self.label2.setHidden(False)
-        self.label3.setHidden(False)
-        self.label4.setHidden(False)
-        self.label5.setHidden(False)
-        self.label6.setHidden(False)
-        self.label7.setHidden(False)
-        self.label8.setHidden(False)
-        self.label9.setHidden(False)
-        self.label10.setHidden(False)
-        self.label11.setHidden(False)
-        self.label12.setHidden(False)
-        self.lineedit1.setHidden(False)
-        self.lineedit2.setHidden(False)
-        self.lineedit3.setHidden(False)
-        self.lineedit4.setHidden(False)
-        self.lineedit5.setHidden(False)
-        self.lineedit6.setHidden(False)
-        self.lineedit7.setHidden(False)
-        self.lineedit8.setHidden(False)
-        self.lineedit9.setHidden(False)
-        self.lineedit10.setHidden(False)
-        self.lineedit11.setHidden(False)
-        self.lineedit12.setHidden(False)
-        self.label13.setHidden(True)
-        self.lineedit13.setHidden(True)
-        self.label14.setHidden(True)
-        self.lineedit14.setHidden(True)
-        self.label15.setHidden(True)
-        self.lineedit15.setHidden(True)
-        self.label16.setHidden(True)
-        self.lineedit16.setHidden(True)
-        self.label17.setHidden(True)
-        self.lineedit17.setHidden(True)
-        self.label18.setHidden(True)
-        self.lineedit18.setHidden(True)
-        self.label19.setHidden(True)
-        self.lineedit19.setHidden(True)
-        self.label20.setHidden(True)
-        self.lineedit20.setHidden(True)
-        self.label21.setHidden(True)
-        self.lineedit21.setHidden(True)
-        self.label22.setHidden(True)
-        self.lineedit22.setHidden(True)
-        self.label23.setHidden(True)
-        self.lineedit23.setHidden(True)
-        self.label24.setHidden(True)
-        self.lineedit24.setHidden(True)
-        self.download_template.setHidden(True)
-        self.download_template.setDisabled(True)
-        self.upload_info.setHidden(True)
-        self.upload_info.setDisabled(True)
-        self.tableWidget.setHidden(True)
-        self.textedit_csv_label.setHidden(True)
-        self.textedit_csv.setHidden(True)
-        self.tableWidget_label.setHidden(True)
-
-    
-    def radiobutton_24(self): #button for samples 12-24
-        self.labelupload.setText('24')
-        self.label13.setHidden(False)
-        self.lineedit13.setHidden(False)
-        self.label14.setHidden(False)
-        self.lineedit14.setHidden(False)
-        self.label15.setHidden(False)
-        self.lineedit15.setHidden(False)
-        self.label16.setHidden(False)
-        self.lineedit16.setHidden(False)
-        self.label17.setHidden(False)
-        self.lineedit17.setHidden(False)
-        self.label18.setHidden(False)
-        self.lineedit18.setHidden(False)
-        self.label19.setHidden(False)
-        self.lineedit19.setHidden(False)
-        self.label20.setHidden(False)
-        self.lineedit20.setHidden(False)
-        self.label21.setHidden(False)
-        self.lineedit21.setHidden(False)
-        self.label22.setHidden(False)
-        self.lineedit22.setHidden(False)
-        self.label23.setHidden(False)
-        self.lineedit23.setHidden(False)
-        self.label24.setHidden(False)
-        self.lineedit24.setHidden(False)
-        self.window2.unhide()
-
-        self.download_template.setHidden(True)
-        self.download_template.setDisabled(True)
-        self.upload_info.setHidden(True)
-        self.upload_info.setDisabled(True)
-        self.tableWidget.setHidden(True)
-        self.textedit_csv.setHidden(True)
-        self.textedit_csv_label.setHidden(True)
-        self.tableWidget_label.setHidden(True)
-        self.label1.setHidden(False)
-        self.label2.setHidden(False)
-        self.label3.setHidden(False)
-        self.label4.setHidden(False)
-        self.label5.setHidden(False)
-        self.label6.setHidden(False)
-        self.label7.setHidden(False)
-        self.label8.setHidden(False)
-        self.label9.setHidden(False)
-        self.label10.setHidden(False)
-        self.label11.setHidden(False)
-        self.label12.setHidden(False)
-        self.lineedit1.setHidden(False)
-        self.lineedit2.setHidden(False)
-        self.lineedit3.setHidden(False)
-        self.lineedit4.setHidden(False)
-        self.lineedit5.setHidden(False)
-        self.lineedit6.setHidden(False)
-        self.lineedit7.setHidden(False)
-        self.lineedit8.setHidden(False)
-        self.lineedit9.setHidden(False)
-        self.lineedit10.setHidden(False)
-        self.lineedit11.setHidden(False)
-        self.lineedit12.setHidden(False)
         
+        globs, locs = globals(), locals()
+        [exec(f'self.{label_name}.setHidden(False)', globs,locs) for label_name in self.label_name_list_main[(0):12]]
+        [exec(f'self.{input_name}.setHidden(False)', globs,locs) for input_name in self.input_name_list_main[(0):12]]
+        
+        [exec(f'self.{label_name}.setHidden(True)', globs,locs) for label_name in self.label_name_list_main[(12):24]]
+        [exec(f'self.{input_name}.setHidden(True)', globs,locs) for input_name in self.input_name_list_main[(12):24]]
+
+        self.download_template.setHidden(True)
+        self.download_template.setDisabled(True)
+        self.upload_info.setHidden(True)
+        self.upload_info.setDisabled(True)
+        self.tableWidget.setHidden(True)
+        self.textedit_csv_label.setHidden(True)
+        self.textedit_csv.setHidden(True)
+        self.tableWidget_label.setHidden(True)
+
     
+    def radiobutton_24(self): #button for samples 1-24
+        self.labelupload.setText('24')
+
+        globs, locs = globals(), locals()
+        [exec(f'self.{label_name}.setHidden(False)', globs,locs) for label_name in self.label_name_list_main[(0):24]]
+        [exec(f'self.{input_name}.setHidden(False)', globs,locs) for input_name in self.input_name_list_main[(0):24]]
+
+        self.window2.hide_and_show(1,24,False)
+
+        self.download_template.setHidden(True)
+        self.download_template.setDisabled(True)
+        self.upload_info.setHidden(True)
+        self.upload_info.setDisabled(True)
+        self.tableWidget.setHidden(True)
+        self.textedit_csv.setHidden(True)
+        self.textedit_csv_label.setHidden(True)
+        self.tableWidget_label.setHidden(True)
+        
+        
     def radiobutton_96(self):#button for 94-samples(not avaible atm)
 
             self.labelupload.setText('96')
@@ -1519,62 +1000,19 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             self.textedit_csv.setHidden(False)
             self.textedit_csv_label.setHidden(False)
             self.tableWidget_label.setHidden(False)
-            self.window2.sample_96()
-            self.label1.setHidden(True)
-            self.label2.setHidden(True)
-            self.label3.setHidden(True)
-            self.label4.setHidden(True)
-            self.label5.setHidden(True)
-            self.label6.setHidden(True)
-            self.label7.setHidden(True)
-            self.label8.setHidden(True)
-            self.label9.setHidden(True)
-            self.label10.setHidden(True)
-            self.label11.setHidden(True)
-            self.label12.setHidden(True)
-            self.lineedit1.setHidden(True)
-            self.lineedit2.setHidden(True)
-            self.lineedit3.setHidden(True)
-            self.lineedit4.setHidden(True)
-            self.lineedit5.setHidden(True)
-            self.lineedit6.setHidden(True)
-            self.lineedit7.setHidden(True)
-            self.lineedit8.setHidden(True)
-            self.lineedit9.setHidden(True)
-            self.lineedit10.setHidden(True)
-            self.lineedit11.setHidden(True)
-            self.lineedit12.setHidden(True)
-            self.label13.setHidden(True)
-            self.lineedit13.setHidden(True)
-            self.label14.setHidden(True)
-            self.lineedit14.setHidden(True)
-            self.label15.setHidden(True)
-            self.lineedit15.setHidden(True)
-            self.label16.setHidden(True)
-            self.lineedit16.setHidden(True)
-            self.label17.setHidden(True)
-            self.lineedit17.setHidden(True)
-            self.label18.setHidden(True)
-            self.lineedit18.setHidden(True)
-            self.label19.setHidden(True)
-            self.lineedit19.setHidden(True)
-            self.label20.setHidden(True)
-            self.lineedit20.setHidden(True)
-            self.label21.setHidden(True)
-            self.lineedit21.setHidden(True)
-            self.label22.setHidden(True)
-            self.lineedit22.setHidden(True)
-            self.label23.setHidden(True)
-            self.lineedit23.setHidden(True)
-            self.label24.setHidden(True)
-            self.lineedit24.setHidden(True)
+            self.window2.hide_and_show(1,24,True)
+
+            globs, locs = globals(), locals()
+            [exec(f'self.{label_name}.setHidden(True)', globs,locs) for label_name in self.label_name_list_main[(0):24]]
+            [exec(f'self.{input_name}.setHidden(True)', globs,locs) for input_name in self.input_name_list_main[(0):24]]
+            
             self.window2.hide()
     
     def passinInformation(self):#all infos from mainwindow for window 2 to display there
         self.button_upload.setEnabled(True)
-        self.window2.input000.setText(self.flowcell_edit.text())
-        self.window2.input0.setText(self.sequencing_edit.text())
-        self.window2.input00.setText(self.barcode_edit.text())
+        self.window2.input_flowcell.setText(self.flowcell_edit.text())
+        self.window2.input_kit.setText(self.sequencing_edit.text())
+        self.window2.input_barcode.setText(self.barcode_edit.text())
         self.window2.input1.setText(self.lineedit1.text())
         self.window2.input3.setText(self.lineedit3.text())
         self.window2.input2.setText(self.lineedit2.text())
