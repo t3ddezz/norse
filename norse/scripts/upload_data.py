@@ -1,3 +1,8 @@
+from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import QApplication, QMainWindow, QInputDialog,  QFileDialog, QFrame, QMessageBox
+from PyQt5.QtGui import QPalette, QColor, QIcon, QPixmap
+from PyQt5.QtCore import Qt, QFileInfo
+
 def choose_dir(self):#pyqt5 build in directory select
         save_path = QFileDialog().getExistingDirectory(self, 'Select an  directory')
 

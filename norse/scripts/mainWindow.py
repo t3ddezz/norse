@@ -35,7 +35,8 @@ def iniUI(self):
 
         self.checkbox_hide_unhide = QtWidgets.QCheckBox('show',self)
         self.checkbox_hide_unhide.adjustSize()
-        self.checkbox_hide_unhide.stateChanged.connect(password_hide_unhide(self))
+        state = self.checkbox_hide_unhide.checkState()
+        self.checkbox_hide_unhide.stateChanged.connect(password_hide_unhide(self,state))
         self.checkbox_hide_unhide.move(370, 405)
 
         self.label_sonderzeichen = QtWidgets.QLabel(self)
