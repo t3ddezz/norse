@@ -6,7 +6,7 @@ import pkg_resources
 
 
 setup(name='norse',
-      version="0.1",
+      version="0.3.0",
       scripts=['norse/norse_script.py'],
       install_requires=[
             "pandas==1.2.3",
