@@ -14,7 +14,7 @@ GUI for data transfer to server
 
 ### Requirements
 
-norse runs on MacOS and Linux(if not working install do [this](#linux-not-working))
+norse runs on MacOS and Linux(if not working install  [this](#only-if-linux-not-working))
 1. A conda version. Can be downloaded from [here](https://www.anaconda.com/products/individual)
 
 
@@ -29,14 +29,15 @@ python setup.py install
 ````
 
 
-Only if linux not working:
+# Only if linux not working:
 ```shell=
 sudo apt-get install libxkbcommon-x11-0
 sudo apt install libxcb-xinerama0
 ``` 
+
 via docker:
 
-use Dockerfile
+use [Dockerfile](https://github.com/t3ddezz/norse/blob/simplify/Dockerfile)
 
 
 
