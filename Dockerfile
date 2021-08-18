@@ -13,5 +13,5 @@ RUN apt-get update && apt-get install -y python3-pyqt5 git python3-pip
 
 RUN pip3 install install  pandas requests paramiko openpyxl xlrd  argparse
 
-RUN git clone -b docker_testing  https://github.com/t3ddezz/norse.git
+RUN git clone -b main  https://github.com/t3ddezz/norse.git
 RUN chmod 777 /norse/norse/norse_script.py
