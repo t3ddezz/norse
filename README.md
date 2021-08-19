@@ -29,7 +29,7 @@ python setup.py install
 ````
 
 
-### Only if linux not working:
+#### Only if linux not working:
 ```shell=
 sudo apt-get install libxkbcommon-x11-0
 sudo apt install libxcb-xinerama0
