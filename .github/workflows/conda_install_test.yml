@@ -1,12 +1,12 @@
-name: norse
+name: norse_conda_install
 on: [push, pull_request]
 defaults:
   run:
     shell: bash -l {0}
 
 jobs:
-  run_pangolin_test:
-    name: norse test on ${{ matrix.os }}
+  norse_test:
+    name: norse conda install on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -18,7 +18,7 @@ jobs:
           environment-file: environment.yml
           activate-environment: norse
           channels: defaults
-      - name: Install norse
-        run: pip install -e .
+      - name: Install setup.py
+        run: python setup.py install
       - name: Check norse version
         run: norse --version
