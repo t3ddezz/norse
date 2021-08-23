@@ -61,5 +61,5 @@ docker run --rm \
 
 ## Basic usage
 
-2. Run ``norse -r``
+2. Run `norse -r `
 
