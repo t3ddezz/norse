@@ -7,7 +7,7 @@ import pkg_resources
 
 setup(name='norse',
       version="0.3.0",
-      scripts=['norse/norse_script.py'],
+      scripts=['norse/main_script.py'],
       description='na',
       url='https://github.com/t3ddezz/norse',
       author='anton',
