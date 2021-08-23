@@ -13,7 +13,7 @@ setup(name='norse',
       author='anton',
       entry_points="""
       [console_scripts]
-      norse = norse_script:main
+      norse = main_script:main
       """,
       keywords=[],
       zip_safe=False)
