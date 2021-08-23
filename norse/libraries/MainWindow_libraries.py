@@ -15,7 +15,10 @@ import time
 import os
 from libraries.Window2_libraries import *
 from libraries import validator_libraries
+#from __init__ import version
 
+#print(version)
+version = "0.3.0"
 
 class MyWindow(QMainWindow):#create a window through the initUI() method, and call it in the initialization method init()
     
@@ -346,6 +349,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.textedit_csv_label.move(400, 215)
         self.textedit_csv_label.setHidden(True)
         self.textedit_csv_label.setFont(QtGui.QFont("arial", 15))
+
+        self.exclude_fast5_files = QtWidgets.QCheckBox('exclude fast5 files', self)
+        self.exclude_fast5_files.move(150, 565)
+        self.exclude_fast5_files.adjustSize()
+
         
 
 
@@ -376,6 +384,9 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
 
     def upload(self, state):#function to upload files and create run_info.txt
+        exclude_fast5_files_status = self.exclude_fast5_files.isChecked()
+        print(exclude_fast5_files_status)
+        
         print("upload startet")
         save_path = self.lineedit_path_dir.text()
         
@@ -599,19 +610,26 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             rsync_var = rsync_var.strip()
 
             if rsync_var =='rsync not found':
-                os.system('scp -r ' + save_path + username + "@" +
-                    ip + ":" + path_on_server + "/" + neuer_ordner_name)
-                os.system(f"scp -r {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
+                if exclude_fast5_files_status == False:
 
+                    os.system('scp -r ' + save_path + username + "@" +
+                        ip + ":" + path_on_server + "/" + neuer_ordner_name)
+                    os.system(f"scp -r {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
+                elif exclude_fast5_files_status == True:
+                    os.system(f"scp -r {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
             else:
-                #os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
-                 #   save_path + " " + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name) {neuer_ordner_name}
+                if exclude_fast5_files_status == False:
                 
-                os.system(f"rsync --rsync-path={rsync_var} -acrv --remove-source-files {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
-                print(" ")
-                print("file upload complete")
-                print(" ")
-                
+                    os.system(f"rsync --rsync-path={rsync_var} -acrv --remove-source-files {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
+                    print(" ")
+                    print("file upload complete")
+                    print(" ")
+                elif exclude_fast5_files_status == True:
+                    os.system(f"rsync  --exclude '*.fast5*' --rsync-path={rsync_var} -acrv --remove-source-files {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
+                    print(" ")
+                    print("file upload complete")
+                    print(" ")
+            
         except paramiko.AuthenticationException:
             print('connection error')
         except socket.timeout:
