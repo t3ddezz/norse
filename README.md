@@ -13,15 +13,19 @@ GUI for data transfer to server
 
 ## Requirements
 
-norse runs on MacOS and Linux(if not working isntall following libaries)
-1. A conda version. Can be downloaded from [here](https://www.anaconda.com/products/individual)
+* norse runs on MacOS and Linux either via conda or docker 
+
 
 
 ## Installation
 ### via conda:
++ conda installation here{link}
 
 ```shell=
+# choose a suitable install location (e.g home dir)
+git clone https://github.com/t3ddezz/norse.git
 cd norse
+# conda installation
 conda env create -f environment.yml
 conda activate norse
 python setup.py install
