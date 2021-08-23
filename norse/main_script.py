@@ -15,7 +15,9 @@ import socket
 import time
 import os
 import argparse
-from libraries.MainWindow_libraries import MyWindow
+from .norse_module.MainWindow_libraries import MyWindow
+
+
 
 
 version = "0.3.1"

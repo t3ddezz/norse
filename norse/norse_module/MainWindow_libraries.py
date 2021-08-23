@@ -13,8 +13,8 @@ import paramiko
 import socket
 import time
 import os
-from libraries.Window2_libraries import *
-from libraries import validator_libraries
+from .Window2_libraries import *
+from .validator_libraries import *
 #from __init__ import version
 
 #print(version)
@@ -123,7 +123,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.sequencing_edit.setMaxLength(13)
         self.sequencing_edit.adjustSize()
         self.sequencing_edit.move(10, 75)
-        self.validator = validator_libraries.Validator(self)
+        self.validator = Validator(self)
         self.sequencing_edit.setValidator(self.validator)
         #self.sequencing_edit.textChanged[str].connect(self.sequencing_changed)
         self.sequencing_edit.editingFinished.connect(self.sequencing_changed)
