@@ -15,6 +15,8 @@ import time
 import os
 from .Window2_libraries import *
 from .validator_libraries import *
+from pathlib import Path
+
 #from __init__ import version
 
 #print(version)
@@ -37,7 +39,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         # 'self' is the first parameter of the methods of a class that refers to the instance of the same
 
         self.window2 = Window2()#for initiating window2
-
+        home = str(Path.home())
+        self.norse_user_info_path = home + "/norse_user_info.txt"
         globs, locs = globals(), locals()
         [exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list_main]
         [exec(f"self.{input_name} = QtWidgets.QLineEdit(self)",globs, locs) for input_name in self.input_name_list_main]
@@ -363,7 +366,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         # check if there is a user info.txt if not no abortion
         try:
             
-            user_pre_info = open('user_info.txt','r')
+            user_pre_info = open(self.norse_user_info_path,'r')
             
             data_list = user_pre_info.read().splitlines()
             
@@ -708,7 +711,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
          
 
-        user_info = open('user_info.txt', "w+")
+        user_info = open(self.norse_user_info_path, "w+")
 
         user_info.truncate(0)
         
