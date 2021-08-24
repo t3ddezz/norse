@@ -59,8 +59,11 @@ docker run --rm \
   -u qtuser \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e DISPLAY=unix$DISPLAY \
+  --network host \
+  -v $HOME:/home/qtuser \
+  -v $PWD:/upload \
   norse:build \
-  /norse/norse/norse_script.py -r
+  norse -r
 ```
 
 

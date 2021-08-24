@@ -9,7 +9,7 @@ RUN adduser --quiet --disabled-password qtuser && usermod -a -G audio qtuser
 ENV LIBGL_ALWAYS_INDIRECT=1
 
 # Install Python 3, PyQt5
-RUN apt-get update && apt-get install -y python3-pyqt5 git python3-pip
+RUN apt-get update && apt-get install -y python3-pyqt5 git python3-pip libxkbcommon-x11-0 libxcb-xinerama0
 
 RUN pip3 install install  pandas requests paramiko openpyxl xlrd  argparse
 
