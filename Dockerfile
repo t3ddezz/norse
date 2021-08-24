@@ -15,3 +15,4 @@ RUN pip3 install install  pandas requests paramiko openpyxl xlrd  argparse
 
 RUN git clone https://github.com/t3ddezz/norse.git
 RUN chmod 777 /norse/norse/norse_script.py
+RUN cd norse && python3 setup.py install

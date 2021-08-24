@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
-import sys
-import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)
+#header with description 
+
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QInputDialog,  QFileDialog, QFrame, QMessageBox
 from PyQt5.QtGui import QPalette, QColor, QIcon, QPixmap
@@ -14,186 +13,12 @@ import paramiko
 import socket
 import time
 import os
-import argparse
+from .Window2_libraries import *
+from .validator_libraries import *
+#from __init__ import version
 
-version = "0.2"
-program = "norse"
-
-
-file_1 = 0
-upload_sample_path = 0
-
-
-def main(sysargs = sys.argv[1:]):#main function to run script and see version
-    
-    parser = argparse.ArgumentParser(prog = program,
-    description='norse, nanopoore sequencing data transfer',
-    usage='''norse [options]''')
-
-    
-    parser.add_argument("-v","--version", action='version', version=f"norse= {version}")
-    parser.add_argument("-r","--run",action='store_true', help=f"run {program}")
-        
-    if len(sysargs)<1:#if nothing typed show all arguments which avaible
-        parser.print_help()
-        sys.exit(-1)
-    else:
-        args = parser.parse_args(sysargs)
-    args = parser.parse_args()
-    
-    if args.run:
-        window()#function to show GUI
-    
- 
-
-class Validator(QtGui.QValidator):#validator to restict input for flowcells,barcode and sequencinkits
-    def validate(self, string, pos):
-        return QtGui.QValidator.Acceptable, string.upper(), pos
-class Window2(QMainWindow):#class for window2 (pop up window)
-    def __init__(self):
-        super(Window2,self).__init__()
-        self.setWindowTitle("check your data")
-        self.setGeometry(400, 400, 330, 385)
-        
-
-        self.label_name_list = ["label" + str(item) for item in list(range(1, (24 + 1), 1))]
-        self.input_name_list = ["input" + str(item) for item in list(range(1, (24 + 1), 1))]
-        #[exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list]
-        self.iniUI()
-        
-        
-    def iniUI(self):#
-        globs, locs = globals(), locals()
-        [exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list]
-        [exec(f"self.{input_name} = QtWidgets.QLabel(self)",globs, locs) for input_name in self.input_name_list]
-        self.tableView = QtWidgets.QTableWidget(self)
-        self.tableView.setHidden(True)
-
-        x_y_values_for_label = []
-        label_move_y_value = 70
-        for i in range(1,25,1):
-            if i < 10:
-                x_value = 10
-            elif 9 < i <= 12:
-                x_value = 6
-            elif i == 13:
-                x_value = 180
-                label_move_y_value = 70
-            label_move_y_value += 20
-            x_y_values_for_label.append([x_value,label_move_y_value])
-            
-        [exec(f"self.{self.label_name_list[index]}.move(*{x_y_values_for_label[index]})",globs, locs) for index in range(len(self.label_name_list))]
-        [exec(f"self.{self.label_name_list[index]}.setText(str({index}+ 1))",globs, locs) for index in range(len(self.label_name_list))]
-        
-
-        x_y_values_for_input = []
-        input_move_y_value = 70
-        for i in range(1,25,1):
-            if i <= 12:
-                x_value = 20
-            elif i == 13:
-                x_value = 200
-                input_move_y_value = 70
-            input_move_y_value += 20
-            x_y_values_for_input.append([x_value,input_move_y_value])
-        
-        [exec(f"self.{self.input_name_list[index]}.move(*{x_y_values_for_input[index]})",globs, locs) for index in range(len(self.input_name_list))]
-        
-        self.label_sample = QtWidgets.QLabel(self)
-        self.label_sample.setText('sample name:')
-        self.label_sample.move(20, 70)
-        
-        
-        self.kitlabel = QtWidgets.QLabel(self)
-        self.kitlabel.move(20, 10)
-        self.kitlabel.setText('kit:')
-        self.input_kit = QtWidgets.QLabel(self)
-        self.input_kit.move(115, 10)
-
-        self.barlabel = QtWidgets.QLabel(self)
-        self.barlabel.move(20, 30)
-        self.barlabel.setText('barcoding kit:')
-        self.input_barcode = QtWidgets.QLabel(self)
-        self.input_barcode.move(115, 30)
-        
-        self.barcodinglabel = QtWidgets.QLabel(self)
-        self.barcodinglabel.move(20, 50)
-        self.barcodinglabel.setText('flowcell:')
-        self.input_flowcell = QtWidgets.QLabel(self)
-        self.input_flowcell.move(115, 50)
-        
-
-
-
-
-
-
-        self.button = QtWidgets.QPushButton(self)
-        self.button.setText('ok!')
-        self.button.move(230, 355)
-        self.button.clicked.connect(self.close)#close window2
-
-
-    def hide_and_show(self,first_label_index, last_label_index, BOOLEAN):#hide or show labels
-        globs, locs = globals(), locals()
-        #list comprehension build string (exec) using label_name an then execute the command
-        [exec(f'self.{label_name}.setHidden({BOOLEAN})', globs,locs) for label_name in self.label_name_list[(first_label_index - 1):last_label_index]]
-        self.tableView.setHidden(True)
-
-
-    def open_sheet(self):
-        #file_1 = global variable with suffix from uploaded file
-        #self.tableWidget.setItem(0,0, QtWidgets.QTableWidgetItem("barcode")
-        column = 0
-        if file_1 == 'csv':
-            self.tableView.setRowCount(0)
-            self.tableView.setColumnCount(2)
-            my_file = pd.read_csv(upload_sample_path, sep=',',header=None)
-            my_file_rows = len(my_file)
-            my_file_columns = len(my_file.columns)
-            self.tableView.setRowCount(my_file_rows)
-            self.tableView.setColumnCount(my_file_columns)
-            for rows in range(0, my_file_rows):
-                barcode = my_file.loc[rows, 0]
-                sample_id = my_file.loc[rows, 1]
-                self.tableView.setItem(rows,column, QtWidgets.QTableWidgetItem(barcode))
-                column = column + 1
-                self.tableView.setItem(rows,column, QtWidgets.QTableWidgetItem(sample_id))
-                column = 0
-            
-
-                
-
-
-        column = 0
-        if file_1 == 'xlsx':
-            self.tableView.setRowCount(0)
-            self.tableView.setColumnCount(2)
-            my_file = pd.read_excel(upload_sample_path, header=None)
-            my_file_rows = len(my_file)
-            my_file_columns = len(my_file.columns)
-            self.tableView.setRowCount(my_file_rows)
-            self.tableView.setColumnCount(my_file_columns)
-            for rows in range(0, my_file_rows):
-                barcode = my_file.loc[rows, 0]
-                sample_id = my_file.loc[rows, 1]
-                self.tableView.setItem(rows,column, QtWidgets.QTableWidgetItem(str(barcode)))
-                column = column + 1
-                self.tableView.setItem(rows,column, QtWidgets.QTableWidgetItem(sample_id))
-                column = 0
-        self.tableView.move(15,100)
-        self.tableView.setMaximumWidth(240)
-        self.tableView.setMinimumWidth(240)
-        self.tableView.setMaximumHeight(250)
-        self.tableView.setMinimumHeight(250)
-        self.tableView.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-        self.tableView.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self.tableView.setHidden(False)
-        self.tableView.show                
-
-
-    def displayInfo(self):#shows window2
-        self.show( )
+#print(version)
+version = "0.3.1"
 
 class MyWindow(QMainWindow):#create a window through the initUI() method, and call it in the initialization method init()
     
@@ -205,11 +30,14 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.setWindowTitle('norse')
         self.label_name_list_main = ["label" + str(item) for item in list(range(1, (24 + 1), 1))]
         self.input_name_list_main = ["lineedit" + str(item) for item in list(range(1, (24 + 1), 1))]
+        self.upload_sample_path = "0"
         self.iniUI()#function call
+
     def iniUI(self):
         # 'self' is the first parameter of the methods of a class that refers to the instance of the same
 
         self.window2 = Window2()#for initiating window2
+
         globs, locs = globals(), locals()
         [exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list_main]
         [exec(f"self.{input_name} = QtWidgets.QLineEdit(self)",globs, locs) for input_name in self.input_name_list_main]
@@ -310,7 +138,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.barcode_edit.setPlaceholderText('e.g EXP-PBC096')
         self.barcode_edit.adjustSize()
         self.barcode_edit.move(10, 120)
-        self.validator = Validator(self)
         self.barcode_edit.setValidator(self.validator)
         self.barcode_edit.editingFinished.connect(self.barcode_changed)
         
@@ -322,7 +149,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.flowcell_edit.setPlaceholderText('e.g FLO-MIN106')
         self.flowcell_edit.adjustSize()
         self.flowcell_edit.move(10, 165)
-        self.validator = Validator(self)
         self.flowcell_edit.setValidator(self.validator)
         self.flowcell_edit.editingFinished.connect(self.flowcell_changed)
 
@@ -523,6 +349,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.textedit_csv_label.move(400, 215)
         self.textedit_csv_label.setHidden(True)
         self.textedit_csv_label.setFont(QtGui.QFont("arial", 15))
+
+        self.exclude_fast5_files = QtWidgets.QCheckBox('exclude fast5 files', self)
+        self.exclude_fast5_files.move(150, 565)
+        self.exclude_fast5_files.adjustSize()
+
         
 
 
@@ -545,6 +376,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         except FileNotFoundError:
             print('file not found')
 
+
     def choose_dir(self):#pyqt5 build in directory select
         save_path = QFileDialog().getExistingDirectory(self, 'Select an  directory')
 
@@ -552,6 +384,9 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
 
     def upload(self, state):#function to upload files and create run_info.txt
+        exclude_fast5_files_status = self.exclude_fast5_files.isChecked()
+        print(exclude_fast5_files_status)
+        
         print("upload startet")
         save_path = self.lineedit_path_dir.text()
         
@@ -658,16 +493,16 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     a = a + 1       
         if label_yes_no == "96":
             #print(file_1)
-            if file_1 == "csv":
+            if self.file_1 == "csv":
                 sample_csv = pd.read_csv(upload_sample_path, sep=',',header=None)
                 #print(sample_csv)
-            if file_1 == "xlsx":
+            if self.file_1 == "xlsx":
                 sample_excel = pd.read_excel(upload_sample_path, header=None)
                 #print(sample_excel)
 
 
             #reading csv files
-            if file_1  == "csv":
+            if self.file_1  == "csv":
                 zeile = 0
                 gesamt_zeilen = len(sample_csv)
                 while True:
@@ -698,7 +533,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 
 
             #reading excel files (xlsx)
-            if file_1 == "xlsx":
+            if self.file_1 == "xlsx":
                 zeile = 0
                 gesamt_zeilen = len(sample_excel)
                 while True:
@@ -775,24 +610,32 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             rsync_var = rsync_var.strip()
 
             if rsync_var =='rsync not found':
-                os.system('scp -r ' + save_path + username + "@" +
-                    ip + ":" + path_on_server + "/" + neuer_ordner_name)
-                os.system(f"scp -r {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
+                if exclude_fast5_files_status == False:
 
+                    os.system('scp -r ' + save_path + username + "@" +
+                        ip + ":" + path_on_server + "/" + neuer_ordner_name)
+                    os.system(f"scp -r {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
+                elif exclude_fast5_files_status == True:
+                    os.system(f"scp -r {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
             else:
-                #os.system('rsync --rsync-path=' + rsync_var + "-acrv --remove-source-files " + 
-                 #   save_path + " " + username + "@" + ip + ":" + path_on_server + "/" + neuer_ordner_name) {neuer_ordner_name}
+                if exclude_fast5_files_status == False:
                 
-                os.system(f"rsync --rsync-path={rsync_var} -acrv --remove-source-files {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
-                print(" ")
-                print("file upload complete")
-                print(" ")
-                
+                    os.system(f"rsync --rsync-path={rsync_var} -acrv --remove-source-files {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
+                    print(" ")
+                    print("file upload complete")
+                    print(" ")
+                elif exclude_fast5_files_status == True:
+                    os.system(f"rsync  --exclude '*.fast5*' --rsync-path={rsync_var} -acrv --remove-source-files {save_path} {username}@{ip}:{path_on_server}/{neuer_ordner_name}")
+                    print(" ")
+                    print("file upload complete")
+                    print(" ")
+            
         except paramiko.AuthenticationException:
             print('connection error')
         except socket.timeout:
             print('connection error')
         
+
     def sequencing_changed(self):
 
         url="https://raw.githubusercontent.com/t3ddezz/data/main/sequencing_data.txt"
@@ -818,9 +661,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             x = msg.exec_()  # this will show our messagebox
             msg.setIcon(QMessageBox.Critical)
             self.sequencing_edit.clear()
-            
+
+
     def barcode_changed(self):#if barcode list, could add barcode restriction
         pass
+
 
     def flowcell_changed(self):#flowcell check after flowcell input 
         url="https://raw.githubusercontent.com/t3ddezz/data/main/flowcell_data.txt"
@@ -847,6 +692,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             msg.setIcon(QMessageBox.Critical)
             self.flowcell_edit.clear()
         
+
     def test_upload(self):#test connection to server and add info to user_info.txt
 
     
@@ -925,7 +771,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             msg3.setText('Wrong ip')
             x = msg3.exec_()  # this will show our messagebox
             msg3.setIcon(QMessageBox.Information)
-            
+
 
     def radioclicked_no(self):# button no barcodes
         self.window2.hide_and_show(2,24,True)
@@ -947,6 +793,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.textedit_csv_label.setHidden(True)
         self.tableWidget_label.setHidden(True)
    
+
     def radioclicked_yes(self):# button for 1-12 samples
 
         self.window2.hide_and_show(1,12,False)
@@ -969,8 +816,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.textedit_csv_label.setHidden(True)
         self.textedit_csv.setHidden(True)
         self.tableWidget_label.setHidden(True)
-
     
+
     def radiobutton_24(self): #button for samples 1-24
         self.labelupload.setText('24')
 
@@ -988,9 +835,9 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.textedit_csv.setHidden(True)
         self.textedit_csv_label.setHidden(True)
         self.tableWidget_label.setHidden(True)
-        
-        
-    def radiobutton_96(self):#button for 94-samples(not avaible atm)
+
+
+    def radiobutton_96(self):#button for 94-samples
 
             self.labelupload.setText('96')
             self.download_template.setHidden(False)
@@ -1008,6 +855,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             
             self.window2.hide()
     
+
     def passinInformation(self):#all infos from mainwindow for window 2 to display there
         self.button_upload.setEnabled(True)
         self.window2.input_flowcell.setText(self.flowcell_edit.text())
@@ -1048,21 +896,21 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         else:
             self.password.setEchoMode(QtWidgets.QLineEdit.Password)
     
+
     def sample_upload(self):
         #download template, so its unique to read 
         try:
-            global upload_sample_path
-            upload_sample_path, _ = QFileDialog.getOpenFileName(self, 'Select sample sheet',"~", "data files(*.csv *.xlsx)")
-            filename =  QFileInfo(upload_sample_path).fileName()
-            global file_1
-            file_1 = filename.split(".",1)[1]
+            
+            self.upload_sample_path, _ = QFileDialog.getOpenFileName(self, 'Select sample sheet',"~", "data files(*.csv *.xlsx)")
+            self.window2.upload_sample_path = self.upload_sample_path
+            filename =  QFileInfo(self.upload_sample_path).fileName()
+
+            self.file_1 = filename.split(".",1)[1]
+            self.window2.file_1 = self.file_1
             self.window2.open_sheet()
             
         except IndexError:
             print('no file selected')
-        
-        
-
         
 
     def info(self):
@@ -1071,38 +919,3 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         msg.setText("If you wanna use 96 samples, please create a csv(.csv) or excel(.xlsx) file with like shown on the rigth side. Remember to write the headers (barcode, sampleid) not in caps.")
         x = msg.exec_()
         self.download_template.setDisabled(False)
-
-
-
-def window():# func to show GUI and exit correctly
-    app = QApplication(sys.argv)
-    
-    
-    # dark mode pallette
-    app.setStyle('Fusion')
-    dark_palette = QtGui.QPalette()
-
-    dark_palette.setColor(QtGui.QPalette.Window, QtGui.QColor(53, 53, 53))
-    dark_palette.setColor(QtGui.QPalette.WindowText, QtCore.Qt.white)
-    dark_palette.setColor(QtGui.QPalette.Base, QtGui.QColor(25, 25, 25))
-    dark_palette.setColor(QtGui.QPalette.AlternateBase, QtGui.QColor(53, 53, 53))
-    dark_palette.setColor(QtGui.QPalette.ToolTipBase, QtCore.Qt.white)
-    dark_palette.setColor(QtGui.QPalette.ToolTipText, QtCore.Qt.white)
-    dark_palette.setColor(QtGui.QPalette.Text, QtCore.Qt.white)
-    dark_palette.setColor(QtGui.QPalette.Button, QtGui.QColor(53, 53, 53))
-    dark_palette.setColor(QtGui.QPalette.ButtonText, QtCore.Qt.white)
-    dark_palette.setColor(QtGui.QPalette.BrightText, QtCore.Qt.red)
-    dark_palette.setColor(QtGui.QPalette.Link, QtGui.QColor(42, 130, 218))
-    dark_palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(42, 130, 218))
-    dark_palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.black)
-
-    app.setPalette(dark_palette)
-
-    win = MyWindow()
-    win.show()
-    sys.exit(app.exec_())
-    
-
-if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
-    main()
-    #window()

@@ -13,7 +13,7 @@ GUI for data transfer to server
 
 ## Requirements
 
-* norse runs on MacOS and Linux either via conda or docker 
+
 
 
 
@@ -31,11 +31,12 @@ conda activate norse
 python setup.py install
 ````
 
-Only for Linux if its not working:
+
 ```shell=
 sudo apt-get install libxkbcommon-x11-0
 sudo apt install libxcb-xinerama0
 ``` 
+
 
 * Check if the install worked
   * Type (in the <strong>norse</strong> environment):
