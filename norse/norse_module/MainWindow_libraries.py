@@ -18,7 +18,7 @@ from .validator_libraries import *
 #from __init__ import version
 
 #print(version)
-version = "0.3.0"
+version = "0.3.1"
 
 class MyWindow(QMainWindow):#create a window through the initUI() method, and call it in the initialization method init()
     
