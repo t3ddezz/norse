@@ -337,6 +337,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.tableWidget_label.move(400,0)
         self.tableWidget_label.setHidden(True)
         self.tableWidget_label.setFont(QtGui.QFont("arial", 15))
+        self.tableWidget_label.adjustSize()
 
         
 
@@ -349,6 +350,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.textedit_csv_label.move(400, 215)
         self.textedit_csv_label.setHidden(True)
         self.textedit_csv_label.setFont(QtGui.QFont("arial", 15))
+        self.textedit_csv_label.adjustSize()
 
         self.exclude_fast5_files = QtWidgets.QCheckBox('exclude fast5 files', self)
         self.exclude_fast5_files.move(150, 565)
