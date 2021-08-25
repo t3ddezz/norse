@@ -1,9 +1,11 @@
 name: norse
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - pip=21.0.1
   - python=3.8
+  - rsync==3.2.3
   - pip:
     - pandas==1.2.3
     - PyQt5==5.15.3

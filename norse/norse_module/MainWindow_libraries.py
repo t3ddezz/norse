@@ -630,10 +630,14 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     print("file upload complete")
                     print(" ")
                 elif exclude_fast5_files_status == True:
+                    msg = QMessageBox()
+                    msg.setWindowTitle("download startet")
+                    msg.setText("download startet, norse will close automatic. Dont close this window.")
+                    x = msg.exec_()  # this will show our messagebox
+                    msg.setIcon(QMessageBox.Critical)
                     os.system(f'rsync  --exclude "*.fast5" --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
-                    print(" ")
-                    print("file upload complete")
-                    print(" ")
+                    sys.exit(0)
+
             
         except paramiko.AuthenticationException:
             print('connection error')
