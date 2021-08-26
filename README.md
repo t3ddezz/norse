@@ -7,11 +7,10 @@ GUI for data transfer to server
 
 
 ## Quick links
-  * [Requirements](#requirements)
-  * [Install norse](#install-norse)
+  * [Install norse](#installation)
+    * [via conda](#via-conda:)
+    * [via docker](#via-docker:)
   * [Usage](#basic-usage)
-
-## Requirements
 
 
 
@@ -19,7 +18,7 @@ GUI for data transfer to server
 
 ## Installation
 ### via conda:
-+ conda installation here{link}
++ conda installation [here](https://docs.conda.io/en/latest/miniconda.html#system-requirements)
 
 ```shell=
 # choose a suitable install location (e.g home dir)
@@ -31,6 +30,12 @@ conda activate norse
 python setup.py install
 ````
 
+* Troubleshooting with this error: "This application failed to start
+because no Qt platform plugin could be initialized. 
+Reinstalling the application may fix this problem.
+Available platform plugins are: eglfs, linuxfb,xcb."
+
+  * then try this:
 
 ```shell=
 sudo apt-get install libxkbcommon-x11-0
@@ -69,5 +74,5 @@ docker run --rm \
 
 ## Basic usage
 
-2. Run `norse -r `
+Run `norse -r `
 
