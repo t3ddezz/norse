@@ -16,7 +16,6 @@ import os
 from .Window2_libraries import *
 from .validator_libraries import *
 from pathlib import Path
-import subprocess
 
 #from __init__ import version
 
@@ -391,9 +390,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
     def upload(self, state):#function to upload files and create run_info.txt
         exclude_fast5_files_status = self.exclude_fast5_files.isChecked()
-        print(exclude_fast5_files_status)
         
-        print("upload startet")
         save_path = self.lineedit_path_dir.text()
         
         name_of_file = 'run_info' 
@@ -627,24 +624,27 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
             if exit_code != "0":
                 if exclude_fast5_files_status == False:
-
+                    print("norse will be closed after upload")
                     #os.system('scp -r ' + save_path + username + "@" +
                      #   ip + ":" + path_on_server + "/" + neuer_ordner_name)
                     os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    print("\nfile upload complete\n")
+                    sys.exit(0)
                 elif exclude_fast5_files_status == True:
+                    print("norse will be closed after upload")
                     os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    print("\nfile upload complete\n")
+                    sys.exit(0)
             else:
                 if exclude_fast5_files_status == False:
-                
+                    print("norse will be closed after upload")
                     os.system(f'rsync --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                     print("\nfile upload complete\n")
+                    sys.exit(0)
                 elif exclude_fast5_files_status == True:
-                    msg = QMessageBox()
-                    msg.setWindowTitle("download startet")
-                    msg.setText("download startet, norse will close automatic. Dont close this window.")
-                    x = msg.exec_()  # this will show our messagebox
-                    msg.setIcon(QMessageBox.Critical)
+                    print("norse will be closed after upload")
                     os.system(f'rsync  --exclude "*.fast5" --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    print("\nfile upload complete\n")
                     sys.exit(0)
 
             
