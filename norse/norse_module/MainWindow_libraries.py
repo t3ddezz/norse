@@ -16,6 +16,7 @@ import os
 from .Window2_libraries import *
 from .validator_libraries import *
 from pathlib import Path
+import subprocess
 
 #from __init__ import version
 
@@ -600,6 +601,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
         port = 22
         cmd = 'which rsync'
+        cmd2 = 'echo $?'
 
         #connect to server, if fail error printed. But connection is tested in func test_upload
         try:
@@ -614,11 +616,20 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             rsync_var = resp
             rsync_var = rsync_var.strip()
 
-            if rsync_var =='rsync not found':
+            ssh2 = paramiko.SSHClient()
+            ssh2.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh2.connect(ip ,port ,username ,password, timeout=10)
+            stdin,stdout,stderr = ssh2.exec_command("which rsync \n echo $?") 
+            time.sleep(5)
+            outlines2 = stdout.readlines()
+            exit_code = outlines2[1]
+            exit_code = exit_code.strip()
+
+            if exit_code != "0":
                 if exclude_fast5_files_status == False:
 
-                    os.system('scp -r ' + save_path + username + "@" +
-                        ip + ":" + path_on_server + "/" + neuer_ordner_name)
+                    #os.system('scp -r ' + save_path + username + "@" +
+                     #   ip + ":" + path_on_server + "/" + neuer_ordner_name)
                     os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                 elif exclude_fast5_files_status == True:
                     os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
@@ -626,9 +637,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 if exclude_fast5_files_status == False:
                 
                     os.system(f'rsync --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
-                    print(" ")
-                    print("file upload complete")
-                    print(" ")
+                    print("\nfile upload complete\n")
                 elif exclude_fast5_files_status == True:
                     msg = QMessageBox()
                     msg.setWindowTitle("download startet")
