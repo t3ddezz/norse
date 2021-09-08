@@ -84,9 +84,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.lineedit1.setHidden(False)
 
 
-        self.logo_label = QtWidgets.QLabel(self)
-        self.logo_label.setText('norse')
-        self.logo_label.move(10, 10)
+        self.lineedit_dir_name = QtWidgets.QLineEdit(self)
+        self.lineedit_dir_name.setPlaceholderText('your directory name(optional)')
+        self.lineedit_dir_name.move(5, 10)
+        self.lineedit_dir_name.setFixedWidth(210)
 
         self.upper_frame = QtWidgets.QFrame(self)
         self.upper_frame.setFixedWidth(210)
@@ -624,7 +625,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             ssh2 = paramiko.SSHClient()
             ssh2.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh2.connect(ip ,port ,username ,password, timeout=10)
-            stdin,stdout,stderr = ssh2.exec_command("which \n echo $?") 
+            stdin,stdout,stderr = ssh2.exec_command("which rsync \n echo $?") 
             time.sleep(5)
             outlines2 = stdout.readlines()
             exit_code = outlines2[1]
@@ -646,14 +647,20 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             else:
                 if exclude_fast5_files_status == False:
                     print("norse will be closed after upload")
-                    os.system(f'rsync --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
-                    print("\nfile upload complete\n")
-                    sys.exit(0)
+                    rsync_exit_code = os.system(f'rsync --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    if rsync_exit_code != 0:
+                        print("upload failed, please try again")
+                    else:
+                        sys.exit(0)
+                        print("\nfile upload complete\n")
+
+                    
+                    #sys.exit(0)
                 elif exclude_fast5_files_status == True:
                     print("norse will be closed after upload")
                     os.system(f'rsync  --exclude "*.fast5" --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                     print("\nfile upload complete\n")
-                    sys.exit(0)
+                    #sys.exit(0)
 
             
         except paramiko.AuthenticationException:
