@@ -391,6 +391,26 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
     def upload(self, state):#function to upload files and create run_info.txt
         
+        path_on_server = self.lineedit_path.text()
+        username = self.lineedit_username.text()
+        ip = self.lineedit_ip_adress.text()
+        password = self.password.text()
+
+        user_message_box = QMessageBox()
+        user_message_box.setWindowTitle("user info")
+        
+        if username == "":
+            user_message_box.setText("username is empty")
+            x = user_message_box.exec_()
+            return 13
+        if ip == "":
+            user_message_box.setText("ip is empty")
+            x = user_message_box.exec_()
+            return 14
+        if path_on_server == "":
+            user_message_box.setText("path is empty")
+            x = user_message_box.exec_()
+            return 15
         
         
         exclude_fast5_files_status = self.exclude_fast5_files.isChecked()
@@ -427,9 +447,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         demo.write('\n\n')
 
 
-        
-        
-        
         label_yes_no = self.labelupload.text()
         
         
@@ -591,8 +608,16 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         demo.close()
 
         date = datetime.today().strftime('%Y-%m-%d-%H%M%S')
-        folder_name = os.path.basename(os.path.normpath(save_path))
-        neuer_ordner_name = date + '_' + folder_name
+        if self.lineedit_dir_name.text():
+            folder_name = self.lineedit_dir_name.text()
+            neuer_ordner_name = date + '_' + folder_name
+            print("if")
+            print(neuer_ordner_name)
+        else:
+            folder_name = os.path.basename(os.path.normpath(save_path))
+            neuer_ordner_name = date + '_' + folder_name
+            print("else")
+            print(neuer_ordner_name)
 
 
         #check if rsync is avaible if yes then command (which rsync oder rsync -v)
@@ -631,37 +656,51 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             exit_code = outlines2[1]
             exit_code = exit_code.strip()
 
+            message_box = QMessageBox()
+            message_box.setWindowTitle("upload startet")
+            message_box.setText("Upload startet, close this window")
+            x = message_box.exec()
+            msg = QMessageBox()
+            msg.setWindowTitle("upload")
             if exit_code != "0":
                 if exclude_fast5_files_status == False:
-                    print("norse will be closed after upload")
                     #os.system('scp -r ' + save_path + username + "@" +
                      #   ip + ":" + path_on_server + "/" + neuer_ordner_name)
-                    os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
-                    print("\nfile upload complete\n")
-                    sys.exit(0)
+                    scp_exit_code = os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    if scp_exit_code != 0:
+                        msg.setText("upload failed")
+                        x = msg.exec_()
+                    else:
+                        msg.setText("upload complete")
+                        x = msg.exec_()
                 elif exclude_fast5_files_status == True:
-                    print("norse will be closed after upload")
-                    os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
-                    print("\nfile upload complete\n")
-                    sys.exit(0)
+                    scp_exit_code = os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    if scp_exit_code != 0:
+                        msg.setText("upload failed")
+                        x = msg.exec_()
+                    else:
+                        msg.setText("upload complete")
+                        x = msg.exec_()
             else:
                 if exclude_fast5_files_status == False:
-                    print("norse will be closed after upload")
                     rsync_exit_code = os.system(f'rsync --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                     if rsync_exit_code != 0:
-                        print("upload failed, please try again")
+                        msg.setText("upload failed")
+                        x = msg.exec_()
                     else:
-                        sys.exit(0)
-                        print("\nfile upload complete\n")
+                        msg.setText("upload complete")
+                        x = msg.exec_()  
 
                     
                     #sys.exit(0)
                 elif exclude_fast5_files_status == True:
-                    print("norse will be closed after upload")
-                    os.system(f'rsync  --exclude "*.fast5" --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
-                    print("\nfile upload complete\n")
-                    #sys.exit(0)
-
+                    rsync_exit_code = os.system(f'rsync  --exclude "*.fast5" --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    if rsync_exit_code != 0:
+                        msg.setText("upload failed")
+                        x = msg.exec_()
+                    else:
+                        msg.setText("upload complete")
+                        x = msg.exec_()
             
         except paramiko.AuthenticationException:
             print('connection error')
