@@ -1,19 +1,15 @@
 # norse
 
+##  **N**an**O**op**R**e **SE**quencing 
+GUI for nanopore data transfer to a server and sample informations.
 
+![screen](data/interface.png)
 
-**N**an**O**op**R**e **SE**quencing 
-GUI for data transfer to server
-
-
-## Quick links
+## Content
   * [Install norse](#installation)
     * [via conda](#via-conda:)
     * [via docker](#via-docker:)
   * [Usage](#basic-usage)
-
-
-
 
 
 ## Installation
