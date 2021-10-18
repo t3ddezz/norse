@@ -1,7 +1,7 @@
 # norse
 
 ##  **N**an**O**op**R**e **SE**quencing 
-GUI for nanopore data transfer to a server and sample informations.
+GUI for nanopore data transfer to a server and sample informations. All informations are collected in a `run_info.txt` file that is stored with the uploaded data.
 
 ![screen](data/interface.png)
 
