@@ -20,7 +20,7 @@ from pathlib import Path
 #from __init__ import version
 
 #print(version)
-version = "0.3.1"
+version = "0.3.2"
 
 class MyWindow(QMainWindow):#create a window through the initUI() method, and call it in the initialization method init()
     
@@ -522,10 +522,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         if label_yes_no == "96":
             #print(file_1)
             if self.file_1 == "csv":
-                sample_csv = pd.read_csv(upload_sample_path, sep=',',header=None)
+                sample_csv = pd.read_csv(self.upload_sample_path, sep=',',header=None)
                 #print(sample_csv)
             if self.file_1 == "xlsx":
-                sample_excel = pd.read_excel(upload_sample_path, header=None)
+                sample_excel = pd.read_excel(self.upload_sample_path, header=None)
                 #print(sample_excel)
 
 
@@ -637,6 +637,13 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #connect to server, if fail error printed. But connection is tested in func test_upload
         try:
             
+            message_box = QMessageBox()
+            message_box.setWindowTitle("upload startet")
+            message_box.setText("Upload startet, close this window")
+            x = message_box.exec()
+            msg = QMessageBox()
+            msg.setWindowTitle("upload")
+
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(ip ,port ,username ,password, timeout=10)
@@ -656,12 +663,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             exit_code = outlines2[1]
             exit_code = exit_code.strip()
 
-            message_box = QMessageBox()
-            message_box.setWindowTitle("upload startet")
-            message_box.setText("Upload startet, close this window")
-            x = message_box.exec()
-            msg = QMessageBox()
-            msg.setWindowTitle("upload")
+            
             if exit_code != "0":
                 if exclude_fast5_files_status == False:
                     #os.system('scp -r ' + save_path + username + "@" +
