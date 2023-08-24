@@ -665,7 +665,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             exit_code = "1"
             
             if exit_code != "0":
-                 if exclude_fast5_files_status == False:
+                if exclude_fast5_files_status == False:
                     #os.system('scp -r ' + save_path + username + "@" +
                      #   ip + ":" + path_on_server + "/" + neuer_ordner_name)
                     scp_exit_code = os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
