@@ -637,35 +637,35 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #connect to server, if fail error printed. But connection is tested in func test_upload
         try:
             
-            message_box = QMessageBox()
-            message_box.setWindowTitle("upload startet")
-            message_box.setText("Upload startet, close this window")
-            x = message_box.exec()
-            msg = QMessageBox()
-            msg.setWindowTitle("upload")
+            # message_box = QMessageBox()
+            # message_box.setWindowTitle("upload startet")
+            # message_box.setText("Upload startet, close this window")
+            # x = message_box.exec()
+            # msg = QMessageBox()
+            # msg.setWindowTitle("upload")
 
-            ssh = paramiko.SSHClient()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(ip ,port ,username ,password, timeout=10)
-            stdin,stdout,stderr = ssh.exec_command(cmd) 
-            time.sleep(5)
-            outlines = stdout.readlines()
-            resp = ''.join(outlines)
-            rsync_var = resp
-            rsync_var = rsync_var.strip()
+            # ssh = paramiko.SSHClient()
+            # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            # ssh.connect(ip ,port ,username ,password, timeout=10)
+            # stdin,stdout,stderr = ssh.exec_command(cmd) 
+            # time.sleep(5)
+            # outlines = stdout.readlines()
+            # resp = ''.join(outlines)
+            # rsync_var = resp
+            # rsync_var = rsync_var.strip()
 
-            ssh2 = paramiko.SSHClient()
-            ssh2.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh2.connect(ip ,port ,username ,password, timeout=10)
-            stdin,stdout,stderr = ssh2.exec_command("which rsync \n echo $?") 
-            time.sleep(5)
-            outlines2 = stdout.readlines()
-            exit_code = outlines2[1]
-            exit_code = exit_code.strip()
-
+            # ssh2 = paramiko.SSHClient()
+            # ssh2.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            # ssh2.connect(ip ,port ,username ,password, timeout=10)
+            # stdin,stdout,stderr = ssh2.exec_command("which rsync \n echo $?") 
+            # time.sleep(5)
+            # outlines2 = stdout.readlines()
+            # exit_code = outlines2[1]
+            # exit_code = exit_code.strip()
+            exit_code = "1"
             
             if exit_code != "0":
-                if exclude_fast5_files_status == False:
+                 if exclude_fast5_files_status == False:
                     #os.system('scp -r ' + save_path + username + "@" +
                      #   ip + ":" + path_on_server + "/" + neuer_ordner_name)
                     scp_exit_code = os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
@@ -683,9 +683,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     else:
                         msg.setText("upload complete")
                         x = msg.exec_()
+                
             else:
                 if exclude_fast5_files_status == False:
-                    rsync_exit_code = os.system(f'rsync --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    rsync_exit_code = os.system(f'rsync -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                     if rsync_exit_code != 0:
                         msg.setText("upload failed")
                         x = msg.exec_()
@@ -696,13 +697,15 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     
                     #sys.exit(0)
                 elif exclude_fast5_files_status == True:
-                    rsync_exit_code = os.system(f'rsync  --exclude "*.fast5" --rsync-path="{rsync_var}" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    rsync_exit_code = os.system(f'rsync  --exclude "*.fast5" --exclude "*.pod5" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                     if rsync_exit_code != 0:
                         msg.setText("upload failed")
                         x = msg.exec_()
                     else:
                         msg.setText("upload complete")
                         x = msg.exec_()
+                
+               
             
         except paramiko.AuthenticationException:
             print('connection error')
