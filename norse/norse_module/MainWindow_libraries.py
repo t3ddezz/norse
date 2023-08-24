@@ -637,12 +637,12 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #connect to server, if fail error printed. But connection is tested in func test_upload
         try:
             
-            # message_box = QMessageBox()
-            # message_box.setWindowTitle("upload startet")
-            # message_box.setText("Upload startet, close this window")
-            # x = message_box.exec()
-            # msg = QMessageBox()
-            # msg.setWindowTitle("upload")
+            message_box = QMessageBox()
+            message_box.setWindowTitle("upload startet")
+            message_box.setText("Upload startet, close this window")
+            x = message_box.exec()
+            msg = QMessageBox()
+            msg.setWindowTitle("upload")
 
             # ssh = paramiko.SSHClient()
             # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
