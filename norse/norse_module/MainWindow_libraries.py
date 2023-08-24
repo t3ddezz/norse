@@ -662,7 +662,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             # outlines2 = stdout.readlines()
             # exit_code = outlines2[1]
             # exit_code = exit_code.strip()
-            exit_code = "1"
+            exit_code = "0"
             
             if exit_code != "0":
                 if exclude_fast5_files_status == False:
