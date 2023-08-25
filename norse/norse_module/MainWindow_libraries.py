@@ -147,7 +147,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.flowcell_label.move(10, 140)
         self.flowcell_label.setText('Flowcell:')
 
-        with open('~/norse/data/flowcell_data.txt') as file:
+        with open('/norse/data/flowcell_data.txt') as file:
             flowcell_type_list = [line.rstrip() for line in file]
         self.flowcell_edit = QtWidgets.QComboBox(self)
         self.sequencing_kit_edit.setEditable(True)
@@ -748,7 +748,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
 
     def flowcell_changed(self):#flowcell check after flowcell input 
-        with open('norse/data/flowcell_data.txt') as file:
+        with open('/norse/data/flowcell_data.txt') as file:
             flowcell_type_list = [line.rstrip() for line in file]
         
         #flowcell_data_file=open('norse/data/flowcell_data.txt', 'r')
