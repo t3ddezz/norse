@@ -740,7 +740,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 msg.setText("Something is wrong with your input!")
                 x = msg.exec_()  # this will show our messagebox
                 msg.setIcon(QMessageBox.Critical)
-                self.sequencing_kit_edit.clear()
+                self.sequencing_kit_edit.setEditText("")
 
 
     def barcode_changed(self):#if barcode list, could add barcode restriction
