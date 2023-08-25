@@ -121,10 +121,12 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.kitinfos_label.move(10, 50)
         self.kitinfos_label.setText('Ligation kit:')
 
+        with open('/norse/data/sequencing_kit_data.txt') as file:
+            sequencing_kit_list = [line.rstrip() for line in file]
         self.sequencing_kit_edit = QtWidgets.QComboBox(self)
         self.sequencing_kit_edit.setEditable(True)
         self.sequencing_kit_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
-        self.sequencing_kit_edit.addItems(["SQK-LSK114", "SQK-LSK109", "SQK-RBK004", "SQK-RBK096"])
+        self.sequencing_kit_edit.addItems(sequencing_kit_list)
         self.sequencing_kit_edit.setMinimumWidth(150)
         self.sequencing_kit_edit.move(10, 75)
         self.validator = Validator(self)
@@ -152,7 +154,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.flowcell_edit = QtWidgets.QComboBox(self)
         self.flowcell_edit.setEditable(True)
         self.flowcell_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
-        self.flowcell_edit.addItems(["FLO-MIN106", "FLO-MIN109"])
+        self.flowcell_edit.addItems(flowcell_type_list)
         self.flowcell_edit.setMinimumWidth(150)
         self.flowcell_edit.move(10, 165)
         self.flowcell_edit.setValidator(self.validator)
@@ -716,24 +718,18 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         
 
     def sequencing_kit_changed(self):
+        with open('/norse/data/sequencing_kit_data.txt') as file:
+            sequencing_kit_list = [line.rstrip() for line in file]
 
-        url="https://raw.githubusercontent.com/t3ddezz/data/main/sequencing_data.txt"
-        re=requests.get(url).content
-        sequencing=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
-
-        kit_input = self.sequencing_kit_edit.currentText()
-        lange = len(sequencing)
-        zahler = 0
+        sequencing_kit_input = self.sequencing_kit_edit.currentText()
         kit = 0
 
         if len(kit_input) > 0:
-            for i in range(lange):
-                if  kit_input == sequencing.loc[zahler,0]:
+            for element in sequencing_kit_list:
+                if element == sequencing_kit_input:
                     kit = 1
                     break
         
-                else: 
-                    zahler = zahler + 1
             if kit == 0:
                 msg = QMessageBox()
                 msg.setWindowTitle("Sequencing-Kit input")
@@ -750,13 +746,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
     def flowcell_changed(self):#flowcell check after flowcell input 
         with open('/norse/data/flowcell_data.txt') as file:
             flowcell_type_list = [line.rstrip() for line in file]
-        
-        #flowcell_data_file=open('norse/data/flowcell_data.txt', 'r')
-        #flowcell=pd.read_csv(io.StringIO(flowcell_data_file.read()),sep='\t',index_col=False,header=None)
 
         flowcell_input = self.flowcell_edit.currentText()
-        #lange = len(flowcell)
-        counter = 0
         kit = 0
 
         if len(flowcell_input) > 0:
