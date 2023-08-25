@@ -123,7 +123,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.kitinfos_label.setText('Ligation kit:')
 
         self.sequencing_kit_edit = QtWidgets.QComboBox(self)
-        self.sequencing_kit_edit.setInsertPolicy(QComboBox.NoInsert)
+        self.sequencing_kit_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
         self.sequencing_kit_edit.addItems(["SQK-LSK114", "SQK-LSK109", "RBK-004", "RBK-110.96"])
         #self.sequencing_kit_edit.setPlaceholderText('e.g SQK-LSK109')
         #self.sequencing_kit_edit.setMaxLength(13)
@@ -726,7 +726,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         zahler = 0
         kit = 0
 
-        if len(kit_input) != 0:
+        if len(kit_input) > 0:
             for i in range(lange):
                 if  kit_input == sequencing.loc[zahler,0]:
                     kit = 1
@@ -757,7 +757,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         zahler = 0
         kit = 0
 
-        if len(flow_input) != 0:
+        if len(flow_input) > 0:
             for i in range(lange):
                 if  flow_input == flowcell.loc[zahler,0]:
                     kit = 1
