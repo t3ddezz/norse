@@ -724,7 +724,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         sequencing_kit_input = self.sequencing_kit_edit.currentText()
         kit = 0
 
-        if len(kit_input) > 0:
+        if len(sequencing_kit_input) > 0:
             for element in sequencing_kit_list:
                 if element == sequencing_kit_input:
                     kit = 1
