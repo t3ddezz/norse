@@ -429,7 +429,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #demo == run_info.txt
         demo = open(completeName, "w")
 
-        kit = self.sequencing_edit.text()
+        kit = self.sequencing_kit_edit.text()
         barcodekit = self.barcode_edit.text()
         flowcell = self.flowcell_edit.text()
 
@@ -938,7 +938,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
     def passinInformation(self):#all infos from mainwindow for window 2 to display there
         self.button_upload.setEnabled(True)
         self.window2.input_flowcell.setText(self.flowcell_edit.text())
-        self.window2.input_kit.setText(self.sequencing_edit.text())
+        self.window2.input_kit.setText(self.sequencing_kit_edit.text())
         self.window2.input_barcode.setText(self.barcode_edit.text())
         self.window2.input1.setText(self.lineedit1.text())
         self.window2.input3.setText(self.lineedit3.text())
