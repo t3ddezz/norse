@@ -131,8 +131,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.sequencing_kit_edit.move(10, 75)
         self.validator = Validator(self)
         self.sequencing_kit_edit.setValidator(self.validator)
-        #self.sequencing_edit.textChanged[str].connect(self.sequencing_changed)
-        self.sequencing_kit_edit.currentTextChanged.connect(self.sequencing_changed) #editingFinished.connect(self.sequencing_changed)
+        #self.sequencing_edit.textChanged[str].connect(self.sequencing_kit_changed)
+        self.sequencing_kit_edit.currentTextChanged.connect(self.sequencing_kit_changed)
 
         self.barcode_label = QtWidgets.QLabel(self)
         self.barcode_label.move(10, 102)
@@ -715,13 +715,13 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             print('connection error')
         
 
-    def sequencing_changed(self):
+    def sequencing_kit_changed(self):
 
         url="https://raw.githubusercontent.com/t3ddezz/data/main/sequencing_data.txt"
         re=requests.get(url).content
         sequencing=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
 
-        kit_input = self.sequencing_kit_edit.text()
+        kit_input = self.sequencing_kit_edit.currentText()
         lange = len(sequencing)
         zahler = 0
         kit = 0
