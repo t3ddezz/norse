@@ -83,7 +83,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         [exec(f'self.{input_name}.setHidden(True)', globs,locs) for input_name in self.input_name_list_main[(1-1):24]]
         self.lineedit1.setHidden(False)
 
-
         self.lineedit_dir_name = QtWidgets.QLineEdit(self)
         self.lineedit_dir_name.setPlaceholderText('your directory name(optional)')
         self.lineedit_dir_name.move(5, 10)
@@ -122,22 +121,23 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.kitinfos_label.move(10, 50)
         self.kitinfos_label.setText('Ligation kit:')
 
-        self.sequencing_edit = QtWidgets.QLineEdit(self)
-        self.sequencing_edit.setPlaceholderText('e.g SQK-LSK109')
-        self.sequencing_edit.setMaxLength(13)
-        self.sequencing_edit.adjustSize()
-        self.sequencing_edit.move(10, 75)
+        with open('/norse/data/sequencing_kit_data.txt') as file:
+            sequencing_kit_list = [line.rstrip() for line in file]
+        self.sequencing_kit_edit = QtWidgets.QComboBox(self)
+        self.sequencing_kit_edit.setEditable(True)
+        self.sequencing_kit_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
+        self.sequencing_kit_edit.addItems(sequencing_kit_list)
+        self.sequencing_kit_edit.setMinimumWidth(150)
+        self.sequencing_kit_edit.move(10, 75)
         self.validator = Validator(self)
-        self.sequencing_edit.setValidator(self.validator)
-        #self.sequencing_edit.textChanged[str].connect(self.sequencing_changed)
-        self.sequencing_edit.editingFinished.connect(self.sequencing_changed)
+        self.sequencing_kit_edit.setValidator(self.validator)
+        self.sequencing_kit_edit.lineEdit().editingFinished.connect(self.sequencing_kit_changed)
 
         self.barcode_label = QtWidgets.QLabel(self)
         self.barcode_label.move(10, 102)
         self.barcode_label.setText('Barcode kit (optional):')
         self.barcode_label.adjustSize()
 
-        
         self.barcode_edit = QtWidgets.QLineEdit(self)
         self.barcode_edit.setPlaceholderText('e.g EXP-PBC096')
         self.barcode_edit.adjustSize()
@@ -149,18 +149,22 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.flowcell_label.move(10, 140)
         self.flowcell_label.setText('Flowcell:')
 
-        self.flowcell_edit = QtWidgets.QLineEdit(self)
-        self.flowcell_edit.setPlaceholderText('e.g FLO-MIN106')
-        self.flowcell_edit.adjustSize()
+        with open('/norse/data/flowcell_data.txt') as file:
+            flowcell_type_list = [line.rstrip() for line in file]
+        self.flowcell_edit = QtWidgets.QComboBox(self)
+        self.flowcell_edit.setEditable(True)
+        self.flowcell_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
+        self.flowcell_edit.addItems(flowcell_type_list)
+        self.flowcell_edit.setMinimumWidth(150)
         self.flowcell_edit.move(10, 165)
         self.flowcell_edit.setValidator(self.validator)
-        self.flowcell_edit.editingFinished.connect(self.flowcell_changed)
+        self.flowcell_edit.lineEdit().editingFinished.connect(self.flowcell_changed)
+
 
         self.barcodes_label = QtWidgets.QLabel(self)
         self.barcodes_label.setText('Barcodes?')
         self.barcodes_label.move(10, 200)
 
-        
         self.radiobutton_no = QtWidgets.QRadioButton(self)# round button (grouped with radiobutton_yes)- only one can be selected
         self.radiobutton_no.toggled.connect(self.radioclicked_no)
         self.radiobutton_no.move(10, 225)
@@ -427,7 +431,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #demo == run_info.txt
         demo = open(completeName, "w")
 
-        kit = self.sequencing_edit.text()
+        kit = self.sequencing_kit_edit.text()
         barcodekit = self.barcode_edit.text()
         flowcell = self.flowcell_edit.text()
 
@@ -713,31 +717,26 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             print('connection error')
         
 
-    def sequencing_changed(self):
+    def sequencing_kit_changed(self):
+        with open('/norse/data/sequencing_kit_data.txt') as file:
+            sequencing_kit_list = [line.rstrip() for line in file]
 
-        url="https://raw.githubusercontent.com/t3ddezz/data/main/sequencing_data.txt"
-        re=requests.get(url).content
-        sequencing=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
-
-        kit_input = self.sequencing_edit.text()
-        lange = len(sequencing)
-        zahler = 0
+        sequencing_kit_input = self.sequencing_kit_edit.currentText()
         kit = 0
 
-        for i in range(lange):
-            if  kit_input == sequencing.loc[zahler,0]:
-                kit = 1
-                break
-    
-            else: 
-                zahler = zahler + 1
-        if kit == 0:
-            msg = QMessageBox()
-            msg.setWindowTitle("sequencing input")
-            msg.setText("Something is wrong with your input!")
-            x = msg.exec_()  # this will show our messagebox
-            msg.setIcon(QMessageBox.Critical)
-            self.sequencing_edit.clear()
+        if len(sequencing_kit_input) > 0:
+            for element in sequencing_kit_list:
+                if element == sequencing_kit_input:
+                    kit = 1
+                    break
+        
+            if kit == 0:
+                msg = QMessageBox()
+                msg.setWindowTitle("Sequencing-Kit input")
+                msg.setText("Something is wrong with your input!")
+                x = msg.exec_()  # this will show our messagebox
+                msg.setIcon(QMessageBox.Critical)
+                self.sequencing_kit_edit.setEditText("")
 
 
     def barcode_changed(self):#if barcode list, could add barcode restriction
@@ -745,29 +744,25 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
 
     def flowcell_changed(self):#flowcell check after flowcell input 
-        url="https://raw.githubusercontent.com/t3ddezz/data/main/flowcell_data.txt"
-        re=requests.get(url).content
-        flowcell=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
+        with open('/norse/data/flowcell_data.txt') as file:
+            flowcell_type_list = [line.rstrip() for line in file]
 
-        flow_input = self.flowcell_edit.text()
-        lange = len(flowcell)
-        zahler = 0
+        flowcell_input = self.flowcell_edit.currentText()
         kit = 0
 
-        for i in range(lange):
-            if  flow_input == flowcell.loc[zahler,0]:
-                kit = 1
-                break
-    
-            else: 
-                zahler = zahler + 1
-        if kit == 0:
-            msg = QMessageBox()
-            msg.setWindowTitle("flowcell input")
-            msg.setText("Something is wrong with your input!")
-            x = msg.exec_()  # this will show our messagebox
-            msg.setIcon(QMessageBox.Critical)
-            self.flowcell_edit.clear()
+        if len(flowcell_input) > 0:
+            for element in flowcell_type_list:
+                if element == flowcell_input:
+                    kit = 1
+                    break
+            
+            if kit == 0:
+                msg = QMessageBox()
+                msg.setWindowTitle("Flowcell input")
+                msg.setText("Something is wrong with your input!")
+                x = msg.exec_()  # this will show our messagebox
+                msg.setIcon(QMessageBox.Critical)
+                self.flowcell_edit.setEditText("")
         
 
     def test_upload(self):#test connection to server and add info to user_info.txt
@@ -936,7 +931,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
     def passinInformation(self):#all infos from mainwindow for window 2 to display there
         self.button_upload.setEnabled(True)
         self.window2.input_flowcell.setText(self.flowcell_edit.text())
-        self.window2.input_kit.setText(self.sequencing_edit.text())
+        self.window2.input_kit.setText(self.sequencing_kit_edit.text())
         self.window2.input_barcode.setText(self.barcode_edit.text())
         self.window2.input1.setText(self.lineedit1.text())
         self.window2.input3.setText(self.lineedit3.text())
