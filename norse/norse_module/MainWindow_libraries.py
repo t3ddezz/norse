@@ -128,7 +128,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.sequencing_kit_edit.addItems(["SQK-LSK114", "SQK-LSK109", "SQK-RBK004", "SQK-RBK096"])
         #self.sequencing_kit_edit.setPlaceholderText('e.g SQK-LSK109')
         #self.sequencing_kit_edit.setMaxLength(13)
-        self.sequencing_kit_edit.setMinimumWidth(100)
+        self.sequencing_kit_edit.setMinimumWidth(140)
         self.sequencing_kit_edit.move(10, 75)
         self.validator = Validator(self)
         self.sequencing_kit_edit.setValidator(self.validator)
@@ -750,9 +750,8 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
 
     def flowcell_changed(self):#flowcell check after flowcell input 
-        url="https://raw.githubusercontent.com/t3ddezz/data/main/flowcell_data.txt"
-        re=requests.get(url).content
-        flowcell=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
+        flowcell_data_file=open('norse/data/flowcell_data.txt', 'r')
+        flowcell=pd.read_csv(io.StringIO(flowcell_data_file.read().decode('utf-8')),sep='\t',index_col=False,header=None)
 
         flow_input = self.flowcell_edit.text()
         lange = len(flowcell)
