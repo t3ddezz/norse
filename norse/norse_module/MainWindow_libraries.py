@@ -754,7 +754,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #flowcell_data_file=open('norse/data/flowcell_data.txt', 'r')
         #flowcell=pd.read_csv(io.StringIO(flowcell_data_file.read()),sep='\t',index_col=False,header=None)
 
-        flowcell_input = self.flowcell_edit.text()
+        flowcell_input = self.flowcell_edit.currentText()
         #lange = len(flowcell)
         counter = 0
         kit = 0
@@ -771,7 +771,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 msg.setText("Something is wrong with your input!")
                 x = msg.exec_()  # this will show our messagebox
                 msg.setIcon(QMessageBox.Critical)
-                self.flowcell_edit.clear()
+                self.flowcell_edit.setEditText("")
         
 
     def test_upload(self):#test connection to server and add info to user_info.txt
