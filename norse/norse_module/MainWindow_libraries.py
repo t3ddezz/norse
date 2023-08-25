@@ -123,8 +123,9 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.kitinfos_label.setText('Ligation kit:')
 
         self.sequencing_kit_edit = QtWidgets.QComboBox(self)
+        self.sequencing_kit_edit.setEditable(True)
         self.sequencing_kit_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
-        self.sequencing_kit_edit.addItems(["SQK-LSK114", "SQK-LSK109", "RBK-004", "RBK-110.96"])
+        self.sequencing_kit_edit.addItems(["SQK-LSK114", "SQK-LSK109", "SQK-RBK004", "SQK-RBK096"])
         #self.sequencing_kit_edit.setPlaceholderText('e.g SQK-LSK109')
         #self.sequencing_kit_edit.setMaxLength(13)
         self.sequencing_kit_edit.adjustSize()
