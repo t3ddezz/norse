@@ -152,7 +152,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.flowcell_edit = QtWidgets.QComboBox(self)
         self.sequencing_kit_edit.setEditable(True)
         self.sequencing_kit_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
-        self.sequencing_kit_edit.addItems(["FLO-MIN106", "FLO-MIN109"]])
+        self.sequencing_kit_edit.addItems(["FLO-MIN106", "FLO-MIN109"])
         self.flowcell_edit.setMinimumWidth(150)
         self.flowcell_edit.move(10, 165)
         self.flowcell_edit.setValidator(self.validator)
