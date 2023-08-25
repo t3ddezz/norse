@@ -726,20 +726,21 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         zahler = 0
         kit = 0
 
-        for i in range(lange):
-            if  kit_input == sequencing.loc[zahler,0]:
-                kit = 1
-                break
-    
-            else: 
-                zahler = zahler + 1
-        if kit == 0:
-            msg = QMessageBox()
-            msg.setWindowTitle("Sequencing-Kit input")
-            msg.setText("Something is wrong with your input!")
-            x = msg.exec_()  # this will show our messagebox
-            msg.setIcon(QMessageBox.Critical)
-            self.sequencing_kit_edit.clear()
+        if len(kit_input) != 0:
+            for i in range(lange):
+                if  kit_input == sequencing.loc[zahler,0]:
+                    kit = 1
+                    break
+        
+                else: 
+                    zahler = zahler + 1
+            if kit == 0:
+                msg = QMessageBox()
+                msg.setWindowTitle("Sequencing-Kit input")
+                msg.setText("Something is wrong with your input!")
+                x = msg.exec_()  # this will show our messagebox
+                msg.setIcon(QMessageBox.Critical)
+                self.sequencing_kit_edit.clear()
 
 
     def barcode_changed(self):#if barcode list, could add barcode restriction
@@ -756,20 +757,21 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         zahler = 0
         kit = 0
 
-        for i in range(lange):
-            if  flow_input == flowcell.loc[zahler,0]:
-                kit = 1
-                break
-    
-            else: 
-                zahler = zahler + 1
-        if kit == 0:
-            msg = QMessageBox()
-            msg.setWindowTitle("Flowcell input")
-            msg.setText("Something is wrong with your input!")
-            x = msg.exec_()  # this will show our messagebox
-            msg.setIcon(QMessageBox.Critical)
-            self.flowcell_edit.clear()
+        if len(flow_input) != 0:
+            for i in range(lange):
+                if  flow_input == flowcell.loc[zahler,0]:
+                    kit = 1
+                    break
+        
+                else: 
+                    zahler = zahler + 1
+            if kit == 0:
+                msg = QMessageBox()
+                msg.setWindowTitle("Flowcell input")
+                msg.setText("Something is wrong with your input!")
+                x = msg.exec_()  # this will show our messagebox
+                msg.setIcon(QMessageBox.Critical)
+                self.flowcell_edit.clear()
         
 
     def test_upload(self):#test connection to server and add info to user_info.txt
