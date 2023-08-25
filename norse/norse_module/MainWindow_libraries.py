@@ -150,13 +150,13 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         with open('/norse/data/flowcell_data.txt') as file:
             flowcell_type_list = [line.rstrip() for line in file]
         self.flowcell_edit = QtWidgets.QComboBox(self)
-        self.sequencing_kit_edit.setEditable(True)
-        self.sequencing_kit_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
-        self.sequencing_kit_edit.addItems(["FLO-MIN106", "FLO-MIN109"])
+        self.flowcell_edit.setEditable(True)
+        self.flowcell_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
+        self.flowcell_edit.addItems(["FLO-MIN106", "FLO-MIN109"])
         self.flowcell_edit.setMinimumWidth(150)
         self.flowcell_edit.move(10, 165)
         self.flowcell_edit.setValidator(self.validator)
-        #self.flowcell_edit.lineEdit().editingFinished.connect(self.flowcell_changed)
+        self.flowcell_edit.lineEdit().editingFinished.connect(self.flowcell_changed)
 
 
         self.barcodes_label = QtWidgets.QLabel(self)
