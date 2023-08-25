@@ -132,7 +132,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.validator = Validator(self)
         self.sequencing_kit_edit.setValidator(self.validator)
         #self.sequencing_edit.textChanged[str].connect(self.sequencing_changed)
-        self.sequencing_kit_edit.currentTextChanged.connect(self.text_changed) #editingFinished.connect(self.sequencing_changed)
+        self.sequencing_kit_edit.currentTextChanged.connect(self.sequencing_changed) #editingFinished.connect(self.sequencing_changed)
 
         self.barcode_label = QtWidgets.QLabel(self)
         self.barcode_label.move(10, 102)
