@@ -156,7 +156,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.flowcell_edit.setMinimumWidth(150)
         self.flowcell_edit.move(10, 165)
         self.flowcell_edit.setValidator(self.validator)
-        self.flowcell_edit.lineEdit().editingFinished.connect(self.flowcell_changed)
+        #self.flowcell_edit.lineEdit().editingFinished.connect(self.flowcell_changed)
 
 
         self.barcodes_label = QtWidgets.QLabel(self)
