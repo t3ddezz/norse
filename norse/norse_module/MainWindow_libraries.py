@@ -122,15 +122,17 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.kitinfos_label.move(10, 50)
         self.kitinfos_label.setText('Ligation kit:')
 
-        self.sequencing_edit = QtWidgets.QLineEdit(self)
-        self.sequencing_edit.setPlaceholderText('e.g SQK-LSK109')
-        self.sequencing_edit.setMaxLength(13)
-        self.sequencing_edit.adjustSize()
-        self.sequencing_edit.move(10, 75)
+        self.sequencing_kit_edit = QtWidgets.QComboBox(self)
+        self.sequencing_kit_edit.setInsertPolicy(QComboBox.NoInsert)
+        self.sequencing_kit_edit.addItems(["SQK-LSK114", "SQK-LSK109", "RBK-004", "RBK-110.96"])
+        #self.sequencing_kit_edit.setPlaceholderText('e.g SQK-LSK109')
+        #self.sequencing_kit_edit.setMaxLength(13)
+        self.sequencing_kit_edit.adjustSize()
+        self.sequencing_kit_edit.move(10, 75)
         self.validator = Validator(self)
-        self.sequencing_edit.setValidator(self.validator)
+        self.sequencing_kit_edit.setValidator(self.validator)
         #self.sequencing_edit.textChanged[str].connect(self.sequencing_changed)
-        self.sequencing_edit.editingFinished.connect(self.sequencing_changed)
+        self.sequencing_kit_edit.editingFinished.connect(self.text_changed) #.connect(self.sequencing_changed)currentTextChanged
 
         self.barcode_label = QtWidgets.QLabel(self)
         self.barcode_label.move(10, 102)
@@ -719,7 +721,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         re=requests.get(url).content
         sequencing=pd.read_csv(io.StringIO(re.decode('utf-8')),sep='\t',index_col=False,header=None)
 
-        kit_input = self.sequencing_edit.text()
+        kit_input = self.sequencing_kit_edit.text()
         lange = len(sequencing)
         zahler = 0
         kit = 0
@@ -733,11 +735,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 zahler = zahler + 1
         if kit == 0:
             msg = QMessageBox()
-            msg.setWindowTitle("sequencing input")
+            msg.setWindowTitle("Sequencing-Kit input")
             msg.setText("Something is wrong with your input!")
             x = msg.exec_()  # this will show our messagebox
             msg.setIcon(QMessageBox.Critical)
-            self.sequencing_edit.clear()
+            self.sequencing_kit_edit.clear()
 
 
     def barcode_changed(self):#if barcode list, could add barcode restriction
@@ -763,7 +765,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 zahler = zahler + 1
         if kit == 0:
             msg = QMessageBox()
-            msg.setWindowTitle("flowcell input")
+            msg.setWindowTitle("Flowcell input")
             msg.setText("Something is wrong with your input!")
             x = msg.exec_()  # this will show our messagebox
             msg.setIcon(QMessageBox.Critical)
