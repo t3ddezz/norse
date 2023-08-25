@@ -750,22 +750,23 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
 
     def flowcell_changed(self):#flowcell check after flowcell input 
-        flowcell_data_file=open('norse/data/flowcell_data.txt', 'r')
-        flowcell=pd.read_csv(io.StringIO(flowcell_data_file.read().decode('utf-8')),sep='\t',index_col=False,header=None)
+        with open('norse/data/flowcell_data.txt') as file:
+            flowcell_type_list = [line.rstrip() for line in file]
+        
+        #flowcell_data_file=open('norse/data/flowcell_data.txt', 'r')
+        #flowcell=pd.read_csv(io.StringIO(flowcell_data_file.read()),sep='\t',index_col=False,header=None)
 
-        flow_input = self.flowcell_edit.text()
-        lange = len(flowcell)
-        zahler = 0
+        flowcell_input = self.flowcell_edit.text()
+        #lange = len(flowcell)
+        counter = 0
         kit = 0
 
         if len(flow_input) > 0:
-            for i in range(lange):
-                if  flow_input == flowcell.loc[zahler,0]:
+            for element in flowcell_type_list:
+                if element == flowcell_input:
                     kit = 1
                     break
-        
-                else: 
-                    zahler = zahler + 1
+            
             if kit == 0:
                 msg = QMessageBox()
                 msg.setWindowTitle("Flowcell input")
