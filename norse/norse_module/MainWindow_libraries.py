@@ -83,7 +83,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         [exec(f'self.{input_name}.setHidden(True)', globs,locs) for input_name in self.input_name_list_main[(1-1):24]]
         self.lineedit1.setHidden(False)
 
-
         self.lineedit_dir_name = QtWidgets.QLineEdit(self)
         self.lineedit_dir_name.setPlaceholderText('your directory name(optional)')
         self.lineedit_dir_name.move(5, 10)
@@ -126,14 +125,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.sequencing_kit_edit.setEditable(True)
         self.sequencing_kit_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
         self.sequencing_kit_edit.addItems(["SQK-LSK114", "SQK-LSK109", "SQK-RBK004", "SQK-RBK096"])
-        #self.sequencing_kit_edit.setPlaceholderText('e.g SQK-LSK109')
-        #self.sequencing_kit_edit.setMaxLength(13)
-        self.sequencing_kit_edit.setMinimumWidth(140)
+        self.sequencing_kit_edit.setMinimumWidth(150)
         self.sequencing_kit_edit.move(10, 75)
         self.validator = Validator(self)
         self.sequencing_kit_edit.setValidator(self.validator)
-        #self.sequencing_edit.textChanged[str].connect(self.sequencing_kit_changed)
-        #self.sequencing_kit_edit.currentTextChanged.connect(self.sequencing_kit_changed)
         self.sequencing_kit_edit.lineEdit().editingFinished.connect(self.sequencing_kit_changed)
 
         self.barcode_label = QtWidgets.QLabel(self)
@@ -141,7 +136,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.barcode_label.setText('Barcode kit (optional):')
         self.barcode_label.adjustSize()
 
-        
         self.barcode_edit = QtWidgets.QLineEdit(self)
         self.barcode_edit.setPlaceholderText('e.g EXP-PBC096')
         self.barcode_edit.adjustSize()
@@ -153,18 +147,22 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.flowcell_label.move(10, 140)
         self.flowcell_label.setText('Flowcell:')
 
-        self.flowcell_edit = QtWidgets.QLineEdit(self)
-        self.flowcell_edit.setPlaceholderText('e.g FLO-MIN106')
-        self.flowcell_edit.adjustSize()
+        with open('norse/data/flowcell_data.txt') as file:
+            flowcell_type_list = [line.rstrip() for line in file]
+        self.flowcell_edit = QtWidgets.QComboBox(self)
+        self.sequencing_kit_edit.setEditable(True)
+        self.sequencing_kit_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
+        self.sequencing_kit_edit.addItems(flowcell_type_list)
+        self.flowcell_edit.setMinimumWidth(150)
         self.flowcell_edit.move(10, 165)
         self.flowcell_edit.setValidator(self.validator)
-        self.flowcell_edit.editingFinished.connect(self.flowcell_changed)
+        self.flowcell_edit.lineEdit().editingFinished.connect(self.flowcell_changed)
+
 
         self.barcodes_label = QtWidgets.QLabel(self)
         self.barcodes_label.setText('Barcodes?')
         self.barcodes_label.move(10, 200)
 
-        
         self.radiobutton_no = QtWidgets.QRadioButton(self)# round button (grouped with radiobutton_yes)- only one can be selected
         self.radiobutton_no.toggled.connect(self.radioclicked_no)
         self.radiobutton_no.move(10, 225)
@@ -761,7 +759,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         counter = 0
         kit = 0
 
-        if len(flow_input) > 0:
+        if len(flowcell_input) > 0:
             for element in flowcell_type_list:
                 if element == flowcell_input:
                     kit = 1
