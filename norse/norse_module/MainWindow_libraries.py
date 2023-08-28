@@ -370,9 +370,9 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
 
     def choose_dir(self):#pyqt5 build in directory select
-        save_path = QFileDialog().getExistingDirectory(self, 'Select an  directory')
+        upload_dir_path = QFileDialog().getExistingDirectory(self, 'Select an  directory')
 
-        self.lineedit_path_dir.setText(save_path)
+        self.lineedit_path_dir.setText(upload_dir_path)
 
 
     def upload(self, state):#function to upload files and create run_info.txt
@@ -381,6 +381,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         username = self.lineedit_username.text()
         ip = self.lineedit_ip_adress.text()
         password = self.password.text()
+        upload_dir_path = self.lineedit_path_dir.text()
 
         user_message_box = QMessageBox()
         user_message_box.setWindowTitle("user info")
@@ -389,17 +390,24 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             x = user_message_box.exec_()
             return 13
         if ip == "":
-            user_message_box.setText("ip is empty")
+            user_message_box.setText("ip-address is empty")
             x = user_message_box.exec_()
             return 14
-        if path_on_server == "":
-            user_message_box.setText("path is empty")
+        if password == "":
+            user_message_box.setText("password is empty")
             x = user_message_box.exec_()
             return 15
+        if path_on_server == "":
+            user_message_box.setText("\"/path/on/server\" (directory on server) is empty")
+            x = user_message_box.exec_()
+            return 16
+        if upload_dir_path == "":
+            user_message_box.setText("\"/path/to/dir\" (upload directory) is empty")
+            x = user_message_box.exec_()
+            return 17
         
         exclude_fast5_files_status = self.exclude_fast5_files.isChecked()
-        save_path = self.lineedit_path_dir.text()
-        completeName = os.path.join(save_path, "run_info.txt")    
+        completeName = os.path.join(upload_dir_path, "run_info.txt")    
         date = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
 
         demo = open(completeName, "w")
@@ -548,14 +556,14 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             print("if")
             print(neuer_ordner_name)
         else:
-            folder_name = os.path.basename(os.path.normpath(save_path))
+            folder_name = os.path.basename(os.path.normpath(upload_dir_path))
             neuer_ordner_name = date + '_' + folder_name
             print("else")
             print(neuer_ordner_name)
 
 
         #check if rsync is avaible if yes then command (which rsync oder rsync -v)
-        #os.system(f'rsync --rsync-path="/bin/rsync" -acr --remove-source-files "{save_path}" "~/Desktop/test_server/{neuer_ordner_name}"')
+        #os.system(f'rsync --rsync-path="/bin/rsync" -acr --remove-source-files "{upload_dir_path}" "~/Desktop/test_server/{neuer_ordner_name}"')
         #else scp
 
         port = 22
@@ -594,9 +602,9 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             
             if exit_code != "0":
                 if exclude_fast5_files_status == False:
-                    #os.system('scp -r ' + save_path + username + "@" +
+                    #os.system('scp -r ' + upload_dir_path + username + "@" +
                      #   ip + ":" + path_on_server + "/" + neuer_ordner_name)
-                    scp_exit_code = os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    scp_exit_code = os.system(f'scp -r {upload_dir_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                     if scp_exit_code != 0:
                         msg.setText("upload failed")
                         x = msg.exec_()
@@ -604,7 +612,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                         msg.setText("upload complete")
                         x = msg.exec_()
                 elif exclude_fast5_files_status == True:
-                    scp_exit_code = os.system(f'scp -r {save_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    scp_exit_code = os.system(f'scp -r {upload_dir_path} {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                     if scp_exit_code != 0:
                         msg.setText("upload failed")
                         x = msg.exec_()
@@ -614,7 +622,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 
             else:
                 if exclude_fast5_files_status == False:
-                    rsync_exit_code = os.system(f'rsync -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    rsync_exit_code = os.system(f'sshpass -p {password} rsync -acrv --remove-source-files "{upload_dir_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                     if rsync_exit_code != 0:
                         msg.setText("upload failed")
                         x = msg.exec_()
@@ -624,7 +632,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     
                     #sys.exit(0)
                 elif exclude_fast5_files_status == True:
-                    rsync_exit_code = os.system(f'rsync  --exclude "*.fast5" --exclude "*.pod5" -acrv --remove-source-files "{save_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
+                    rsync_exit_code = os.system(f'sshpass -p {password} rsync  --exclude "*.fast5" --exclude "*.pod5" -acrv --remove-source-files "{upload_dir_path}" {username}@{ip}:"{path_on_server}"/"{neuer_ordner_name}"')
                     if rsync_exit_code != 0:
                         msg.setText("upload failed")
                         x = msg.exec_()

@@ -16,7 +16,8 @@ RUN apt-get update && apt-get install -y python3-pyqt5 \
 					libxcb-xinerama0 \
 					rsync \
 					ssh-askpass-gnome \
-					ssh-askpass
+					ssh-askpass \
+					sshpass
 
 RUN pip3 install install pandas requests paramiko openpyxl xlrd  argparse
 
