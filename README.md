@@ -83,6 +83,5 @@ docker run --rm \
 
 ## Basic usage
 
-Run `norse -r` to start the program.
-Run `norse -v` to show the program version.
+Run `norse -r` to start the program or `norse -v` to show the program version.
 
