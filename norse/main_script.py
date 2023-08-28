@@ -15,26 +15,20 @@ import socket
 import time
 import os
 import argparse
-from .norse_module.MainWindow_libraries import MyWindow
+from .norse_module.MainWindow_libraries import MyWindow, version
 
-
-
-
-version = "0.3.2"
 program = "norse"
 
-
-def main(sysargs = sys.argv[1:]):#main function to run script and see version
+def main(sysargs = sys.argv[1:]):   #main function to run script and see version
     
     parser = argparse.ArgumentParser(prog = program,
-    description='norse, nanopoore sequencing data transfer',
+    description='norse, nanopore sequencing data transfer',
     usage='''norse [options]''')
 
-    
-    parser.add_argument("-v","--version", action='version', version=f"norse= {version}")
+    parser.add_argument("-v","--version", action='version', version=f"norse = {version}")
     parser.add_argument("-r","--run",action='store_true', help=f"run {program}")
         
-    if len(sysargs)<1:#if nothing typed show all arguments which avaible
+    if len(sysargs)<1:  #if nothing typed show all arguments which avaible
         parser.print_help()
         sys.exit(-1)
     else:
@@ -42,12 +36,11 @@ def main(sysargs = sys.argv[1:]):#main function to run script and see version
     args = parser.parse_args()
     
     if args.run:
-        window()#function to show GUI
+        window()    #function to show GUI
 
 
-def window():# func to show GUI and exit correctly
+def window():   # func to show GUI and exit correctly
     app = QApplication(sys.argv)
-    
     
     # dark mode pallette
     app.setStyle('Fusion')
@@ -74,6 +67,6 @@ def window():# func to show GUI and exit correctly
     sys.exit(app.exec_())
 
 
-if __name__ == '__main__':#to clarify this has to be mainscript and not a importet module
+if __name__ == '__main__':  #to clarify this has to be mainscript and not a imported module
     main()
     #window()

@@ -17,10 +17,8 @@ from .Window2_libraries import *
 from .validator_libraries import *
 from pathlib import Path
 
-#from __init__ import version
-
 #print(version)
-version = "0.3.2"
+version = "0.5.0"
 
 class MyWindow(QMainWindow):#create a window through the initUI() method, and call it in the initialization method init()
     
@@ -127,7 +125,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.sequencing_kit_edit.setEditable(True)
         self.sequencing_kit_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
         self.sequencing_kit_edit.addItems(sequencing_kit_list)
-        self.sequencing_kit_edit.setMinimumWidth(150)
+        self.sequencing_kit_edit.setMinimumWidth(190)
         self.sequencing_kit_edit.move(10, 75)
         self.validator = Validator(self)
         self.sequencing_kit_edit.setValidator(self.validator)
@@ -155,11 +153,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.flowcell_edit.setEditable(True)
         self.flowcell_edit.setInsertPolicy(QtWidgets.QComboBox.NoInsert)
         self.flowcell_edit.addItems(flowcell_type_list)
-        self.flowcell_edit.setMinimumWidth(150)
+        self.flowcell_edit.setMinimumWidth(190)
         self.flowcell_edit.move(10, 165)
         self.flowcell_edit.setValidator(self.validator)
         self.flowcell_edit.lineEdit().editingFinished.connect(self.flowcell_changed)
-
 
         self.barcodes_label = QtWidgets.QLabel(self)
         self.barcodes_label.setText('Barcodes?')
@@ -216,7 +213,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                            border: black solid 1px
                            }""")
 
-
         self.download_template.setHidden(True)
 
         self.upload_info = QtWidgets.QPushButton(self)
@@ -250,20 +246,15 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.lineedit_path_dir.setPlaceholderText('/path/to/dir')
         self.lineedit_path_dir.resize(290, 30)
 
-
-
         self.button_test = QtWidgets.QPushButton(self)
         self.button_test.move(320, 440)
         self.button_test.setText('test connection')
         self.button_test.clicked.connect(self.test_upload)
 
-
         self.textedit = QtWidgets.QTextEdit(self)#little edit field to add additional info
         self.textedit.setPlaceholderText('Additional information,  this info will be uploaded to the server with run_info.txt')
         self.textedit.setGeometry(430, 400, 365, 195)
 
-
-        
         self.label_barcode_yes_no = QtWidgets.QLabel(self)
         self.label_barcode_yes_no.setHidden(True)
 
@@ -273,12 +264,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.button_checkdata.setWhatsThis('check your data')
         self.button_checkdata.clicked.connect(self.passinInformation)#function to open another window
 
-        
         self.button_dir = QtWidgets.QPushButton(self)
         self.button_dir.setText('choose dir')
         self.button_dir.move(320, 500)
         self.button_dir.clicked.connect(self.choose_dir)
-
 
         self.button_upload = QtWidgets.QPushButton(self)
         self.button_upload.setText('Upload')
@@ -294,7 +283,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.labelupload = QtWidgets.QLabel(self)#
         self.labelupload.setText('')
         self.labelupload.setHidden(True)
-
 
         """self.label_image = QtWidgets.QLabel(self)
         self.label_image.move(300, 140)
@@ -347,8 +335,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.tableWidget_label.setFont(QtGui.QFont("arial", 15))
         self.tableWidget_label.adjustSize()
 
-        
-
         self.textedit_csv = QtWidgets.QTextEdit(self)#little edit field to add additional info
         self.textedit_csv.setPlaceholderText('barcode,sample_id             1,sample_1                           2,sample_2                          3,sample_3                          5,sample_5')
         self.textedit_csv.setGeometry(400, 238, 225, 150)
@@ -363,10 +349,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         self.exclude_fast5_files = QtWidgets.QCheckBox('exclude fast5 files', self)
         self.exclude_fast5_files.move(150, 565)
         self.exclude_fast5_files.adjustSize()
-
-        
-
-
 
         # check if there is a user info.txt if not no abortion
         try:
@@ -402,7 +384,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
 
         user_message_box = QMessageBox()
         user_message_box.setWindowTitle("user info")
-        
         if username == "":
             user_message_box.setText("username is empty")
             x = user_message_box.exec_()
@@ -416,55 +397,31 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             x = user_message_box.exec_()
             return 15
         
-        
         exclude_fast5_files_status = self.exclude_fast5_files.isChecked()
-        
         save_path = self.lineedit_path_dir.text()
-        
-        name_of_file = 'run_info' 
-        
-
-        completeName = os.path.join(save_path, name_of_file + ".txt")    
-
+        completeName = os.path.join(save_path, "run_info.txt")    
         date = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
-           
-        #demo == run_info.txt
+
         demo = open(completeName, "w")
 
-        kit = self.sequencing_kit_edit.text()
+        kit = self.sequencing_kit_edit.currentText()
         barcodekit = self.barcode_edit.text()
-        flowcell = self.flowcell_edit.text()
+        flowcell = self.flowcell_edit.currentText()
 
-        demo.write('Automatically generated by norse (version:' + version + ')')
-        demo.write('\n')
-
-        demo.write('##Kit:\t')
-        demo.write(kit) 
-        demo.write('\n')
-
-        demo.write('##Barcodekit:\t')
-        demo.write(barcodekit)
-        demo.write('\n')
-
-        demo.write('##Flowcell:\t')
-        demo.write(flowcell)
-        demo.write('\n\n')
-
+        demo.write(f'Automatically generated by norse (version: {version})\n')
+        demo.write(f'##Kit:\t{kit}\n')
+        demo.write(f'##Barcodekit:\t{barcodekit}\n')
+        demo.write(f'##Flowcell:\t{flowcell}\n')
 
         label_yes_no = self.labelupload.text()
-        
         
         ## build for run_info.txt
         demo.write("Barcode\tSample-name\n")
         if label_yes_no == 'no':
             lineedit01 = self.lineedit1.text()
-            
-            demo.write('NB01\t')
-            demo.write(lineedit01)
-            
-        
-        
-        if label_yes_no == 'yes':
+            demo.write(f'Sample\t{lineedit01}')
+              
+        elif label_yes_no in ['yes', '24']:
             lineedit01 = self.lineedit1.text()
             lineedit02 = self.lineedit2.text()
             lineedit03 = self.lineedit3.text()
@@ -477,28 +434,11 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             lineedit10 = self.lineedit10.text()
             lineedit11 = self.lineedit11.text()
             lineedit12 = self.lineedit12.text()
-            liste = [lineedit01,lineedit02,lineedit03,lineedit04,lineedit05,lineedit06,lineedit07,lineedit08,
+            
+            barcode_sample_list = [lineedit01,lineedit02,lineedit03,lineedit04,lineedit05,lineedit06,lineedit07,lineedit08,
             lineedit09,lineedit10,lineedit11,lineedit12]
-            a = 1
-            for i in range(0,12):
-                if a<10:
-                    demo.write('NB0')
-                    demo.write(str(a))
-                    demo.write('\t')
-                    demo.write(liste[i])
-                    demo.write('\n')
-                    a = a + 1
-                else:
-                    demo.write('NB')
-                    demo.write(str(a))
-                    demo.write('\t')
-                    demo.write(liste[i])
-                    demo.write('\n')
-                    a = a + 1
-            
 
-            
-        if label_yes_no == '24':
+            if label_yes_no == '24':
                 lineedit13 = self.lineedit13.text()
                 lineedit14 = self.lineedit14.text()
                 lineedit15 = self.lineedit15.text()
@@ -512,95 +452,85 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                 lineedit23 = self.lineedit23.text()
                 lineedit24 = self.lineedit24.text()
 
-                liste = [lineedit13,lineedit14,lineedit15,lineedit16,lineedit17,lineedit18,lineedit19,lineedit20,
-                lineedit21,lineedit22,lineedit23,lineedit24]
-
-                a = 13
-                for i in range(0,12):
-                    demo.write('NB0')
-                    demo.write(str(a))
-                    demo.write('\t')
-                    demo.write(liste[i])
-                    demo.write('\n')
-                    a = a + 1       
-        if label_yes_no == "96":
+                barcode_sample_list.extend([lineedit13,lineedit14,lineedit15,lineedit16,lineedit17,lineedit18,lineedit19,lineedit20,
+                lineedit21,lineedit22,lineedit23,lineedit24])
+            
+            for index in range(len(barcode_sample_list)):
+                if index < 9:
+                    demo.write(f'NB0{str(index + 1)}\t{barcode_sample_list[index]}\n')
+                else:
+                    demo.write(f'NB{str(index + 1)}\t{barcode_sample_list[index]}\n')
+     
+        elif label_yes_no == "96":
             #print(file_1)
             if self.file_1 == "csv":
-                sample_csv = pd.read_csv(self.upload_sample_path, sep=',',header=None)
+                barcode_sample_file = pd.read_csv(self.upload_sample_path, sep=',',header=None)
                 #print(sample_csv)
             if self.file_1 == "xlsx":
-                sample_excel = pd.read_excel(self.upload_sample_path, header=None)
+                barcode_sample_file = pd.read_excel(self.upload_sample_path, header=None)
                 #print(sample_excel)
 
-
             #reading csv files
-            if self.file_1  == "csv":
-                zeile = 0
-                gesamt_zeilen = len(sample_csv)
-                while True:
-                    if sample_csv.iloc[zeile, 0] == "barcode":
-                        #print(zeile)
-                        break
-                    else:
-                        zeile = zeile + 1
-                        if zeile == gesamt_zeilen:
-                            zeile = 0
-                            break
+            # if self.file_1  == "csv":
+            #     zeile = 0
+            #     gesamt_zeilen = len(sample_csv)
+            #     while True:
+            #         if sample_csv.iloc[zeile, 0] == "barcode":
+            #             #print(zeile)
+            #             break
+            #         else:
+            #             zeile = zeile + 1
+            #             if zeile == gesamt_zeilen:
+            #                 zeile = 0
+            #                 break
 
-                if sample_csv.iloc[zeile, 0] == "barcode":
-                    zeile = zeile + 1
-                    for zeilen in range(zeile, gesamt_zeilen):
-                        if zeilen < 10:
-                            demo.write('NB0')
-                            demo.write(str(sample_csv.iloc[zeilen, 0]))#barcode number
-                            demo.write('\t')
-                            demo.write(str(sample_csv.iloc[zeilen, 1]))#sample id
-                            demo.write('\n')
-                        else:
-                            demo.write('NB')
-                            demo.write(str(sample_csv.iloc[zeilen, 0]))#barcode number
-                            demo.write('\t')
-                            demo.write(str(sample_csv.iloc[zeilen, 1]))#sample id
-                            demo.write('\n')
+            #     if sample_csv.iloc[zeile, 0] == "barcode":
+            #         zeile = zeile + 1
+            #         for zeilen in range(zeile, gesamt_zeilen):
+            #             if zeilen < 10:
+            #                 demo.write('NB0')
+            #                 demo.write(str(sample_csv.iloc[zeilen, 0]))#barcode number
+            #                 demo.write('\t')
+            #                 demo.write(str(sample_csv.iloc[zeilen, 1]))#sample id
+            #                 demo.write('\n')
+            #             else:
+            #                 demo.write('NB')
+            #                 demo.write(str(sample_csv.iloc[zeilen, 0]))#barcode number
+            #                 demo.write('\t')
+            #                 demo.write(str(sample_csv.iloc[zeilen, 1]))#sample id
+            #                 demo.write('\n')
                 
 
             #reading excel files (xlsx)
-            if self.file_1 == "xlsx":
-                zeile = 0
-                gesamt_zeilen = len(sample_excel)
-                while True:
-                    if sample_excel.iloc[zeile, 0] == "barcode":
-                        #print(zeile)
+            #if self.file_1 == "xlsx":
+            zeile = 0
+            gesamt_zeilen = len(barcode_sample_file)
+            while True:
+                if barcode_sample_file.iloc[zeile, 0] == "barcode":
+                    #print(zeile)
+                    break
+                else:
+                    zeile = zeile + 1 
+                    if zeile == gesamt_zeilen:
+                        zeile = 0
                         break
+
+            if barcode_sample_file.iloc[zeile, 0] == "barcode":
+                zeile = zeile + 1
+                for zeilen in range(zeile, gesamt_zeilen):
+                    if zeilen < 10:
+                        demo.write(f'NB0{str(barcode_sample_file.iloc[zeilen, 0])}\t{str(barcode_sample_file.iloc[zeilen, 1])}\n')
+                        #demo.write(str(sample_excel.iloc[zeilen, 0]))#barcode number
+                        #demo.write('\t')
+                        #demo.write(str(sample_excel.iloc[zeilen, 1]))#sample id
+                        #demo.write('\n')
                     else:
-                        zeile = zeile + 1 
-                        if zeile == gesamt_zeilen:
-                            zeile = 0
-                            break
+                        demo.write(f'NB{str(barcode_sample_file.iloc[zeilen, 0])}\t{str(barcode_sample_file.iloc[zeilen, 1])}\n')
+                        #demo.write(str(sample_excel.iloc[zeilen, 0]))#barcode number
+                        #demo.write('\t')
+                        #demo.write(str(sample_excel.iloc[zeilen, 1]))#sample id
+                        #demo.write('\n')
 
-                if sample_excel.iloc[zeile, 0] == "barcode":
-                    zeile = zeile + 1
-                    for zeilen in range(zeile, gesamt_zeilen):
-                        if zeilen < 10:
-                            demo.write('NB0')
-                            demo.write(str(sample_excel.iloc[zeilen, 0]))#barcode number
-                            demo.write('\t')
-                            demo.write(str(sample_excel.iloc[zeilen, 1]))#sample id
-                            demo.write('\n')
-                        else:
-                            demo.write('NB')
-                            demo.write(str(sample_excel.iloc[zeilen, 0]))#barcode number
-                            demo.write('\t‚')
-                            demo.write(str(sample_excel.iloc[zeilen, 1]))#sample id
-                            demo.write('\n')
-
-               
-
-        
-
-    
-                    
-        
         additional_info = self.textedit.toPlainText()
         
         demo.write('\n')
@@ -627,12 +557,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         #check if rsync is avaible if yes then command (which rsync oder rsync -v)
         #os.system(f'rsync --rsync-path="/bin/rsync" -acr --remove-source-files "{save_path}" "~/Desktop/test_server/{neuer_ordner_name}"')
         #else scp
-
-        path_on_server = self.lineedit_path.text()
-        username = self.lineedit_username.text()
-        ip = self.lineedit_ip_adress.text()
-        password = self.password.text()
-        
 
         port = 22
         cmd = 'which rsync'
@@ -697,7 +621,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     else:
                         msg.setText("upload complete")
                         x = msg.exec_()  
-
                     
                     #sys.exit(0)
                 elif exclude_fast5_files_status == True:
@@ -708,9 +631,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
                     else:
                         msg.setText("upload complete")
                         x = msg.exec_()
-                
-               
-            
+
         except paramiko.AuthenticationException:
             print('connection error')
         except socket.timeout:
@@ -733,10 +654,10 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             if kit == 0:
                 msg = QMessageBox()
                 msg.setWindowTitle("Sequencing-Kit input")
-                msg.setText("Something is wrong with your input!")
+                msg.setText(f"Something is wrong with your input!\nResetting Box-value.")
                 x = msg.exec_()  # this will show our messagebox
                 msg.setIcon(QMessageBox.Critical)
-                self.sequencing_kit_edit.setEditText("")
+                self.sequencing_kit_edit.setEditText(f"{sequencing_kit_list[0]}")
 
 
     def barcode_changed(self):#if barcode list, could add barcode restriction
@@ -759,35 +680,23 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             if kit == 0:
                 msg = QMessageBox()
                 msg.setWindowTitle("Flowcell input")
-                msg.setText("Something is wrong with your input!")
+                msg.setText(f"Something is wrong with your input!\nResetting Box-value.")
                 x = msg.exec_()  # this will show our messagebox
                 msg.setIcon(QMessageBox.Critical)
-                self.flowcell_edit.setEditText("")
+                self.flowcell_edit.setEditText(f"{flowcell_type_list[0]}")
         
 
     def test_upload(self):#test connection to server and add info to user_info.txt
-
-    
         username = self.lineedit_username.text()
-        
         ip = self.lineedit_ip_adress.text()
-        
         path = self.lineedit_path.text()
-        
         password = self.password.text()
-
-         
 
         user_info = open(self.norse_user_info_path, "w+")
 
         user_info.truncate(0)
         
-        user_info.write(username)
-        user_info.write('\n')
-        user_info.write(ip)
-        user_info.write('\n')
-        user_info.write(path)
-
+        user_info.write(f'{username}\n{ip}\n{path}')
         user_info.close()
 
         try:
@@ -800,49 +709,42 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(ip ,port ,username ,password, timeout=10)
-            stdin,stdout,stderr = ssh.exec_command(cmd)
-            time.sleep(5)
-            outlines = stdout.readlines()
-            resp = ''.join(outlines)
-
-
-
+            # stdin,stdout,stderr = ssh.exec_command(cmd)
+            # time.sleep(5)
+            # outlines = stdout.readlines()
+            # resp = ''.join(outlines)
 
             stdin,stdout,stderr = ssh.exec_command(cmd3)
             time.sleep(5)
             outlines = stdout.readlines()
             resp3 = ''.join(outlines)
-        
-
 
             #print(path in resp3)#string doesnt have to match exactly at moment
             if path in resp3:
                 msg = QMessageBox()
                 msg.setWindowTitle("test upload")
                 msg.setText("Connected succesfully!")
-                x = msg.exec_()  # this will show our messagebox
                 msg.setIcon(QMessageBox.Information)
+                x = msg.exec_()  # this will show our messagebox
             else:
                 msg1 = QMessageBox()
                 msg1.setWindowTitle("test upload")
-                msg1.setText("Path doesnt exist")
-                x1 = msg1.exec_()  # this will show our messagebox
+                msg1.setText(f"Path doesnt exist: Error {stderr}")
                 msg1.setIcon(QMessageBox.Critical)
-                
-
+                x1 = msg1.exec_()  # this will show our messagebox
     
         except paramiko.AuthenticationException:
             msg2 = QMessageBox()
             msg2.setWindowTitle("test upload")
             msg2.setText("Wrong username or password")
-            x = msg2.exec_()  # this will show our messagebox
             msg2.setIcon(QMessageBox.Information)
+            x = msg2.exec_()  # this will show our messagebox
         except socket.error:
             msg3 = QMessageBox()
             msg3.setWindowTitle("test upload")
             msg3.setText('Wrong ip')
-            x = msg3.exec_()  # this will show our messagebox
             msg3.setIcon(QMessageBox.Information)
+            x = msg3.exec_()  # this will show our messagebox
 
 
     def radioclicked_no(self):# button no barcodes
@@ -988,6 +890,6 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
     def info(self):
         msg = QMessageBox()
         msg.setWindowTitle("data input")
-        msg.setText("If you wanna use 96 samples, please create a csv(.csv) or excel(.xlsx) file with like shown on the rigth side. Remember to write the headers (barcode, sampleid) not in caps.")
+        msg.setText("If you wanna use 96 samples, please create a csv (.csv) or excel (.xlsx) file as shown on the rigth side. Remember to write the headers (barcode, sampleid) not in caps.")
         x = msg.exec_()
         self.download_template.setDisabled(False)

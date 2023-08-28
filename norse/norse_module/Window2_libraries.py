@@ -5,9 +5,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QInputDialog,  QFileDialo
 from PyQt5.QtGui import QPalette, QColor, QIcon, QPixmap
 from PyQt5.QtCore import Qt, QFileInfo
 import pandas as pd
-
 #from libraries.MainWindow_libraries import file_1, upload_sample_path
-
 
 class Window2(QMainWindow):#class for window2 (pop up window)
     
@@ -15,14 +13,13 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         super(Window2,self).__init__()
         self.setWindowTitle("check your data")
         self.setGeometry(400, 400, 330, 385)
-        
 
         self.label_name_list = ["label" + str(item) for item in list(range(1, (24 + 1), 1))]
         self.input_name_list = ["input" + str(item) for item in list(range(1, (24 + 1), 1))]
         self.iniUI()
         
         
-    def iniUI(self):#
+    def iniUI(self):
         globs, locs = globals(), locals()
         [exec(f"self.{label_name} = QtWidgets.QLabel(self)",globs, locs) for label_name in self.label_name_list]
         [exec(f"self.{input_name} = QtWidgets.QLabel(self)",globs, locs) for input_name in self.input_name_list]
@@ -41,10 +38,9 @@ class Window2(QMainWindow):#class for window2 (pop up window)
                 label_move_y_value = 70
             label_move_y_value += 20
             x_y_values_for_label.append([x_value,label_move_y_value])
-            
+
         [exec(f"self.{self.label_name_list[index]}.move(*{x_y_values_for_label[index]})",globs, locs) for index in range(len(self.label_name_list))]
         [exec(f"self.{self.label_name_list[index]}.setText(str({index}+ 1))",globs, locs) for index in range(len(self.label_name_list))]
-        
 
         x_y_values_for_input = []
         input_move_y_value = 70
@@ -62,7 +58,6 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.label_sample = QtWidgets.QLabel(self)
         self.label_sample.setText('sample name:')
         self.label_sample.move(20, 70)
-        
         
         self.kitlabel = QtWidgets.QLabel(self)
         self.kitlabel.move(20, 10)
@@ -88,7 +83,7 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.button.clicked.connect(self.close)#close window2
 
 
-    def hide_and_show(self,first_label_index, last_label_index, BOOLEAN):#hide or show labels
+    def hide_and_show(self,first_label_index, last_label_index, BOOLEAN):   #hide or show labels
         globs, locs = globals(), locals()
         #list comprehension build string (exec) using label_name an then execute the command
         [exec(f'self.{label_name}.setHidden({BOOLEAN})', globs,locs) for label_name in self.label_name_list[(first_label_index - 1):last_label_index]]
@@ -142,5 +137,5 @@ class Window2(QMainWindow):#class for window2 (pop up window)
         self.tableView.show                
 
 
-    def displayInfo(self):#shows window2
+    def displayInfo(self):  #shows window2
         self.show( )
