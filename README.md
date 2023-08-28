@@ -66,7 +66,20 @@ docker run --rm \
   norse:build \
   norse -r
 ```
-
+**or**
+use the newest docker from [dockerhub](https://hub.docker.com/repository/docker/dataspott/norse/general):
+```
+# run docker image from dockerhub (insert respective VERSION)
+docker run --rm \
+  -u qtuser \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -e DISPLAY=unix$DISPLAY \
+  --network host \
+  -v $HOME:/home/qtuser \
+  -v $PWD:/upload \
+  dataspott/norse:VERSION \
+  norse -r
+```
 
 ## Basic usage
 
