@@ -420,6 +420,7 @@ class MyWindow(QMainWindow):#create a window through the initUI() method, and ca
         demo.write(f'##Kit:\t{kit}\n')
         demo.write(f'##Barcodekit:\t{barcodekit}\n')
         demo.write(f'##Flowcell:\t{flowcell}\n')
+        demo.write(f'##Run name:\t{upload_dir_path}\n')
 
         label_yes_no = self.labelupload.text()
         
