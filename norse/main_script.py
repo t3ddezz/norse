@@ -25,10 +25,10 @@ def main(sysargs = sys.argv[1:]):   #main function to run script and see version
     description='norse, nanopore sequencing data transfer',
     usage='''norse [options]''')
 
-    parser.add_argument("-v","--version", action='version', version=f"norse = {version}")
-    parser.add_argument("-r","--run",action='store_true', help=f"run {program}")
+    parser.add_argument("-v", "--version", action = 'version', version = f"norse = {version}")
+    parser.add_argument("-r", "--run", action = 'store_true', help = f"run {program}")
         
-    if len(sysargs)<1:  #if nothing typed show all arguments which avaible
+    if len(sysargs)<1:  #if no arguments typed print help and exit
         parser.print_help()
         sys.exit(-1)
     else:
@@ -36,13 +36,13 @@ def main(sysargs = sys.argv[1:]):   #main function to run script and see version
     args = parser.parse_args()
     
     if args.run:
-        window()    #function to show GUI
+        window()    #exec function to show GUI
 
 
-def window():   # func to show GUI and exit correctly
+def window():   #def function to show GUI and exit correctly
     app = QApplication(sys.argv)
     
-    # dark mode pallette
+    #dark mode palette
     app.setStyle('Fusion')
     dark_palette = QtGui.QPalette()
 
